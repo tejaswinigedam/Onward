@@ -8,4 +8,7 @@ coverage/
 .env.local
 .env*.local
 .vercel
+
+# Local MCP config holds a Supabase access token — keep it out of git.
+.mcp.json
 .DS_Store
