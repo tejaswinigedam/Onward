@@ -37,6 +37,18 @@ describe("extractOffer", () => {
     expect(extractOffer("Notice period of 2 months applies.").noticePeriodDays).toBe(60);
   });
 
+  it("takes the ANNUAL column from a monthly/annual annexure table", () => {
+    // Real-world layout: "Label  <monthly>  <annual>".
+    const text =
+      "We offer you Rs. 1,200,000.00/- per annum as total cost to the Company. " +
+      "CTC ANNEXURE Components MONTHLY ANNUAL Basic (35% of Fixed CTC) 32,375.00 388,500.00 " +
+      "Fixed CTC 92,500.00 1,110,000.00 Variable Pay 7,500.00 90,000.00 " +
+      "Total CTC 100,000.00 1,200,000.00";
+    const r = extractOffer(text);
+    expect(r.annualCTC).toBe(1200000); // annual, not the 100,000 monthly
+    expect(r.variableShare).toBeCloseTo(0.075, 3); // 90,000 / 12,00,000
+  });
+
   it("warns when CTC is missing", () => {
     const r = extractOffer("This letter confirms your joining date.");
     expect(r.annualCTC).toBeUndefined();

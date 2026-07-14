@@ -47,7 +47,7 @@ export function OfferUpload() {
       }
       const ex = json.extracted as ExtractedOffer;
       setCtc(ex.annualCTC ?? 0);
-      setVariablePct(Math.round((ex.variableShare ?? 0) * 100));
+      setVariablePct(Number(((ex.variableShare ?? 0) * 100).toFixed(1)));
       setNotice(ex.noticePeriodDays);
       setWarnings(ex.warnings ?? []);
       setStatus("done");

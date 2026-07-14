@@ -33,41 +33,53 @@ export function parseAmount(raw: string): number | undefined {
   return undefined;
 }
 
-/** Find the first amount that appears near any of the given keywords. */
-function amountNear(text: string, keywords: string[]): number | undefined {
+const AMT = "(?:₹|rs\\.?)?\\s*[\\d,]+(?:\\.\\d+)?(?:\\s*(?:lpa|lakhs?|lac|cr|crore))?";
+
+/**
+ * Find the amount near a keyword. Offer annexures list a MONTHLY and an ANNUAL
+ * column, so we capture up to two consecutive amounts after the label and return
+ * the LARGER one (annual ≥ monthly). For a single figure it just returns that.
+ */
+function annualAmountNear(text: string, keywords: string[]): number | undefined {
   for (const kw of keywords) {
-    // keyword ... up to ~40 chars ... an amount (with optional ₹/Rs and lakh/cr suffix)
-    const re = new RegExp(
-      `${kw}[^\\d₹]{0,40}((?:₹|rs\\.?)?\\s*[\\d.,]+\\s*(?:lpa|lakhs?|lac|cr|crore)?)`,
-      "i",
-    );
+    const re = new RegExp(`${kw}[^\\d₹]{0,25}(${AMT})(?:\\s+(${AMT}))?`, "i");
     const m = text.match(re);
     if (m) {
-      const amt = parseAmount(m[1]!);
-      if (amt && amt > 0) return amt;
+      const vals = [m[1], m[2]]
+        .map((x) => (x ? parseAmount(x) : undefined))
+        .filter((v): v is number => !!v && v > 0);
+      if (vals.length) return Math.max(...vals);
     }
   }
   return undefined;
+}
+
+/** An amount explicitly tagged "per annum" / "p.a." — the most reliable CTC signal. */
+function perAnnumAmount(text: string): number | undefined {
+  const m = text.match(new RegExp(`(${AMT})\\s*/?-?\\s*(?:per\\s*annum|p\\.?\\s*a\\.?|/\\s*annum)`, "i"));
+  return m ? parseAmount(m[1]!) : undefined;
 }
 
 export function extractOffer(text: string): ExtractedOffer {
   const warnings: string[] = [];
   const flat = text.replace(/\s+/g, " ");
 
-  const annualCTC = amountNear(flat, [
-    "total ctc", "annual ctc", "ctc", "cost to company", "total compensation", "gross salary",
-  ]);
+  // CTC: prefer an explicitly labelled total, then a "per annum" figure, then
+  // looser fallbacks — each using annual (larger-of-two) logic for tables.
+  const annualCTC =
+    annualAmountNear(flat, ["total ctc", "annual ctc"]) ??
+    perAnnumAmount(flat) ??
+    annualAmountNear(flat, ["cost to company", "gross earning", "total compensation", "ctc", "gross salary"]);
   if (!annualCTC) warnings.push("Couldn't find the CTC — please enter it.");
 
-  // Variable: prefer an explicit percentage, else derive from a variable amount.
+  // Variable: prefer an explicit % tied to variable/performance/at-risk; else
+  // derive from a labelled variable amount (annual) over CTC.
   let variableShare: number | undefined;
-  const pct = flat.match(
-    /(variable|performance|at[-\s]?risk|bonus)[^%\d]{0,30}(\d{1,2}(?:\.\d+)?)\s*%/i,
-  );
+  const pct = flat.match(/(variable|performance|at[-\s]?risk)[^%\d]{0,30}(\d{1,2}(?:\.\d+)?)\s*%/i);
   if (pct) {
     variableShare = Math.min(1, parseFloat(pct[2]!) / 100);
   } else {
-    const varAmt = amountNear(flat, ["variable pay", "variable", "performance pay", "performance bonus"]);
+    const varAmt = annualAmountNear(flat, ["variable pay", "variable", "performance pay", "performance bonus"]);
     if (varAmt && annualCTC && annualCTC > 0) {
       variableShare = Math.min(1, varAmt / annualCTC);
     }
