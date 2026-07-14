@@ -16,7 +16,14 @@ const MAX_BYTES = 8 * 1024 * 1024; // 8 MB
  */
 export async function POST(req: Request) {
   if (!clerkEnabled) return NextResponse.json({ error: "Auth not configured" }, { status: 503 });
-  const { userId } = await auth();
+  let userId: string | null = null;
+  try {
+    ({ userId } = await auth());
+  } catch {
+    // Clerk couldn't verify (e.g. misconfigured server key) — treat as signed out
+    // rather than crashing with a 500.
+    return NextResponse.json({ error: "Sign in to upload" }, { status: 401 });
+  }
   if (!userId) return NextResponse.json({ error: "Sign in to upload" }, { status: 401 });
 
   let form: FormData;
