@@ -1,9 +1,8 @@
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
-import { PDFParse } from "pdf-parse";
+import { extractText, getDocumentProxy } from "unpdf";
 import { extractOffer } from "@onward/engine";
 
-// pdf-parse relies on Node APIs — force the Node runtime (not Edge).
 export const runtime = "nodejs";
 export const maxDuration = 30;
 
@@ -42,11 +41,10 @@ export async function POST(req: Request) {
 
   let text: string;
   try {
-    const buffer = Buffer.from(await file.arrayBuffer());
-    const parser = new PDFParse({ data: buffer });
-    const result = await parser.getText();
-    await parser.destroy();
-    text = result.text ?? "";
+    const buffer = new Uint8Array(await file.arrayBuffer());
+    const pdf = await getDocumentProxy(buffer);
+    const result = await extractText(pdf, { mergePages: true });
+    text = Array.isArray(result.text) ? result.text.join("\n") : result.text ?? "";
   } catch {
     return NextResponse.json({ error: "Couldn't read that PDF." }, { status: 422 });
   }
