@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Offer Letter Explorer — Onward</title>
+<meta name="description" content="Understand every clause of your offer letter before you sign. CTC, take-home, EPF, notice period — explained in plain English."/>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-QH8KCWJXD4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-QH8KCWJXD4');
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --indigo:   #5B4CFF;
+  --indigo-d: #4A3EE0;
+  --indigo-1: #E8E5FF;
+  --indigo-0: #F3F1FF;
+  --coral:    #FF7A59;
+  --amber:    #F9BD5E;
+  --ink:      #1F2937;
+  --ink-soft: #6B7280;
+  --ink-mute: #9CA3AF;
+  --border:   #E5E7EB;
+  --border-s: #D1D5DB;
+  --ivory:    #FCFBF8;
+  --ivory2:   #F6F5F2;
+  --white:    #FFFFFF;
+  --dark:     #111827;
+  --dark-s:   #1F2937;
+  --font:     'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-d:   'Manrope', var(--font);
+  --r-pill: 9999px;
+  --r-lg:   26px;
+  --r-xl:   34px;
+  --sh:     0 4px 14px rgba(31,41,55,.07), 0 8px 22px rgba(31,41,55,.06);
+  --sh-lg:  0 12px 36px rgba(31,41,55,.13);
+  --sh-xl:  0 24px 60px rgba(31,41,55,.18);
+  --sh-b:   0 8px 26px rgba(91,76,255,.32);
+}
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font); font-size: 17px; line-height: 1.65; background: var(--ivory); color: var(--ink); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+h1,h2,h3,h4 { font-family: var(--font-d); font-weight: 700; line-height: 1.12; margin: 0; }
+p { margin: 0; }
+a { text-decoration: none; color: inherit; }
+button { cursor: pointer; border: none; background: none; font: inherit; }
+svg { display: block; }
+
+@keyframes fade-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+
+.reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s cubic-bezier(.22,1,.36,1), transform .7s cubic-bezier(.22,1,.36,1); }
+.reveal.in { opacity: 1; transform: none; }
+.reveal-delay-1 { transition-delay: .12s; }
+.reveal-delay-2 { transition-delay: .22s; }
+.reveal-delay-3 { transition-delay: .32s; }
+
+.wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+/* NAV */
+nav { position: fixed; inset: 0 0 auto; z-index: 100; padding: 18px 0; background: rgba(252,251,248,.95); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); }
+nav.lifted { box-shadow: 0 2px 18px rgba(31,41,55,.07); }
+.nav-inner { max-width: 1080px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; }
+.brand { display: flex; align-items: center; gap: 10px; }
+.brand-mark { width: 26px; height: 27px; flex: none; }
+.brand-name { font-family: var(--font-d); font-weight: 800; font-size: 18px; letter-spacing: -.4px; color: var(--ink); }
+.btn-nav { display: inline-flex; align-items: center; gap: 7px; background: var(--indigo); color: #fff; font-family: var(--font-d); font-size: 13.5px; font-weight: 700; padding: 10px 20px; border-radius: var(--r-pill); box-shadow: var(--sh-b); transition: background .2s, transform .15s; }
+.btn-nav:hover { background: var(--indigo-d); transform: translateY(-1px); }
+
+/* HERO */
+.page-hero {
+  padding: 140px 24px 80px;
+  background:
+    radial-gradient(ellipse 80% 60% at 10% 10%, rgba(232,229,255,.9) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 50% at 90% 90%, rgba(255,228,219,.6) 0%, transparent 55%),
+    var(--ivory);
+  text-align: center;
+}
+.hero-inner { max-width: 720px; margin: 0 auto; }
+.page-kicker { display: inline-flex; align-items: center; gap: 8px; background: var(--indigo-0); color: var(--indigo); font-size: 12px; font-weight: 800; letter-spacing: 1.1px; text-transform: uppercase; padding: 6px 13px; border-radius: var(--r-pill); margin-bottom: 24px; animation: fade-up .5s ease both; }
+.page-h1 { font-size: clamp(34px, 5vw, 56px); font-weight: 900; letter-spacing: -2px; line-height: 1.07; color: var(--ink); margin-bottom: 20px; animation: fade-up .55s .07s ease both; }
+.page-h1 .accent { color: var(--indigo); }
+.page-sub { font-size: 19px; color: var(--ink-soft); line-height: 1.68; max-width: 560px; margin: 0 auto 36px; animation: fade-up .55s .14s ease both; }
+.btn-cta { display: inline-flex; align-items: center; gap: 10px; background: var(--indigo); color: #fff; font-family: var(--font-d); font-size: 16px; font-weight: 700; padding: 15px 30px; border-radius: var(--r-pill); box-shadow: var(--sh-b); transition: background .2s, transform .15s; animation: fade-up .55s .2s ease both; }
+.btn-cta:hover { background: var(--indigo-d); transform: translateY(-2px); }
+.btn-cta svg { transition: transform .2s; }
+.btn-cta:hover svg { transform: translateX(3px); }
+
+/* PREVIEW VISUAL */
+.preview-section { padding: 0 24px 96px; }
+.preview-card {
+  max-width: 860px; margin: 0 auto;
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: var(--r-xl); overflow: hidden;
+  box-shadow: var(--sh-xl);
+  animation: fade-in .8s .3s ease both;
+}
+.preview-bar { background: var(--ivory2); border-bottom: 1px solid var(--border); padding: 12px 20px; display: flex; align-items: center; gap: 8px; }
+.preview-dot { width: 10px; height: 10px; border-radius: 50%; }
+.preview-dot--red { background: #FF5F57; }
+.preview-dot--yellow { background: #FFBD2E; }
+.preview-dot--green { background: #28CA41; }
+.preview-url { flex: 1; background: var(--border); border-radius: 6px; padding: 5px 12px; font-size: 12px; color: var(--ink-mute); text-align: center; margin: 0 12px; }
+.preview-body { padding: 32px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+
+/* Clause explorer mock */
+.clause-list { display: flex; flex-direction: column; gap: 10px; }
+.clause-row {
+  border: 1.5px solid var(--border); border-radius: 12px; padding: 14px 16px;
+  cursor: pointer; transition: border-color .2s, background .2s;
+}
+.clause-row:hover { border-color: var(--indigo); background: var(--indigo-0); }
+.clause-row.active { border-color: var(--indigo); background: var(--indigo-0); }
+.clause-label { font-size: 10px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; color: var(--ink-mute); margin-bottom: 4px; }
+.clause-val { font-family: var(--font-d); font-size: 15px; font-weight: 700; color: var(--ink); }
+.clause-row.active .clause-val { color: var(--indigo); }
+
+.explanation-panel { background: var(--dark-s); border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 14px; }
+.exp-tag { font-size: 10px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; color: rgba(255,255,255,.4); }
+.exp-title { font-family: var(--font-d); font-size: 18px; font-weight: 800; color: #fff; }
+.exp-body { font-size: 14px; color: rgba(255,255,255,.65); line-height: 1.7; }
+.exp-callout { background: rgba(91,76,255,.18); border: 1px solid rgba(91,76,255,.35); border-radius: 10px; padding: 12px 14px; font-size: 13px; color: rgba(255,255,255,.85); line-height: 1.6; }
+.exp-callout strong { color: #A89EFF; }
+
+/* WHAT'S INSIDE */
+.inside-section { background: var(--white); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 96px 0; }
+.section-kicker { display: inline-block; font-size: 12px; font-weight: 800; letter-spacing: 1.1px; text-transform: uppercase; color: var(--indigo); background: var(--indigo-0); padding: 5px 12px; border-radius: var(--r-pill); margin-bottom: 16px; }
+.section-h2 { font-size: clamp(26px,3.6vw,40px); font-weight: 900; letter-spacing: -1.1px; color: var(--ink); margin-bottom: 12px; }
+.section-sub { font-size: 18px; color: var(--ink-soft); max-width: 520px; margin: 0 auto; line-height: 1.65; }
+.section-header { text-align: center; margin-bottom: 60px; }
+
+.topics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.topic-card { background: var(--ivory); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 28px 24px; transition: transform .25s, box-shadow .25s; }
+.topic-card:hover { transform: translateY(-4px); box-shadow: var(--sh-lg); }
+.topic-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+.topic-icon--indigo { background: var(--indigo-0); }
+.topic-icon--coral { background: #FFE4DB; }
+.topic-icon--amber { background: #FEF3C7; }
+.topic-h3 { font-size: 16px; font-weight: 700; letter-spacing: -.2px; margin-bottom: 7px; }
+.topic-p { font-size: 14px; color: var(--ink-soft); line-height: 1.65; }
+
+/* HOW IT WORKS */
+.how-section { padding: 96px 0; background: var(--ivory); }
+.steps { display: flex; flex-direction: column; gap: 0; max-width: 680px; margin: 0 auto; }
+.step { display: grid; grid-template-columns: 48px 1fr; gap: 20px; padding: 28px 0; border-bottom: 1px solid var(--border); }
+.step:last-child { border-bottom: none; }
+.step-num { width: 48px; height: 48px; border-radius: 50%; background: var(--indigo-0); color: var(--indigo); font-family: var(--font-d); font-size: 18px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex: none; }
+.step-body { padding-top: 10px; }
+.step-h3 { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+.step-p { font-size: 15px; color: var(--ink-soft); line-height: 1.65; }
+
+/* CTA */
+.cta-section { padding: 96px 24px; text-align: center; background: linear-gradient(180deg, var(--indigo-1) 0%, var(--ivory) 70%); border-top: 1px solid var(--border); }
+.cta-inner { max-width: 520px; margin: 0 auto; }
+.cta-h2 { font-size: clamp(26px,3.8vw,42px); font-weight: 900; letter-spacing: -1.4px; line-height: 1.1; color: var(--ink); margin-bottom: 14px; }
+.cta-sub { font-size: 17px; color: var(--ink-soft); margin-bottom: 32px; line-height: 1.65; }
+
+/* FOOTER */
+footer { background: var(--dark-s); padding: 40px 0; }
+.foot-inner { max-width: 1080px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; }
+.foot-brand { display: flex; align-items: center; gap: 8px; }
+.foot-mark { width: 22px; height: 23px; flex: none; }
+.foot-name { font-family: var(--font-d); font-weight: 800; font-size: 16px; letter-spacing: -.3px; color: #fff; }
+.foot-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+.foot-copy { font-size: 13px; color: #9797AE; font-style: italic; }
+.foot-contact { font-size: 13px; color: #9797AE; }
+.foot-contact a { color: rgba(255,255,255,.55); transition: color .2s; }
+.foot-contact a:hover { color: #fff; }
+
+@media (max-width: 760px) {
+  .preview-body { grid-template-columns: 1fr; }
+  .topics-grid { grid-template-columns: 1fr 1fr; }
+  .foot-right { align-items: flex-start; }
+}
+@media (max-width: 520px) {
+  .topics-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<nav id="site-nav">
+  <div class="nav-inner">
+    <a href="index.html" class="brand">
+      <svg class="brand-mark" viewBox="0 0 316 325" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M240.178 163.895C244.542 163.998 247.534 170.007 248.001 173.902C249.111 183.152 238.403 187.845 231.549 191.077C219.924 196.56 208.144 201.455 197.535 208.874C170.196 226.784 150.549 259.408 171.265 290.495C165.885 290.79 122.505 290.695 120.059 289.823C119.398 287.06 122.818 276.455 123.867 273.178C120.956 271.82 117.934 270.558 114.992 269.22C112.355 273.628 107.704 285.13 106.674 289.863C105.478 289.783 104.192 289.76 102.987 289.718C94.7369 289.613 86.4868 289.575 78.2367 289.605C74.2662 289.608 67.0854 289.428 63.3944 289.928C66.8709 282.11 70.5689 274.67 75.204 267.61C104.453 223.058 155.293 200.105 205.916 190.105C214.555 188.399 225.168 186.122 233.1 182.253C241.993 177.915 244.605 173.056 240.178 163.895Z" fill="#F37C5E"/>
+        <path d="M77.4292 92.2555C79.6298 88.7425 82.9019 85.2103 85.7589 82.1965C101.177 66.127 120.917 54.8988 142.58 49.8775C171.938 42.8493 202.877 47.837 228.562 63.7388C236.656 68.828 244.105 74.8825 250.746 81.77C251.985 83.0325 254.098 85.0878 254.893 86.6235C254.811 88.489 233.935 108.256 231.719 111.133C231.673 111.192 231.216 111.565 231.111 111.649C227.118 107.852 224.606 104.433 219.977 100.597C204.566 87.8268 187.342 81.3308 167.282 82.094C149.34 82.7765 133.585 89.1083 119.572 100.432C116.821 102.654 113.076 106.674 110.509 109.305L109.762 108.991C108.315 109.293 107.47 109.675 106.122 110.234C105.914 103.658 102.975 107.382 100.057 106.061C94.7135 103.641 90.1719 100.881 84.0941 100.336C83.0322 100.24 81.6035 99.5775 80.5035 99.4878C78.8956 99.3973 76.7222 100.743 75.1843 100.138C75.6563 98.8878 76.3152 97.6653 75.8031 96.4375L75.2172 96.3755C75.2063 95.702 77.0881 93.8258 77.4292 92.2555Z" fill="#5B4DE6"/>
+        <path d="M81.1051 234.533C64.3531 215.327 54.2648 188.6 54.0228 163.119C54.0116 161.935 54.0066 160.748 54.0136 159.564C54.2668 138.967 60.1514 118.835 71.026 101.362C72.5908 98.8512 75.4587 94.21 77.4292 92.2555C77.0881 93.8257 75.2063 95.702 75.2172 96.3755L75.8031 96.4375C76.3153 97.6652 75.6563 98.8877 75.1843 100.138C76.7222 100.743 78.8956 99.3972 80.5035 99.4877C81.6035 99.5775 83.0323 100.24 84.0941 100.335C90.1719 100.881 94.7135 103.641 100.057 106.06C102.975 107.382 105.914 103.658 106.122 110.234C107.47 109.675 108.315 109.293 109.762 108.991L110.509 109.305C105.489 114.461 99.1804 126.148 96.8269 132.906C89.4168 154.184 91.1426 175.438 101.386 195.245C102.682 197.8 104.152 200.262 105.787 202.613C107.005 204.347 109.828 208.025 110.652 209.838C110.097 211.152 106.016 213.171 104.539 214.3C97.8509 219.409 85.8331 228.016 81.1051 234.533Z" fill="#402EBA"/>
+        <path d="M186.093 264.283C185.676 258.86 189.393 249.956 192.734 245.705C194.437 243.539 199.196 242.623 201.856 241.606C204.875 240.451 208.049 239.32 210.996 237.936C219.872 233.787 228.546 228.258 236.06 222.009C251.046 209.544 262.243 194.364 271.184 177.12C273.066 173.491 274.763 169.766 276.575 166.096C277.058 165.117 278.152 162.695 278.735 161.905C280.258 162.666 280.395 169.988 280.512 171.855C281.738 191.302 276.926 211.551 267.76 228.667C258.739 245.609 245.524 259.938 229.388 270.278C226.418 272.208 220.685 275.628 217.336 276.918C214.253 279.448 198.142 284.19 193.806 285.49C189.76 279.048 186.411 272.005 186.093 264.283Z" fill="#3F2CB8"/>
+        <path d="M261.936 107.682C264.929 108.532 265.423 113.397 266.17 116.126C267.282 120.169 268.254 124.45 270.292 128.159C275.354 130.905 285.584 132.516 287.951 135.106C289.018 139.084 275.132 140.917 271.885 142.97C266.422 146.423 266.629 162.096 262.554 164.211C262.088 164.141 260.989 163.993 260.77 163.62C257.453 157.425 257.984 150.942 254.193 144.618C251.417 139.983 236.433 140.022 236.206 135.781C237.131 131.736 250.33 131.423 253.57 128.2C258.131 123.661 257.445 110.608 261.936 107.682Z" fill="#F9BD5E"/>
+      </svg>
+      <span class="brand-name">Onward</span>
+    </a>
+    <a href="index.html#waitlist" class="btn-nav">
+      Join Waitlist
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="page-hero">
+  <div class="hero-inner">
+    <div class="page-kicker">Employment Journey</div>
+    <h1 class="page-h1">Understand offer letters<br><span class="accent">before you get one.</span></h1>
+    <p class="page-sub">Most people see an offer letter for the first time and have no idea what they're reading. Onward lets you explore real template offer letters — clause by clause — so when yours arrives, you'll already know the language. And if you already have one, we'll decode that too.</p>
+    <a href="index.html#waitlist" class="btn-cta">
+      Get Early Access
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+</section>
+
+<!-- INTERACTIVE PREVIEW -->
+<section class="preview-section">
+  <div class="preview-card">
+    <div class="preview-bar">
+      <span class="preview-dot preview-dot--red"></span>
+      <span class="preview-dot preview-dot--yellow"></span>
+      <span class="preview-dot preview-dot--green"></span>
+      <span class="preview-url">Template Offer Letter — Software Engineer, Bangalore</span>
+    </div>
+    <div class="preview-body">
+      <div class="clause-list" id="clause-list">
+        <div class="clause-row active" data-idx="0">
+          <div class="clause-label">Annual CTC</div>
+          <div class="clause-val">&#8377; 8,40,000</div>
+        </div>
+        <div class="clause-row" data-idx="1">
+          <div class="clause-label">Take-home / month</div>
+          <div class="clause-val">&#8377; 57,200</div>
+        </div>
+        <div class="clause-row" data-idx="2">
+          <div class="clause-label">EPF Contribution</div>
+          <div class="clause-val">12% of Basic</div>
+        </div>
+        <div class="clause-row" data-idx="3">
+          <div class="clause-label">Variable Pay</div>
+          <div class="clause-val">20% of CTC</div>
+        </div>
+        <div class="clause-row" data-idx="4">
+          <div class="clause-label">Notice Period</div>
+          <div class="clause-val">60 days</div>
+        </div>
+      </div>
+      <div class="explanation-panel" id="explanation-panel">
+        <!-- filled by JS -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT'S INSIDE -->
+<section class="inside-section">
+  <div class="wrap">
+    <div class="section-header">
+      <p class="section-kicker reveal">What's covered</p>
+      <h2 class="section-h2 reveal reveal-delay-1">What every offer letter<br>actually contains.</h2>
+      <p class="section-sub reveal reveal-delay-2">Learn the terms before they're in front of you. No surprises, no last-minute Googling.</p>
+    </div>
+
+    <div class="topics-grid">
+      <div class="topic-card reveal">
+        <div class="topic-icon topic-icon--indigo">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <rect x="2" y="4" width="16" height="3.5" rx="1.5" fill="#5B4CFF" opacity=".25"/>
+            <rect x="2" y="4" width="16" height="3.5" rx="1.5" stroke="#5B4CFF" stroke-width="1.2"/>
+            <rect x="2" y="10" width="10" height="3.5" rx="1.5" fill="#5B4CFF" opacity=".25"/>
+            <rect x="2" y="10" width="10" height="3.5" rx="1.5" stroke="#5B4CFF" stroke-width="1.2"/>
+            <path d="M14 11.5h4M16 9.5v4" stroke="#FF7A59" stroke-width="1.4" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h3 class="topic-h3">CTC vs Take-Home</h3>
+        <p class="topic-p">Why your in-hand salary is significantly less than your CTC, and exactly where the difference goes — EPF, gratuity, professional tax, and more.</p>
+      </div>
+      <div class="topic-card reveal reveal-delay-1">
+        <div class="topic-icon topic-icon--coral">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <rect x="2" y="12" width="3.5" height="6" rx="1" fill="#FF7A59" opacity=".3"/>
+            <rect x="2" y="12" width="3.5" height="6" rx="1" stroke="#FF7A59" stroke-width="1.2"/>
+            <rect x="8.25" y="8" width="3.5" height="10" rx="1" fill="#FF7A59" opacity=".3"/>
+            <rect x="8.25" y="8" width="3.5" height="10" rx="1" stroke="#FF7A59" stroke-width="1.2"/>
+            <rect x="14.5" y="4" width="3.5" height="14" rx="1" fill="#FF7A59" opacity=".3"/>
+            <rect x="14.5" y="4" width="3.5" height="14" rx="1" stroke="#FF7A59" stroke-width="1.2"/>
+          </svg>
+        </div>
+        <h3 class="topic-h3">Variable Pay & Bonuses</h3>
+        <p class="topic-p">What "20% variable" actually means in practice, how performance linkage works, and why you shouldn't count it as guaranteed income.</p>
+      </div>
+      <div class="topic-card reveal reveal-delay-2">
+        <div class="topic-icon topic-icon--indigo">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="10" r="7" stroke="#5B4CFF" stroke-width="1.3"/>
+            <circle cx="10" cy="10" r="3.5" fill="#5B4CFF" opacity=".2" stroke="#5B4CFF" stroke-width="1.2"/>
+            <path d="M10 3v2M10 15v2M3 10h2M15 10h2" stroke="#5B4CFF" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h3 class="topic-h3">EPF & Gratuity</h3>
+        <p class="topic-p">How EPF is calculated, who contributes what, and why gratuity only kicks in after 5 years — things nobody explains during the joining process.</p>
+      </div>
+      <div class="topic-card reveal">
+        <div class="topic-icon topic-icon--amber">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <rect x="4" y="2" width="12" height="16" rx="2" stroke="#D97706" stroke-width="1.3"/>
+            <rect x="4" y="2" width="12" height="5" rx="2" fill="#F9BD5E" opacity=".3"/>
+            <rect x="4" y="5" width="12" height="2" fill="#F9BD5E" opacity=".3"/>
+            <path d="M7 11h6M7 14h4" stroke="#D97706" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h3 class="topic-h3">Notice Period Clauses</h3>
+        <p class="topic-p">What "buy-out" means, what happens if you leave without serving notice, and how to negotiate this clause before you sign.</p>
+      </div>
+      <div class="topic-card reveal reveal-delay-1">
+        <div class="topic-icon topic-icon--coral">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <rect x="5" y="9" width="10" height="9" rx="2" stroke="#FF7A59" stroke-width="1.3"/>
+            <rect x="5" y="9" width="10" height="9" rx="2" fill="#FF7A59" opacity=".15"/>
+            <path d="M7 9V7a3 3 0 0 1 6 0v2" stroke="#FF7A59" stroke-width="1.3" stroke-linecap="round"/>
+            <circle cx="10" cy="13.5" r="1.5" fill="#FF7A59" opacity=".6"/>
+          </svg>
+        </div>
+        <h3 class="topic-h3">Non-Compete & NDAs</h3>
+        <p class="topic-p">Whether non-compete clauses are enforceable in India, what NDAs actually restrict, and what to watch out for in the fine print.</p>
+      </div>
+      <div class="topic-card reveal reveal-delay-2">
+        <div class="topic-icon topic-icon--indigo">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M10 2L3 6v4c0 4 3.1 7.7 7 8.9C13.9 17.7 17 14 17 10V6l-7-4z" stroke="#5B4CFF" stroke-width="1.3" stroke-linejoin="round"/>
+            <path d="M10 2L3 6v4c0 4 3.1 7.7 7 8.9C13.9 17.7 17 14 17 10V6l-7-4z" fill="#5B4CFF" opacity=".12"/>
+            <path d="M7 10l2 2 4-4" stroke="#5B4CFF" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3 class="topic-h3">Benefits Decoded</h3>
+        <p class="topic-p">Health insurance limits, whether it covers your family, how reimbursements work, and what happens to benefits when you resign.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section">
+  <div class="wrap">
+    <div class="section-header">
+      <p class="section-kicker reveal">How it works</p>
+      <h2 class="section-h2 reveal reveal-delay-1">Learn it once.<br>Be ready when it counts.</h2>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3 class="step-h3">Explore a real template offer letter</h3>
+          <p class="step-p">We give you a realistic offer letter for a typical role — compensation, benefits, terms — laid out exactly as it would arrive in your inbox.</p>
+        </div>
+      </div>
+      <div class="step reveal reveal-delay-1">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3 class="step-h3">Tap any clause to understand it</h3>
+          <p class="step-p">Every number, every term gets a plain-English explanation. What it means, why it matters, and what to watch out for.</p>
+        </div>
+      </div>
+      <div class="step reveal reveal-delay-2">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h3 class="step-h3">See how the real numbers work</h3>
+          <p class="step-p">Understand how CTC becomes take-home, what EPF actually costs you, and why variable pay isn't the same as guaranteed salary.</p>
+        </div>
+      </div>
+      <div class="step reveal reveal-delay-3">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h3 class="step-h3">Got your own offer? We'll decode that too.</h3>
+          <p class="step-p">When your actual offer letter arrives, bring it in. Onward will walk you through your specific numbers, clauses, and what to ask before you sign.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-inner">
+    <p class="section-kicker reveal">Early Access</p>
+    <h2 class="cta-h2 reveal reveal-delay-1">Know what you're reading<br>before it even arrives.</h2>
+    <p class="cta-sub reveal reveal-delay-2">Join the waitlist and get early access to the Offer Letter Explorer — templates to learn from, and your own offer decoded when the time comes.</p>
+    <a href="index.html#waitlist" class="btn-cta reveal reveal-delay-3">
+      Join the Waitlist
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-inner">
+    <div class="foot-brand">
+      <svg class="foot-mark" viewBox="0 0 316 325" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M240.178 163.895C244.542 163.998 247.534 170.007 248.001 173.902C249.111 183.152 238.403 187.845 231.549 191.077C219.924 196.56 208.144 201.455 197.535 208.874C170.196 226.784 150.549 259.408 171.265 290.495C165.885 290.79 122.505 290.695 120.059 289.823C119.398 287.06 122.818 276.455 123.867 273.178C120.956 271.82 117.934 270.558 114.992 269.22C112.355 273.628 107.704 285.13 106.674 289.863C105.478 289.783 104.192 289.76 102.987 289.718C94.7369 289.613 86.4868 289.575 78.2367 289.605C74.2662 289.608 67.0854 289.428 63.3944 289.928C66.8709 282.11 70.5689 274.67 75.204 267.61C104.453 223.058 155.293 200.105 205.916 190.105C214.555 188.399 225.168 186.122 233.1 182.253C241.993 177.915 244.605 173.056 240.178 163.895Z" fill="#F37C5E"/>
+        <path d="M77.4292 92.2555C79.6298 88.7425 82.9019 85.2103 85.7589 82.1965C101.177 66.127 120.917 54.8988 142.58 49.8775C171.938 42.8493 202.877 47.837 228.562 63.7388C236.656 68.828 244.105 74.8825 250.746 81.77C251.985 83.0325 254.098 85.0878 254.893 86.6235C254.811 88.489 233.935 108.256 231.719 111.133C231.673 111.192 231.216 111.565 231.111 111.649C227.118 107.852 224.606 104.433 219.977 100.597C204.566 87.8268 187.342 81.3308 167.282 82.094C149.34 82.7765 133.585 89.1083 119.572 100.432C116.821 102.654 113.076 106.674 110.509 109.305L109.762 108.991C108.315 109.293 107.47 109.675 106.122 110.234C105.914 103.658 102.975 107.382 100.057 106.061C94.7135 103.641 90.1719 100.881 84.0941 100.336C83.0322 100.24 81.6035 99.5775 80.5035 99.4878C78.8956 99.3973 76.7222 100.743 75.1843 100.138C75.6563 98.8878 76.3152 97.6653 75.8031 96.4375L75.2172 96.3755C75.2063 95.702 77.0881 93.8258 77.4292 92.2555Z" fill="#5B4DE6"/>
+        <path d="M81.1051 234.533C64.3531 215.327 54.2648 188.6 54.0228 163.119C54.0116 161.935 54.0066 160.748 54.0136 159.564C54.2668 138.967 60.1514 118.835 71.026 101.362C72.5908 98.8512 75.4587 94.21 77.4292 92.2555C77.0881 93.8257 75.2063 95.702 75.2172 96.3755L75.8031 96.4375C76.3153 97.6652 75.6563 98.8877 75.1843 100.138C76.7222 100.743 78.8956 99.3972 80.5035 99.4877C81.6035 99.5775 83.0323 100.24 84.0941 100.335C90.1719 100.881 94.7135 103.641 100.057 106.06C102.975 107.382 105.914 103.658 106.122 110.234C107.47 109.675 108.315 109.293 109.762 108.991L110.509 109.305C105.489 114.461 99.1804 126.148 96.8269 132.906C89.4168 154.184 91.1426 175.438 101.386 195.245C102.682 197.8 104.152 200.262 105.787 202.613C107.005 204.347 109.828 208.025 110.652 209.838C110.097 211.152 106.016 213.171 104.539 214.3C97.8509 219.409 85.8331 228.016 81.1051 234.533Z" fill="#402EBA"/>
+        <path d="M186.093 264.283C185.676 258.86 189.393 249.956 192.734 245.705C194.437 243.539 199.196 242.623 201.856 241.606C204.875 240.451 208.049 239.32 210.996 237.936C219.872 233.787 228.546 228.258 236.06 222.009C251.046 209.544 262.243 194.364 271.184 177.12C273.066 173.491 274.763 169.766 276.575 166.096C277.058 165.117 278.152 162.695 278.735 161.905C280.258 162.666 280.395 169.988 280.512 171.855C281.738 191.302 276.926 211.551 267.76 228.667C258.739 245.609 245.524 259.938 229.388 270.278C226.418 272.208 220.685 275.628 217.336 276.918C214.253 279.448 198.142 284.19 193.806 285.49C189.76 279.048 186.411 272.005 186.093 264.283Z" fill="#3F2CB8"/>
+        <path d="M261.936 107.682C264.929 108.532 265.423 113.397 266.17 116.126C267.282 120.169 268.254 124.45 270.292 128.159C275.354 130.905 285.584 132.516 287.951 135.106C289.018 139.084 275.132 140.917 271.885 142.97C266.422 146.423 266.629 162.096 262.554 164.211C262.088 164.141 260.989 163.993 260.77 163.62C257.453 157.425 257.984 150.942 254.193 144.618C251.417 139.983 236.433 140.022 236.206 135.781C237.131 131.736 250.33 131.423 253.57 128.2C258.131 123.661 257.445 110.608 261.936 107.682Z" fill="#F9BD5E"/>
+      </svg>
+      <span class="foot-name">Onward</span>
+    </div>
+    <div class="foot-right">
+      <p class="foot-copy">© 2026 Onward. All rights reserved.</p>
+      <p class="foot-contact">Contact: <a href="mailto:onwardsupport@gmail.com">onwardsupport@gmail.com</a></p>
+    </div>
+  </div>
+</footer>
+
+<script>
+const nav = document.getElementById('site-nav');
+window.addEventListener('scroll', () => nav.classList.toggle('lifted', window.scrollY > 10), { passive: true });
+
+const revealObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); revealObs.unobserve(e.target); } });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+const explanations = [
+  {
+    tag: 'Compensation',
+    title: 'What is CTC?',
+    body: 'CTC (Cost to Company) is the total amount your employer spends on you annually. It includes your salary, employer\'s EPF contribution, gratuity provision, and all other benefits.',
+    callout: '<strong>Key insight:</strong> Your actual in-hand salary will be roughly 70–80% of your CTC. Always ask for the take-home breakup, not just the CTC figure.'
+  },
+  {
+    tag: 'Compensation',
+    title: 'Why is take-home lower?',
+    body: 'Your gross salary is reduced by your own EPF contribution (12% of basic), professional tax (₹200/month in most states), and income tax (TDS). What\'s left is your take-home.',
+    callout: '<strong>Example:</strong> On a ₹8.4L CTC, your monthly take-home is typically ₹54,000–₹58,000 after all deductions.'
+  },
+  {
+    tag: 'Benefits',
+    title: 'EPF — Employee Provident Fund',
+    body: 'Both you and your employer contribute 12% of your basic salary to EPF every month. This money goes into a retirement savings account you can access when you leave or retire.',
+    callout: '<strong>Important:</strong> EPF is a long-term benefit, not a current expense. The employer\'s 12% is often already included in your CTC — not on top of it.'
+  },
+  {
+    tag: 'Compensation',
+    title: 'Variable pay explained',
+    body: 'Variable pay (also called performance bonus) is paid only if you and/or your company hit certain targets. It\'s real money — but it\'s not guaranteed.',
+    callout: '<strong>Watch out:</strong> Many companies include variable pay in the CTC headline. A ₹8.4L CTC with 20% variable means only ₹6.72L is fixed and certain.'
+  },
+  {
+    tag: 'Terms',
+    title: 'Notice period obligations',
+    body: 'A 60-day notice period means you must inform your employer 60 days before you plan to leave — or pay the equivalent salary as a buy-out.',
+    callout: '<strong>Negotiable:</strong> Notice periods are often negotiable before signing. Once you\'re in the job, they\'re binding. Always try to get this reduced if it feels long.'
+  }
+];
+
+let activeIdx = 0;
+
+function renderExplanation(idx) {
+  const e = explanations[idx];
+  document.getElementById('explanation-panel').innerHTML = `
+    <div class="exp-tag">${e.tag}</div>
+    <div class="exp-title">${e.title}</div>
+    <div class="exp-body">${e.body}</div>
+    <div class="exp-callout">${e.callout}</div>
+  `;
+}
+
+document.getElementById('clause-list').addEventListener('click', function(ev) {
+  const row = ev.target.closest('.clause-row');
+  if (!row) return;
+  document.querySelectorAll('.clause-row').forEach(r => r.classList.remove('active'));
+  row.classList.add('active');
+  renderExplanation(parseInt(row.dataset.idx));
+});
+
+renderExplanation(0);
+</script>
+</body>
+</html>

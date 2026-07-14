@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Resume Builder — Onward</title>
+<meta name="description" content="Build a resume that actually gets noticed. Guided prompts, smart suggestions, and formats built for Indian job markets."/>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-QH8KCWJXD4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-QH8KCWJXD4');
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --indigo:   #5B4CFF;
+  --indigo-d: #4A3EE0;
+  --indigo-1: #E8E5FF;
+  --indigo-0: #F3F1FF;
+  --coral:    #FF7A59;
+  --amber:    #F9BD5E;
+  --ink:      #1F2937;
+  --ink-soft: #6B7280;
+  --ink-mute: #9CA3AF;
+  --border:   #E5E7EB;
+  --ivory:    #FCFBF8;
+  --ivory2:   #F6F5F2;
+  --white:    #FFFFFF;
+  --dark-s:   #1F2937;
+  --font:     'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-d:   'Manrope', var(--font);
+  --r-pill: 9999px;
+  --r-lg:   26px;
+  --r-xl:   34px;
+  --sh:     0 4px 14px rgba(31,41,55,.07), 0 8px 22px rgba(31,41,55,.06);
+  --sh-lg:  0 12px 36px rgba(31,41,55,.13);
+  --sh-xl:  0 24px 60px rgba(31,41,55,.18);
+  --sh-b:   0 8px 26px rgba(91,76,255,.32);
+}
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font); font-size: 17px; line-height: 1.65; background: var(--ivory); color: var(--ink); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+h1,h2,h3,h4 { font-family: var(--font-d); font-weight: 700; line-height: 1.12; margin: 0; }
+p { margin: 0; }
+a { text-decoration: none; color: inherit; }
+button { cursor: pointer; border: none; background: none; font: inherit; }
+svg { display: block; }
+
+@keyframes fade-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+
+.reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s cubic-bezier(.22,1,.36,1), transform .7s cubic-bezier(.22,1,.36,1); }
+.reveal.in { opacity: 1; transform: none; }
+.reveal-delay-1 { transition-delay: .12s; }
+.reveal-delay-2 { transition-delay: .22s; }
+.reveal-delay-3 { transition-delay: .32s; }
+
+.wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+/* NAV */
+nav { position: fixed; inset: 0 0 auto; z-index: 100; padding: 18px 0; background: rgba(252,251,248,.95); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); }
+nav.lifted { box-shadow: 0 2px 18px rgba(31,41,55,.07); }
+.nav-inner { max-width: 1080px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; }
+.brand { display: flex; align-items: center; gap: 10px; }
+.brand-mark { width: 26px; height: 27px; flex: none; }
+.brand-name { font-family: var(--font-d); font-weight: 800; font-size: 18px; letter-spacing: -.4px; color: var(--ink); }
+.btn-nav { display: inline-flex; align-items: center; gap: 7px; background: var(--indigo); color: #fff; font-family: var(--font-d); font-size: 13.5px; font-weight: 700; padding: 10px 20px; border-radius: var(--r-pill); box-shadow: var(--sh-b); transition: background .2s, transform .15s; }
+.btn-nav:hover { background: var(--indigo-d); transform: translateY(-1px); }
+
+/* HERO */
+.page-hero {
+  padding: 140px 24px 80px;
+  background:
+    radial-gradient(ellipse 80% 60% at 10% 10%, rgba(232,229,255,.9) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 50% at 90% 90%, rgba(255,228,219,.6) 0%, transparent 55%),
+    var(--ivory);
+  text-align: center;
+}
+.hero-inner { max-width: 720px; margin: 0 auto; }
+.page-kicker { display: inline-flex; align-items: center; gap: 8px; background: var(--indigo-0); color: var(--indigo); font-size: 12px; font-weight: 800; letter-spacing: 1.1px; text-transform: uppercase; padding: 6px 13px; border-radius: var(--r-pill); margin-bottom: 24px; animation: fade-up .5s ease both; }
+.page-h1 { font-size: clamp(34px, 5vw, 56px); font-weight: 900; letter-spacing: -2px; line-height: 1.07; color: var(--ink); margin-bottom: 20px; animation: fade-up .55s .07s ease both; }
+.page-h1 .accent { color: var(--indigo); }
+.page-sub { font-size: 19px; color: var(--ink-soft); line-height: 1.68; max-width: 560px; margin: 0 auto 36px; animation: fade-up .55s .14s ease both; }
+.btn-cta { display: inline-flex; align-items: center; gap: 10px; background: var(--indigo); color: #fff; font-family: var(--font-d); font-size: 16px; font-weight: 700; padding: 15px 30px; border-radius: var(--r-pill); box-shadow: var(--sh-b); transition: background .2s, transform .15s; animation: fade-up .55s .2s ease both; }
+.btn-cta:hover { background: var(--indigo-d); transform: translateY(-2px); }
+.btn-cta svg { transition: transform .2s; }
+.btn-cta:hover svg { transform: translateX(3px); }
+
+/* RESUME PREVIEW */
+.preview-section { padding: 0 24px 96px; }
+.preview-wrap { max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; animation: fade-in .8s .3s ease both; }
+
+.prompt-panel { background: var(--white); border: 1px solid var(--border); border-radius: var(--r-xl); padding: 28px; box-shadow: var(--sh); }
+.prompt-title { font-family: var(--font-d); font-size: 13px; font-weight: 700; color: var(--ink-mute); text-transform: uppercase; letter-spacing: .8px; margin-bottom: 20px; }
+.prompt-item { margin-bottom: 18px; }
+.prompt-label { font-size: 12px; font-weight: 600; color: var(--ink-soft); margin-bottom: 6px; }
+.prompt-q { font-size: 14px; font-weight: 600; color: var(--ink); background: var(--ivory2); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; margin-bottom: 8px; }
+.prompt-a { font-size: 14px; color: var(--ink-soft); background: var(--indigo-0); border: 1.5px solid rgba(91,76,255,.2); border-radius: 10px; padding: 10px 14px; line-height: 1.55; }
+.suggestion-chip { display: inline-flex; align-items: center; gap: 6px; background: var(--indigo-1); color: var(--indigo); font-size: 12px; font-weight: 600; padding: 5px 10px; border-radius: var(--r-pill); margin-top: 8px; }
+
+.resume-panel { background: var(--white); border: 1px solid var(--border); border-radius: var(--r-xl); padding: 28px; box-shadow: var(--sh); font-size: 13px; }
+.resume-name { font-family: var(--font-d); font-size: 20px; font-weight: 800; color: var(--ink); margin-bottom: 4px; }
+.resume-role { font-size: 13px; color: var(--ink-soft); margin-bottom: 10px; }
+.resume-contacts { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+.resume-contact { font-size: 11px; color: var(--ink-mute); }
+.resume-divider { height: 1px; background: var(--border); margin: 12px 0; }
+.resume-section-title { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--indigo); margin-bottom: 10px; }
+.resume-entry-title { font-size: 13px; font-weight: 700; color: var(--ink); }
+.resume-entry-meta { font-size: 11px; color: var(--ink-mute); margin-bottom: 6px; }
+.resume-bullet { font-size: 12px; color: var(--ink-soft); line-height: 1.6; padding-left: 12px; position: relative; margin-bottom: 3px; }
+.resume-bullet::before { content: '·'; position: absolute; left: 0; color: var(--indigo); }
+.resume-bullet.highlight { color: var(--ink); font-weight: 500; }
+.resume-skills { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.resume-skill { font-size: 11px; background: var(--indigo-0); color: var(--indigo); padding: 3px 9px; border-radius: var(--r-pill); font-weight: 600; }
+.ai-badge { display: inline-flex; align-items: center; gap: 5px; background: var(--indigo-1); border: 1px solid rgba(91,76,255,.25); border-radius: 8px; padding: 5px 10px; font-size: 11px; font-weight: 600; color: var(--indigo); margin-top: 10px; }
+
+/* WHAT'S INSIDE */
+.inside-section { background: var(--white); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 96px 0; }
+.section-kicker { display: inline-block; font-size: 12px; font-weight: 800; letter-spacing: 1.1px; text-transform: uppercase; color: var(--indigo); background: var(--indigo-0); padding: 5px 12px; border-radius: var(--r-pill); margin-bottom: 16px; }
+.section-h2 { font-size: clamp(26px,3.6vw,40px); font-weight: 900; letter-spacing: -1.1px; color: var(--ink); margin-bottom: 12px; }
+.section-sub { font-size: 18px; color: var(--ink-soft); max-width: 520px; margin: 0 auto; line-height: 1.65; }
+.section-header { text-align: center; margin-bottom: 60px; }
+.topics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.topic-card { background: var(--ivory); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 28px 24px; transition: transform .25s, box-shadow .25s; }
+.topic-card:hover { transform: translateY(-4px); box-shadow: var(--sh-lg); }
+.topic-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+.topic-icon--indigo { background: var(--indigo-0); }
+.topic-icon--coral { background: #FFE4DB; }
+.topic-icon--amber { background: #FEF3C7; }
+.topic-h3 { font-size: 16px; font-weight: 700; letter-spacing: -.2px; margin-bottom: 7px; }
+.topic-p { font-size: 14px; color: var(--ink-soft); line-height: 1.65; }
+
+/* HOW IT WORKS */
+.how-section { padding: 96px 0; background: var(--ivory); }
+.steps { display: flex; flex-direction: column; gap: 0; max-width: 680px; margin: 0 auto; }
+.step { display: grid; grid-template-columns: 48px 1fr; gap: 20px; padding: 28px 0; border-bottom: 1px solid var(--border); }
+.step:last-child { border-bottom: none; }
+.step-num { width: 48px; height: 48px; border-radius: 50%; background: var(--indigo-0); color: var(--indigo); font-family: var(--font-d); font-size: 18px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex: none; }
+.step-body { padding-top: 10px; }
+.step-h3 { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+.step-p { font-size: 15px; color: var(--ink-soft); line-height: 1.65; }
+
+/* CTA */
+.cta-section { padding: 96px 24px; text-align: center; background: linear-gradient(180deg, var(--indigo-1) 0%, var(--ivory) 70%); border-top: 1px solid var(--border); }
+.cta-inner { max-width: 520px; margin: 0 auto; }
+.cta-h2 { font-size: clamp(26px,3.8vw,42px); font-weight: 900; letter-spacing: -1.4px; line-height: 1.1; color: var(--ink); margin-bottom: 14px; }
+.cta-sub { font-size: 17px; color: var(--ink-soft); margin-bottom: 32px; line-height: 1.65; }
+
+/* FOOTER */
+footer { background: var(--dark-s); padding: 40px 0; }
+.foot-inner { max-width: 1080px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; }
+.foot-brand { display: flex; align-items: center; gap: 8px; }
+.foot-mark { width: 22px; height: 23px; flex: none; }
+.foot-name { font-family: var(--font-d); font-weight: 800; font-size: 16px; letter-spacing: -.3px; color: #fff; }
+.foot-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+.foot-copy { font-size: 13px; color: #9797AE; font-style: italic; }
+.foot-contact { font-size: 13px; color: #9797AE; }
+.foot-contact a { color: rgba(255,255,255,.55); transition: color .2s; }
+.foot-contact a:hover { color: #fff; }
+
+@media (max-width: 760px) {
+  .preview-wrap { grid-template-columns: 1fr; }
+  .topics-grid { grid-template-columns: 1fr 1fr; }
+  .foot-right { align-items: flex-start; }
+}
+@media (max-width: 520px) {
+  .topics-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<nav id="site-nav">
+  <div class="nav-inner">
+    <a href="index.html" class="brand">
+      <svg class="brand-mark" viewBox="0 0 316 325" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M240.178 163.895C244.542 163.998 247.534 170.007 248.001 173.902C249.111 183.152 238.403 187.845 231.549 191.077C219.924 196.56 208.144 201.455 197.535 208.874C170.196 226.784 150.549 259.408 171.265 290.495C165.885 290.79 122.505 290.695 120.059 289.823C119.398 287.06 122.818 276.455 123.867 273.178C120.956 271.82 117.934 270.558 114.992 269.22C112.355 273.628 107.704 285.13 106.674 289.863C105.478 289.783 104.192 289.76 102.987 289.718C94.7369 289.613 86.4868 289.575 78.2367 289.605C74.2662 289.608 67.0854 289.428 63.3944 289.928C66.8709 282.11 70.5689 274.67 75.204 267.61C104.453 223.058 155.293 200.105 205.916 190.105C214.555 188.399 225.168 186.122 233.1 182.253C241.993 177.915 244.605 173.056 240.178 163.895Z" fill="#F37C5E"/>
+        <path d="M77.4292 92.2555C79.6298 88.7425 82.9019 85.2103 85.7589 82.1965C101.177 66.127 120.917 54.8988 142.58 49.8775C171.938 42.8493 202.877 47.837 228.562 63.7388C236.656 68.828 244.105 74.8825 250.746 81.77C251.985 83.0325 254.098 85.0878 254.893 86.6235C254.811 88.489 233.935 108.256 231.719 111.133C231.673 111.192 231.216 111.565 231.111 111.649C227.118 107.852 224.606 104.433 219.977 100.597C204.566 87.8268 187.342 81.3308 167.282 82.094C149.34 82.7765 133.585 89.1083 119.572 100.432C116.821 102.654 113.076 106.674 110.509 109.305L109.762 108.991C108.315 109.293 107.47 109.675 106.122 110.234C105.914 103.658 102.975 107.382 100.057 106.061C94.7135 103.641 90.1719 100.881 84.0941 100.336C83.0322 100.24 81.6035 99.5775 80.5035 99.4878C78.8956 99.3973 76.7222 100.743 75.1843 100.138C75.6563 98.8878 76.3152 97.6653 75.8031 96.4375L75.2172 96.3755C75.2063 95.702 77.0881 93.8258 77.4292 92.2555Z" fill="#5B4DE6"/>
+        <path d="M81.1051 234.533C64.3531 215.327 54.2648 188.6 54.0228 163.119C54.0116 161.935 54.0066 160.748 54.0136 159.564C54.2668 138.967 60.1514 118.835 71.026 101.362C72.5908 98.8512 75.4587 94.21 77.4292 92.2555C77.0881 93.8257 75.2063 95.702 75.2172 96.3755L75.8031 96.4375C76.3153 97.6652 75.6563 98.8877 75.1843 100.138C76.7222 100.743 78.8956 99.3972 80.5035 99.4877C81.6035 99.5775 83.0323 100.24 84.0941 100.335C90.1719 100.881 94.7135 103.641 100.057 106.06C102.975 107.382 105.914 103.658 106.122 110.234C107.47 109.675 108.315 109.293 109.762 108.991L110.509 109.305C105.489 114.461 99.1804 126.148 96.8269 132.906C89.4168 154.184 91.1426 175.438 101.386 195.245C102.682 197.8 104.152 200.262 105.787 202.613C107.005 204.347 109.828 208.025 110.652 209.838C110.097 211.152 106.016 213.171 104.539 214.3C97.8509 219.409 85.8331 228.016 81.1051 234.533Z" fill="#402EBA"/>
+        <path d="M186.093 264.283C185.676 258.86 189.393 249.956 192.734 245.705C194.437 243.539 199.196 242.623 201.856 241.606C204.875 240.451 208.049 239.32 210.996 237.936C219.872 233.787 228.546 228.258 236.06 222.009C251.046 209.544 262.243 194.364 271.184 177.12C273.066 173.491 274.763 169.766 276.575 166.096C277.058 165.117 278.152 162.695 278.735 161.905C280.258 162.666 280.395 169.988 280.512 171.855C281.738 191.302 276.926 211.551 267.76 228.667C258.739 245.609 245.524 259.938 229.388 270.278C226.418 272.208 220.685 275.628 217.336 276.918C214.253 279.448 198.142 284.19 193.806 285.49C189.76 279.048 186.411 272.005 186.093 264.283Z" fill="#3F2CB8"/>
+        <path d="M261.936 107.682C264.929 108.532 265.423 113.397 266.17 116.126C267.282 120.169 268.254 124.45 270.292 128.159C275.354 130.905 285.584 132.516 287.951 135.106C289.018 139.084 275.132 140.917 271.885 142.97C266.422 146.423 266.629 162.096 262.554 164.211C262.088 164.141 260.989 163.993 260.77 163.62C257.453 157.425 257.984 150.942 254.193 144.618C251.417 139.983 236.433 140.022 236.206 135.781C237.131 131.736 250.33 131.423 253.57 128.2C258.131 123.661 257.445 110.608 261.936 107.682Z" fill="#F9BD5E"/>
+      </svg>
+      <span class="brand-name">Onward</span>
+    </a>
+    <a href="index.html#waitlist" class="btn-nav">
+      Join Waitlist
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="page-hero">
+  <div class="hero-inner">
+    <div class="page-kicker">Employment Journey</div>
+    <h1 class="page-h1">A resume that gets you<br><span class="accent">in the room.</span></h1>
+    <p class="page-sub">Most first resumes are a mess — not because you lack experience, but because nobody taught you how to present what you have. We guide you through it, step by step.</p>
+    <a href="index.html#waitlist" class="btn-cta">
+      Get Early Access
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+</section>
+
+<!-- PREVIEW -->
+<section class="preview-section">
+  <div class="preview-wrap">
+    <div class="prompt-panel">
+      <div class="prompt-title">Guided prompts</div>
+      <div class="prompt-item">
+        <div class="prompt-label">Experience</div>
+        <div class="prompt-q">What did you actually do in this role or project?</div>
+        <div class="prompt-a">Built an inventory tracking dashboard using Python and Google Sheets for my college fest. Reduced manual errors by automating stock updates.</div>
+        <div class="suggestion-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M12 2l3 7h7l-6 4.5 2.3 7L12 17l-6.3 3.5L8 13.5 2 9h7z" fill="#5B4CFF"/></svg>
+          Suggested: quantify with % or numbers
+        </div>
+      </div>
+      <div class="prompt-item">
+        <div class="prompt-label">Skills</div>
+        <div class="prompt-q">Which tools or technologies did you use?</div>
+        <div class="prompt-a">Python, Google Sheets, Excel, basic SQL, Canva for reports</div>
+      </div>
+    </div>
+
+    <div class="resume-panel">
+      <div class="resume-name">Priya Sharma</div>
+      <div class="resume-role">B.Tech CSE · Graduating 2025 · Seeking SDE / Analyst roles</div>
+      <div class="resume-contacts">
+        <span class="resume-contact">priya@email.com</span>
+        <span class="resume-contact">+91 98765 43210</span>
+        <span class="resume-contact">LinkedIn</span>
+        <span class="resume-contact">GitHub</span>
+      </div>
+      <div class="resume-divider"></div>
+      <div class="resume-section-title">Experience & Projects</div>
+      <div class="resume-entry-title">Inventory Dashboard — College Fest (Techfest 2024)</div>
+      <div class="resume-entry-meta">Volunteer Coordinator · Oct 2024</div>
+      <div class="resume-bullet highlight">Automated stock tracking for 12 stalls using Python + Google Sheets, reducing manual errors by 80%</div>
+      <div class="resume-bullet">Built real-time dashboard used by 5 coordinators across event day</div>
+      <div class="resume-bullet">Delivered final report to organising committee within 2 hours of fest close</div>
+      <div class="ai-badge">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M12 2l3 7h7l-6 4.5 2.3 7L12 17l-6.3 3.5L8 13.5 2 9h7z" fill="#5B4CFF"/></svg>
+        Impact bullet added by Onward
+      </div>
+      <div class="resume-divider"></div>
+      <div class="resume-section-title">Skills</div>
+      <div class="resume-skills">
+        <span class="resume-skill">Python</span>
+        <span class="resume-skill">SQL</span>
+        <span class="resume-skill">Excel</span>
+        <span class="resume-skill">Google Sheets</span>
+        <span class="resume-skill">Data Analysis</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT'S INSIDE -->
+<section class="inside-section">
+  <div class="wrap">
+    <div class="section-header">
+      <p class="section-kicker reveal">What's covered</p>
+      <h2 class="section-h2 reveal reveal-delay-1">Everything a great resume needs.<br>Nothing it doesn't.</h2>
+      <p class="section-sub reveal reveal-delay-2">We help you build it right the first time — structured, scannable, and relevant for Indian hiring.</p>
+    </div>
+    <div class="topics-grid">
+      <div class="topic-card reveal">
+        <div class="topic-icon topic-icon--indigo">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <rect x="3" y="2" width="14" height="16" rx="2" stroke="#5B4CFF" stroke-width="1.3"/>
+            <rect x="3" y="2" width="14" height="5" rx="2" fill="#5B4CFF" opacity=".15"/>
+            <rect x="3" y="5" width="14" height="2" fill="#5B4CFF" opacity=".15"/>
+            <path d="M6 11h8M6 14h5" stroke="#5B4CFF" stroke-width="1.3" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h3 class="topic-h3">Structure & Format</h3>
+        <p class="topic-p">The right sections in the right order, fonts that recruiters actually prefer, and length guidance for freshers vs experienced candidates.</p>
+      </div>
+      <div class="topic-card reveal reveal-delay-1">
+        <div class="topic-icon topic-icon--coral">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M6 14h8M6 10h5" stroke="#FF7A59" stroke-width="1.3" stroke-linecap="round"/>
+            <circle cx="5" cy="14" r="1.2" fill="#FF7A59"/>
+            <circle cx="5" cy="10" r="1.2" fill="#FF7A59"/>
+            <path d="M10 3l1.5 3.5L15 7l-2.5 2.5.6 3.5L10 11.3 6.9 13l.6-3.5L5 7l3.5-.5L10 3z" fill="#FF7A59" opacity=".25" stroke="#FF7A59" stroke-width="1.1" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3 class="topic-h3">Impact Bullets</h3>
+        <p class="topic-p">We help you turn vague descriptions into achievement-oriented bullets. "Managed social media" becomes "Grew Instagram following by 40% in 3 months."</p>
+      </div>
+      <div class="topic-card reveal reveal-delay-2">
+        <div class="topic-icon topic-icon--amber">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M3 4h14l-2.5 4H5.5L3 4z" stroke="#D97706" stroke-width="1.3" stroke-linejoin="round" fill="#F9BD5E" opacity=".2"/>
+            <path d="M5.5 8h9l-2 4H7.5l-2-4z" stroke="#D97706" stroke-width="1.3" stroke-linejoin="round" fill="#F9BD5E" opacity=".2"/>
+            <path d="M7.5 12h5l-1.5 4h-2L7.5 12z" stroke="#D97706" stroke-width="1.3" stroke-linejoin="round" fill="#F9BD5E" opacity=".35"/>
+          </svg>
+        </div>
+        <h3 class="topic-h3">ATS Optimisation</h3>
+        <p class="topic-p">Most resumes never reach a human. We ensure yours passes Applicant Tracking Systems with the right keywords and clean formatting.</p>
+      </div>
+      <div class="topic-card reveal">
+        <div class="topic-icon topic-icon--indigo">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M10 2l-7 5v5c0 3.5 3 6.5 7 7.5 4-1 7-4 7-7.5V7l-7-5z" stroke="#5B4CFF" stroke-width="1.3" stroke-linejoin="round" fill="#5B4CFF" opacity=".1"/>
+            <rect x="7" y="9" width="6" height="1.5" rx=".75" fill="#5B4CFF" opacity=".5"/>
+            <rect x="7" y="12" width="4" height="1.5" rx=".75" fill="#5B4CFF" opacity=".5"/>
+            <rect x="7" y="6.5" width="3" height="1.5" rx=".75" fill="#5B4CFF"/>
+          </svg>
+        </div>
+        <h3 class="topic-h3">Fresher-Specific Guidance</h3>
+        <p class="topic-p">No experience? No problem. We help you present internships, projects, coursework, and college activities in the strongest possible way.</p>
+      </div>
+      <div class="topic-card reveal reveal-delay-1">
+        <div class="topic-icon topic-icon--coral">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <rect x="3" y="10" width="14" height="8" rx="1.5" stroke="#FF7A59" stroke-width="1.3"/>
+            <rect x="3" y="10" width="14" height="8" rx="1.5" fill="#FF7A59" opacity=".1"/>
+            <rect x="6" y="7" width="8" height="5" rx="1" stroke="#FF7A59" stroke-width="1.3"/>
+            <rect x="8.5" y="4" width="3" height="4" rx="1" stroke="#FF7A59" stroke-width="1.3"/>
+            <path d="M7 14h2M11 14h2" stroke="#FF7A59" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h3 class="topic-h3">Indian Job Market Formats</h3>
+        <p class="topic-p">What works for TCS/Infosys differs from startups or MNCs. We tailor the approach based on where you're applying.</p>
+      </div>
+      <div class="topic-card reveal reveal-delay-2">
+        <div class="topic-icon topic-icon--amber">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <rect x="3" y="3" width="14" height="14" rx="2.5" stroke="#D97706" stroke-width="1.3"/>
+            <rect x="3" y="3" width="14" height="14" rx="2.5" fill="#F9BD5E" opacity=".12"/>
+            <path d="M7 10l2 2 4-4" stroke="#D97706" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3 class="topic-h3">Final Checklist</h3>
+        <p class="topic-p">Before you send it out — a thorough checklist covering common mistakes, red flags, and things recruiters silently judge you for.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section">
+  <div class="wrap">
+    <div class="section-header">
+      <p class="section-kicker reveal">How it works</p>
+      <h2 class="section-h2 reveal reveal-delay-1">Answer questions.<br>We handle the framing.</h2>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3 class="step-h3">Tell us about yourself, in plain words</h3>
+          <p class="step-p">No resume jargon needed. We ask you simple questions about your experience, projects, and goals — you just answer honestly.</p>
+        </div>
+      </div>
+      <div class="step reveal reveal-delay-1">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3 class="step-h3">We suggest how to frame it</h3>
+          <p class="step-p">Our guided prompts turn your raw answers into strong, action-oriented bullets with measurable impact where possible.</p>
+        </div>
+      </div>
+      <div class="step reveal reveal-delay-2">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h3 class="step-h3">Choose a format that fits your target role</h3>
+          <p class="step-p">We offer clean, recruiter-approved templates suited for tech, finance, consulting, and general roles in Indian companies.</p>
+        </div>
+      </div>
+      <div class="step reveal reveal-delay-3">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h3 class="step-h3">Review, download, apply</h3>
+          <p class="step-p">Get a final checklist before you export. Your resume is ready to go — and you actually understand every line of it.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-inner">
+    <p class="section-kicker reveal">Early Access</p>
+    <h2 class="cta-h2 reveal reveal-delay-1">Your first resume,<br>done right.</h2>
+    <p class="cta-sub reveal reveal-delay-2">Join the waitlist and be among the first to build your resume with Onward when we launch.</p>
+    <a href="index.html#waitlist" class="btn-cta reveal reveal-delay-3">
+      Join the Waitlist
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-inner">
+    <div class="foot-brand">
+      <svg class="foot-mark" viewBox="0 0 316 325" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M240.178 163.895C244.542 163.998 247.534 170.007 248.001 173.902C249.111 183.152 238.403 187.845 231.549 191.077C219.924 196.56 208.144 201.455 197.535 208.874C170.196 226.784 150.549 259.408 171.265 290.495C165.885 290.79 122.505 290.695 120.059 289.823C119.398 287.06 122.818 276.455 123.867 273.178C120.956 271.82 117.934 270.558 114.992 269.22C112.355 273.628 107.704 285.13 106.674 289.863C105.478 289.783 104.192 289.76 102.987 289.718C94.7369 289.613 86.4868 289.575 78.2367 289.605C74.2662 289.608 67.0854 289.428 63.3944 289.928C66.8709 282.11 70.5689 274.67 75.204 267.61C104.453 223.058 155.293 200.105 205.916 190.105C214.555 188.399 225.168 186.122 233.1 182.253C241.993 177.915 244.605 173.056 240.178 163.895Z" fill="#F37C5E"/>
+        <path d="M77.4292 92.2555C79.6298 88.7425 82.9019 85.2103 85.7589 82.1965C101.177 66.127 120.917 54.8988 142.58 49.8775C171.938 42.8493 202.877 47.837 228.562 63.7388C236.656 68.828 244.105 74.8825 250.746 81.77C251.985 83.0325 254.098 85.0878 254.893 86.6235C254.811 88.489 233.935 108.256 231.719 111.133C231.673 111.192 231.216 111.565 231.111 111.649C227.118 107.852 224.606 104.433 219.977 100.597C204.566 87.8268 187.342 81.3308 167.282 82.094C149.34 82.7765 133.585 89.1083 119.572 100.432C116.821 102.654 113.076 106.674 110.509 109.305L109.762 108.991C108.315 109.293 107.47 109.675 106.122 110.234C105.914 103.658 102.975 107.382 100.057 106.061C94.7135 103.641 90.1719 100.881 84.0941 100.336C83.0322 100.24 81.6035 99.5775 80.5035 99.4878C78.8956 99.3973 76.7222 100.743 75.1843 100.138C75.6563 98.8878 76.3152 97.6653 75.8031 96.4375L75.2172 96.3755C75.2063 95.702 77.0881 93.8258 77.4292 92.2555Z" fill="#5B4DE6"/>
+        <path d="M81.1051 234.533C64.3531 215.327 54.2648 188.6 54.0228 163.119C54.0116 161.935 54.0066 160.748 54.0136 159.564C54.2668 138.967 60.1514 118.835 71.026 101.362C72.5908 98.8512 75.4587 94.21 77.4292 92.2555C77.0881 93.8257 75.2063 95.702 75.2172 96.3755L75.8031 96.4375C76.3153 97.6652 75.6563 98.8877 75.1843 100.138C76.7222 100.743 78.8956 99.3972 80.5035 99.4877C81.6035 99.5775 83.0323 100.24 84.0941 100.335C90.1719 100.881 94.7135 103.641 100.057 106.06C102.975 107.382 105.914 103.658 106.122 110.234C107.47 109.675 108.315 109.293 109.762 108.991L110.509 109.305C105.489 114.461 99.1804 126.148 96.8269 132.906C89.4168 154.184 91.1426 175.438 101.386 195.245C102.682 197.8 104.152 200.262 105.787 202.613C107.005 204.347 109.828 208.025 110.652 209.838C110.097 211.152 106.016 213.171 104.539 214.3C97.8509 219.409 85.8331 228.016 81.1051 234.533Z" fill="#402EBA"/>
+        <path d="M186.093 264.283C185.676 258.86 189.393 249.956 192.734 245.705C194.437 243.539 199.196 242.623 201.856 241.606C204.875 240.451 208.049 239.32 210.996 237.936C219.872 233.787 228.546 228.258 236.06 222.009C251.046 209.544 262.243 194.364 271.184 177.12C273.066 173.491 274.763 169.766 276.575 166.096C277.058 165.117 278.152 162.695 278.735 161.905C280.258 162.666 280.395 169.988 280.512 171.855C281.738 191.302 276.926 211.551 267.76 228.667C258.739 245.609 245.524 259.938 229.388 270.278C226.418 272.208 220.685 275.628 217.336 276.918C214.253 279.448 198.142 284.19 193.806 285.49C189.76 279.048 186.411 272.005 186.093 264.283Z" fill="#3F2CB8"/>
+        <path d="M261.936 107.682C264.929 108.532 265.423 113.397 266.17 116.126C267.282 120.169 268.254 124.45 270.292 128.159C275.354 130.905 285.584 132.516 287.951 135.106C289.018 139.084 275.132 140.917 271.885 142.97C266.422 146.423 266.629 162.096 262.554 164.211C262.088 164.141 260.989 163.993 260.77 163.62C257.453 157.425 257.984 150.942 254.193 144.618C251.417 139.983 236.433 140.022 236.206 135.781C237.131 131.736 250.33 131.423 253.57 128.2C258.131 123.661 257.445 110.608 261.936 107.682Z" fill="#F9BD5E"/>
+      </svg>
+      <span class="foot-name">Onward</span>
+    </div>
+    <div class="foot-right">
+      <p class="foot-copy">© 2026 Onward. All rights reserved.</p>
+      <p class="foot-contact">Contact: <a href="mailto:onwardsupport@gmail.com">onwardsupport@gmail.com</a></p>
+    </div>
+  </div>
+</footer>
+
+<script>
+const nav = document.getElementById('site-nav');
+window.addEventListener('scroll', () => nav.classList.toggle('lifted', window.scrollY > 10), { passive: true });
+const revealObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); revealObs.unobserve(e.target); } });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+</script>
+</body>
+</html>

@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Onward — Hero Climb Animation</title>
+<!--
+  ═══════════════════════════════════════════════════════════════
+  ONWARD · HERO CLIMB ANIMATION (self-contained, no JS)
+
+  To embed in the hero section:
+    1. Copy the <style> block marked "oc-" styles.
+    2. Copy the entire <div class="oc-stage"> ... </div>.
+  All classes are prefixed "oc-" to avoid collisions.
+  The SVG scales to its container width (aspect ratio 800:430).
+  Loop duration: 16s. Honors prefers-reduced-motion (shows the
+  completed climb as a static scene).
+  ═══════════════════════════════════════════════════════════════
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=Inter:wght@500;600&display=swap" rel="stylesheet"/>
+<style>
+body {
+  margin: 0; min-height: 100vh; display: grid; place-items: center;
+  background: #FCFBF8; font-family: 'Inter', system-ui, sans-serif;
+}
+.demo-frame { width: min(920px, 94vw); }
+
+/* ═════════ oc- styles — copy from here ═════════ */
+.oc-stage {
+  --oc-indigo:   #5B4CFF;
+  --oc-indigo-d: #4A3EE0;
+  --oc-indigo-1: #E8E5FF;
+  --oc-indigo-0: #F3F1FF;
+  --oc-coral:    #FF7A59;
+  --oc-coral-d:  #E05B3A;
+  --oc-amber:    #F9BD5E;
+  --oc-cream:    #FEF3C7;
+  --oc-ink:      #1F2937;
+  --oc-ink-soft: #6B7280;
+  --oc-white:    #FFFFFF;
+  --oc-dur: 16s;
+  width: 100%;
+}
+.oc-stage svg { display: block; width: 100%; height: auto; }
+.oc-stage text {
+  font-family: 'Manrope', 'Inter', system-ui, sans-serif;
+}
+
+/* ── background drift ── */
+.oc-cloud   { animation: oc-drift var(--oc-dur) linear infinite; }
+.oc-cloud-2 { animation-duration: calc(var(--oc-dur) * 1.4); animation-delay: -6s; }
+.oc-sun     { animation: oc-breathe 6s ease-in-out infinite; transform-origin: 78px 64px; }
+@keyframes oc-drift {
+  from { transform: translateX(0); }
+  50%  { transform: translateX(26px); }
+  to   { transform: translateX(0); }
+}
+@keyframes oc-breathe {
+  0%,100% { transform: scale(1); }
+  50%     { transform: scale(1.06); }
+}
+
+/* ── climber: hops stone → stone, two victory hops, fades to restart ──
+   Feet positions: P1(90,350) P2(245,298) P3(400,246) P4(555,194) P5(710,142) */
+.oc-climber {
+  animation: oc-walk var(--oc-dur) infinite, oc-presence var(--oc-dur) infinite;
+}
+@keyframes oc-walk {
+  0%    { transform: translate(90px, 350px); }
+  11%   { transform: translate(90px, 350px);  animation-timing-function: ease-out; }
+  14%   { transform: translate(167px, 243px); animation-timing-function: ease-in; }
+  17%   { transform: translate(245px, 298px); }
+  28%   { transform: translate(245px, 298px); animation-timing-function: ease-out; }
+  31%   { transform: translate(322px, 191px); animation-timing-function: ease-in; }
+  34%   { transform: translate(400px, 246px); }
+  45%   { transform: translate(400px, 246px); animation-timing-function: ease-out; }
+  48%   { transform: translate(477px, 139px); animation-timing-function: ease-in; }
+  51%   { transform: translate(555px, 194px); }
+  62%   { transform: translate(555px, 194px); animation-timing-function: ease-out; }
+  65%   { transform: translate(632px, 87px);  animation-timing-function: ease-in; }
+  68%   { transform: translate(710px, 142px); }
+  71%   { transform: translate(710px, 142px); animation-timing-function: ease-out; }
+  73%   { transform: translate(710px, 128px); animation-timing-function: ease-in; }
+  75%   { transform: translate(710px, 142px); animation-timing-function: ease-out; }
+  77%   { transform: translate(710px, 130px); animation-timing-function: ease-in; }
+  79%   { transform: translate(710px, 142px); }
+  100%  { transform: translate(710px, 142px); }
+}
+@keyframes oc-presence {
+  0%   { opacity: 0; }
+  2%   { opacity: 1; }
+  96%  { opacity: 1; }
+  99%  { opacity: 0; }
+  100% { opacity: 0; }
+}
+/* squash & stretch on the body while hopping */
+.oc-climber-body { animation: oc-squash var(--oc-dur) infinite; transform-origin: 0 0; }
+@keyframes oc-squash {
+  0%, 10.5%             { transform: scale(1,1); }
+  11.5%                 { transform: scale(1.12,.86); }  /* crouch  */
+  13%                   { transform: scale(.94,1.08); }  /* stretch */
+  17%                   { transform: scale(1.08,.9); }   /* land    */
+  18.5%, 27.5%          { transform: scale(1,1); }
+  28.5%                 { transform: scale(1.12,.86); }
+  30%                   { transform: scale(.94,1.08); }
+  34%                   { transform: scale(1.08,.9); }
+  35.5%, 44.5%          { transform: scale(1,1); }
+  45.5%                 { transform: scale(1.12,.86); }
+  47%                   { transform: scale(.94,1.08); }
+  51%                   { transform: scale(1.08,.9); }
+  52.5%, 61.5%          { transform: scale(1,1); }
+  62.5%                 { transform: scale(1.12,.86); }
+  64%                   { transform: scale(.94,1.08); }
+  68%                   { transform: scale(1.08,.9); }
+  69.5%, 100%           { transform: scale(1,1); }
+}
+/* arms raise in celebration at the summit */
+.oc-arm-l, .oc-arm-r { animation: var(--oc-dur) infinite; transform-origin: 0 -34px; }
+.oc-arm-l { animation-name: oc-cheer-l; }
+.oc-arm-r { animation-name: oc-cheer-r; }
+@keyframes oc-cheer-l {
+  0%, 69%   { transform: rotate(0deg); }
+  72%, 94%  { transform: rotate(-130deg); }
+  97%, 100% { transform: rotate(-130deg); }
+}
+@keyframes oc-cheer-r {
+  0%, 69%   { transform: rotate(0deg); }
+  72%, 94%  { transform: rotate(130deg); }
+  97%, 100% { transform: rotate(130deg); }
+}
+
+/* ── stones light up on landing (land: 2 / 17 / 34 / 51 / 68 %) ── */
+.oc-lit   { opacity: 0; animation: var(--oc-dur) infinite; }
+.oc-lit-1 { animation-name: oc-lit-1; }
+.oc-lit-2 { animation-name: oc-lit-2; }
+.oc-lit-3 { animation-name: oc-lit-3; }
+.oc-lit-4 { animation-name: oc-lit-4; }
+.oc-lit-5 { animation-name: oc-lit-5; }
+@keyframes oc-lit-1 { 0%,1.5% {opacity:0;} 3%  {opacity:1;} 96% {opacity:1;} 100% {opacity:0;} }
+@keyframes oc-lit-2 { 0%,16.5%{opacity:0;} 18% {opacity:1;} 96% {opacity:1;} 100% {opacity:0;} }
+@keyframes oc-lit-3 { 0%,33.5%{opacity:0;} 35% {opacity:1;} 96% {opacity:1;} 100% {opacity:0;} }
+@keyframes oc-lit-4 { 0%,50.5%{opacity:0;} 52% {opacity:1;} 96% {opacity:1;} 100% {opacity:0;} }
+@keyframes oc-lit-5 { 0%,67.5%{opacity:0;} 69% {opacity:1;} 96% {opacity:1;} 100% {opacity:0;} }
+
+/* pulse ring on landing */
+.oc-pulse   { opacity: 0; animation: var(--oc-dur) infinite; transform-box: fill-box; transform-origin: center; }
+.oc-pulse-1 { animation-name: oc-pulse-1; }
+.oc-pulse-2 { animation-name: oc-pulse-2; }
+.oc-pulse-3 { animation-name: oc-pulse-3; }
+.oc-pulse-4 { animation-name: oc-pulse-4; }
+.oc-pulse-5 { animation-name: oc-pulse-5; }
+@keyframes oc-pulse-1 { 0%,2%  {opacity:.9; transform:scale(.4);} 8%  {opacity:0; transform:scale(1.5);} 100% {opacity:0;} }
+@keyframes oc-pulse-2 { 0%,17% {opacity:0;  transform:scale(.4);} 17.5% {opacity:.9;} 23% {opacity:0; transform:scale(1.5);} 100% {opacity:0;} }
+@keyframes oc-pulse-3 { 0%,34% {opacity:0;  transform:scale(.4);} 34.5% {opacity:.9;} 40% {opacity:0; transform:scale(1.5);} 100% {opacity:0;} }
+@keyframes oc-pulse-4 { 0%,51% {opacity:0;  transform:scale(.4);} 51.5% {opacity:.9;} 57% {opacity:0; transform:scale(1.5);} 100% {opacity:0;} }
+@keyframes oc-pulse-5 { 0%,68% {opacity:0;  transform:scale(.4);} 68.5% {opacity:.9;} 74% {opacity:0; transform:scale(1.5);} 100% {opacity:0;} }
+
+/* labels pop in just after landing */
+.oc-tag   { opacity: 0; animation: var(--oc-dur) infinite; transform-box: fill-box; transform-origin: center; }
+.oc-tag-1 { animation-name: oc-tag-1; }
+.oc-tag-2 { animation-name: oc-tag-2; }
+.oc-tag-3 { animation-name: oc-tag-3; }
+.oc-tag-4 { animation-name: oc-tag-4; }
+.oc-tag-5 { animation-name: oc-tag-5; }
+@keyframes oc-tag-1 { 0%,2.5% {opacity:0; transform:translateY(8px) scale(.85);} 5%  {opacity:1; transform:none;} 96% {opacity:1;} 100% {opacity:0;} }
+@keyframes oc-tag-2 { 0%,17.5%{opacity:0; transform:translateY(8px) scale(.85);} 20% {opacity:1; transform:none;} 96% {opacity:1;} 100% {opacity:0;} }
+@keyframes oc-tag-3 { 0%,34.5%{opacity:0; transform:translateY(8px) scale(.85);} 37% {opacity:1; transform:none;} 96% {opacity:1;} 100% {opacity:0;} }
+@keyframes oc-tag-4 { 0%,51.5%{opacity:0; transform:translateY(8px) scale(.85);} 54% {opacity:1; transform:none;} 96% {opacity:1;} 100% {opacity:0;} }
+@keyframes oc-tag-5 { 0%,68.5%{opacity:0; transform:translateY(8px) scale(.85);} 71% {opacity:1; transform:none;} 96% {opacity:1;} 100% {opacity:0;} }
+
+/* dotted trail segments draw in as the climber advances */
+.oc-trail   { stroke-dasharray: 3 7; opacity: 0; animation: var(--oc-dur) infinite; }
+.oc-trail-1 { animation-name: oc-trail-1; }
+.oc-trail-2 { animation-name: oc-trail-2; }
+.oc-trail-3 { animation-name: oc-trail-3; }
+.oc-trail-4 { animation-name: oc-trail-4; }
+@keyframes oc-trail-1 { 0%,16% {opacity:0;} 19% {opacity:1;} 96% {opacity:1;} 100% {opacity:0;} }
+@keyframes oc-trail-2 { 0%,33% {opacity:0;} 36% {opacity:1;} 96% {opacity:1;} 100% {opacity:0;} }
+@keyframes oc-trail-3 { 0%,50% {opacity:0;} 53% {opacity:1;} 96% {opacity:1;} 100% {opacity:0;} }
+@keyframes oc-trail-4 { 0%,67% {opacity:0;} 70% {opacity:1;} 96% {opacity:1;} 100% {opacity:0;} }
+
+/* flag pops at the summit */
+.oc-flag { animation: oc-flag var(--oc-dur) infinite; transform-origin: 762px 130px; }
+@keyframes oc-flag {
+  0%,69%  { transform: scale(0); }
+  72%     { transform: scale(1.15); }
+  74%     { transform: scale(1); }
+  96%     { transform: scale(1); }
+  100%    { transform: scale(0); }
+}
+.oc-flag-cloth { animation: oc-wave 1.6s ease-in-out infinite; transform-origin: 762px 78px; }
+@keyframes oc-wave {
+  0%,100% { transform: skewY(0deg); }
+  50%     { transform: skewY(4deg); }
+}
+
+/* confetti burst at the summit */
+.oc-confetti { opacity: 0; animation: var(--oc-dur) infinite; }
+@keyframes oc-pop-a { 0%,69% {opacity:0; transform:translate(0,0) rotate(0);}   70% {opacity:1;} 82% {opacity:0; transform:translate(-34px,-58px) rotate(160deg);} 100% {opacity:0;} }
+@keyframes oc-pop-b { 0%,69% {opacity:0; transform:translate(0,0) rotate(0);}   70% {opacity:1;} 82% {opacity:0; transform:translate(30px,-64px) rotate(-140deg);} 100% {opacity:0;} }
+@keyframes oc-pop-c { 0%,69% {opacity:0; transform:translate(0,0) rotate(0);}   70% {opacity:1;} 84% {opacity:0; transform:translate(-52px,-30px) rotate(120deg);} 100% {opacity:0;} }
+@keyframes oc-pop-d { 0%,69% {opacity:0; transform:translate(0,0) rotate(0);}   70% {opacity:1;} 84% {opacity:0; transform:translate(50px,-36px) rotate(-120deg);} 100% {opacity:0;} }
+@keyframes oc-pop-e { 0%,69% {opacity:0; transform:translate(0,0) scale(.4);}   70% {opacity:1;} 80% {opacity:0; transform:translate(6px,-76px) scale(1);} 100% {opacity:0;} }
+.oc-pop-a { animation-name: oc-pop-a; }
+.oc-pop-b { animation-name: oc-pop-b; }
+.oc-pop-c { animation-name: oc-pop-c; }
+.oc-pop-d { animation-name: oc-pop-d; }
+.oc-pop-e { animation-name: oc-pop-e; }
+
+/* reduced motion: freeze on the completed climb */
+@media (prefers-reduced-motion: reduce) {
+  .oc-stage * { animation: none !important; }
+  .oc-climber { transform: translate(710px, 142px); opacity: 1; }
+  .oc-lit, .oc-tag, .oc-trail { opacity: 1; }
+  .oc-flag { transform: scale(1); }
+  .oc-pulse, .oc-confetti { opacity: 0; }
+}
+/* ═════════ end oc- styles ═════════ */
+</style>
+</head>
+<body>
+<div class="demo-frame">
+<div class="oc-stage" role="img" aria-label="Illustration of a person climbing stepping stones through life milestones: first job, stable career, money growth, family planning, and first home.">
+<svg viewBox="0 0 800 430" xmlns="http://www.w3.org/2000/svg" fill="none">
+  <defs>
+    <linearGradient id="oc-sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F3F1FF"/>
+      <stop offset="1" stop-color="#FCFBF8"/>
+    </linearGradient>
+    <linearGradient id="oc-stone-lit" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5B4CFF"/>
+      <stop offset="1" stop-color="#4A3EE0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- backdrop -->
+  <rect x="0" y="0" width="800" height="430" rx="28" fill="url(#oc-sky)"/>
+  <g class="oc-sun">
+    <circle cx="78" cy="64" r="26" fill="var(--oc-amber)" opacity=".9"/>
+    <circle cx="78" cy="64" r="38" fill="var(--oc-amber)" opacity=".18"/>
+  </g>
+  <g class="oc-cloud" opacity=".8">
+    <ellipse cx="250" cy="66" rx="34" ry="12" fill="var(--oc-white)"/>
+    <ellipse cx="276" cy="58" rx="24" ry="11" fill="var(--oc-white)"/>
+  </g>
+  <g class="oc-cloud oc-cloud-2" opacity=".7">
+    <ellipse cx="520" cy="46" rx="30" ry="11" fill="var(--oc-white)"/>
+    <ellipse cx="544" cy="40" rx="20" ry="9" fill="var(--oc-white)"/>
+  </g>
+
+  <!-- dotted trail between stones -->
+  <g stroke="var(--oc-indigo)" stroke-width="2.5" stroke-linecap="round">
+    <path class="oc-trail oc-trail-1" d="M118 338 Q167 268 217 306"/>
+    <path class="oc-trail oc-trail-2" d="M273 286 Q322 216 372 254"/>
+    <path class="oc-trail oc-trail-3" d="M428 234 Q477 164 527 202"/>
+    <path class="oc-trail oc-trail-4" d="M583 182 Q632 112 682 150"/>
+  </g>
+
+  <!-- ═══ STONE 1 · First job (feet 90,350) ═══ -->
+  <g>
+    <rect x="35" y="350" width="110" height="60" rx="14" fill="var(--oc-indigo-1)"/>
+    <rect x="35" y="350" width="110" height="22" rx="11" fill="var(--oc-white)" stroke="#E5E7EB"/>
+    <rect class="oc-lit oc-lit-1" x="35" y="350" width="110" height="22" rx="11" fill="url(#oc-stone-lit)"/>
+    <circle class="oc-pulse oc-pulse-1" cx="90" cy="361" r="34" stroke="var(--oc-indigo)" stroke-width="3"/>
+    <g class="oc-tag oc-tag-1">
+      <rect x="26" y="382" width="128" height="34" rx="17" fill="var(--oc-white)" stroke="#E5E7EB"/>
+      <!-- briefcase -->
+      <rect x="38" y="393" width="16" height="12" rx="3" fill="var(--oc-coral)"/>
+      <path d="M42 393 v-2.5 a2.5 2.5 0 0 1 2.5-2.5 h3 a2.5 2.5 0 0 1 2.5 2.5 V393" stroke="var(--oc-coral)" stroke-width="2"/>
+      <text x="60" y="404" font-size="13.5" font-weight="700" fill="var(--oc-ink)">First job</text>
+    </g>
+  </g>
+
+  <!-- ═══ STONE 2 · Stable career (feet 245,298) ═══ -->
+  <g>
+    <rect x="190" y="298" width="110" height="112" rx="14" fill="var(--oc-indigo-1)"/>
+    <rect x="190" y="298" width="110" height="22" rx="11" fill="var(--oc-white)" stroke="#E5E7EB"/>
+    <rect class="oc-lit oc-lit-2" x="190" y="298" width="110" height="22" rx="11" fill="url(#oc-stone-lit)"/>
+    <circle class="oc-pulse oc-pulse-2" cx="245" cy="309" r="34" stroke="var(--oc-indigo)" stroke-width="3"/>
+    <g class="oc-tag oc-tag-2">
+      <rect x="166" y="330" width="158" height="34" rx="17" fill="var(--oc-white)" stroke="#E5E7EB"/>
+      <!-- rising bars -->
+      <rect x="179" y="349" width="4.5" height="7"  rx="2" fill="var(--oc-coral)"/>
+      <rect x="186" y="345" width="4.5" height="11" rx="2" fill="var(--oc-coral)"/>
+      <rect x="193" y="341" width="4.5" height="15" rx="2" fill="var(--oc-coral)"/>
+      <text x="205" y="352" font-size="13.5" font-weight="700" fill="var(--oc-ink)">Stable career</text>
+    </g>
+  </g>
+
+  <!-- ═══ STONE 3 · Money growth (feet 400,246) ═══ -->
+  <g>
+    <rect x="345" y="246" width="110" height="164" rx="14" fill="var(--oc-indigo-1)"/>
+    <rect x="345" y="246" width="110" height="22" rx="11" fill="var(--oc-white)" stroke="#E5E7EB"/>
+    <rect class="oc-lit oc-lit-3" x="345" y="246" width="110" height="22" rx="11" fill="url(#oc-stone-lit)"/>
+    <circle class="oc-pulse oc-pulse-3" cx="400" cy="257" r="34" stroke="var(--oc-indigo)" stroke-width="3"/>
+    <g class="oc-tag oc-tag-3">
+      <rect x="318" y="278" width="164" height="34" rx="17" fill="var(--oc-white)" stroke="#E5E7EB"/>
+      <!-- coin stack + arrow -->
+      <ellipse cx="338" cy="301" rx="7" ry="3" fill="var(--oc-amber)"/>
+      <ellipse cx="338" cy="296" rx="7" ry="3" fill="var(--oc-amber)"/>
+      <ellipse cx="338" cy="291" rx="7" ry="3" fill="var(--oc-amber)"/>
+      <path d="M350 297 L358 288 M358 288 h-5 M358 288 v5" stroke="var(--oc-coral)" stroke-width="2" stroke-linecap="round"/>
+      <text x="366" y="300" font-size="13.5" font-weight="700" fill="var(--oc-ink)">Money growth</text>
+    </g>
+  </g>
+
+  <!-- ═══ STONE 4 · Family planning (feet 555,194) ═══ -->
+  <g>
+    <rect x="500" y="194" width="110" height="216" rx="14" fill="var(--oc-indigo-1)"/>
+    <rect x="500" y="194" width="110" height="22" rx="11" fill="var(--oc-white)" stroke="#E5E7EB"/>
+    <rect class="oc-lit oc-lit-4" x="500" y="194" width="110" height="22" rx="11" fill="url(#oc-stone-lit)"/>
+    <circle class="oc-pulse oc-pulse-4" cx="555" cy="205" r="34" stroke="var(--oc-indigo)" stroke-width="3"/>
+    <g class="oc-tag oc-tag-4">
+      <rect x="470" y="226" width="172" height="34" rx="17" fill="var(--oc-white)" stroke="#E5E7EB"/>
+      <!-- heart -->
+      <path d="M490 240 c-2.6-2.8-7-1-7 2.2 c0 3 4.4 6.2 7 8 c2.6-1.8 7-5 7-8 c0-3.2-4.4-5-7-2.2 Z" fill="var(--oc-coral)"/>
+      <text x="503" y="248" font-size="13.5" font-weight="700" fill="var(--oc-ink)">Family planning</text>
+    </g>
+  </g>
+
+  <!-- ═══ STONE 5 · First home (feet 710,142) ═══ -->
+  <g>
+    <rect x="655" y="142" width="110" height="268" rx="14" fill="var(--oc-indigo-1)"/>
+    <rect x="655" y="142" width="110" height="22" rx="11" fill="var(--oc-white)" stroke="#E5E7EB"/>
+    <rect class="oc-lit oc-lit-5" x="655" y="142" width="110" height="22" rx="11" fill="url(#oc-stone-lit)"/>
+    <circle class="oc-pulse oc-pulse-5" cx="710" cy="153" r="34" stroke="var(--oc-indigo)" stroke-width="3"/>
+    <g class="oc-tag oc-tag-5">
+      <rect x="630" y="174" width="140" height="34" rx="17" fill="var(--oc-white)" stroke="#E5E7EB"/>
+      <!-- house -->
+      <path d="M642 192 l8-7 8 7" stroke="var(--oc-coral)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M644.5 191 v7 h11 v-7" stroke="var(--oc-coral)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="666" y="196" font-size="13.5" font-weight="700" fill="var(--oc-ink)">First home</text>
+    </g>
+  </g>
+
+  <!-- flag at the summit -->
+  <g class="oc-flag">
+    <line x1="762" y1="130" x2="762" y2="72" stroke="var(--oc-ink)" stroke-width="3" stroke-linecap="round"/>
+    <path class="oc-flag-cloth" d="M762 74 h30 l-8 9 8 9 h-30 Z" fill="var(--oc-coral)"/>
+  </g>
+
+  <!-- confetti around the summit -->
+  <g class="oc-summit-confetti">
+    <rect class="oc-confetti oc-pop-a" x="700" y="120" width="7" height="7" rx="2" fill="var(--oc-coral)"/>
+    <rect class="oc-confetti oc-pop-b" x="722" y="116" width="7" height="7" rx="2" fill="var(--oc-indigo)"/>
+    <circle class="oc-confetti oc-pop-c" cx="695" cy="126" r="4" fill="var(--oc-amber)"/>
+    <circle class="oc-confetti oc-pop-d" cx="728" cy="124" r="4" fill="var(--oc-indigo)"/>
+    <rect class="oc-confetti oc-pop-e" x="710" y="112" width="6" height="6" rx="3" fill="var(--oc-coral)"/>
+  </g>
+
+  <!-- ═══ CLIMBER (drawn with feet at 0,0) ═══ -->
+  <g class="oc-climber">
+    <g class="oc-climber-body">
+      <!-- shadow -->
+      <ellipse cx="0" cy="1" rx="16" ry="3.5" fill="var(--oc-ink)" opacity=".12"/>
+      <!-- legs -->
+      <path d="M-5 -14 L-6 0 M5 -14 L6 0" stroke="var(--oc-ink)" stroke-width="5" stroke-linecap="round"/>
+      <!-- body -->
+      <rect x="-11" y="-42" width="22" height="30" rx="10" fill="var(--oc-coral)"/>
+      <!-- arms (rotate up to cheer) -->
+      <g class="oc-arm-l"><path d="M0 -34 L-14 -22" stroke="var(--oc-coral-d)" stroke-width="5" stroke-linecap="round" transform="translate(-9,0)"/></g>
+      <g class="oc-arm-r"><path d="M0 -34 L14 -22"  stroke="var(--oc-coral-d)" stroke-width="5" stroke-linecap="round" transform="translate(9,0)"/></g>
+      <!-- head -->
+      <circle cx="0" cy="-53" r="11" fill="#FFD7B0"/>
+      <path d="M-11 -55 a11 11 0 0 1 22 0 l0 -2 a11 8 0 0 0 -22 0 Z" fill="var(--oc-ink)"/>
+      <!-- face -->
+      <circle cx="-3.5" cy="-53" r="1.4" fill="var(--oc-ink)"/>
+      <circle cx="3.5" cy="-53" r="1.4" fill="var(--oc-ink)"/>
+      <path d="M-3 -48.5 q3 2.4 6 0" stroke="var(--oc-ink)" stroke-width="1.4" stroke-linecap="round"/>
+    </g>
+  </g>
+</svg>
+</div>
+</div>
+</body>
+</html>

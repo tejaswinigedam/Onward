@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Tax Season, Guided — Onward</title>
+<meta name="description" content="Know exactly what documents you need, what deadlines to hit, and what every tax term means — so nothing catches you off guard."/>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-QH8KCWJXD4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-QH8KCWJXD4');
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --indigo:   #5B4CFF;
+  --indigo-d: #4A3EE0;
+  --indigo-1: #E8E5FF;
+  --indigo-0: #F3F1FF;
+  --amber:    #F9BD5E;
+  --amber-0:  #FEF3C7;
+  --amber-d:  #D97706;
+  --green:    #10B981;
+  --green-0:  #ECFDF5;
+  --ink:      #1F2937;
+  --ink-soft: #6B7280;
+  --ink-mute: #9CA3AF;
+  --border:   #E5E7EB;
+  --ivory:    #FCFBF8;
+  --ivory2:   #F6F5F2;
+  --white:    #FFFFFF;
+  --dark-s:   #1F2937;
+  --font:     'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-d:   'Manrope', var(--font);
+  --r-pill: 9999px;
+  --r-lg:   26px;
+  --r-xl:   34px;
+  --sh:     0 4px 14px rgba(31,41,55,.07), 0 8px 22px rgba(31,41,55,.06);
+  --sh-lg:  0 12px 36px rgba(31,41,55,.13);
+  --sh-xl:  0 24px 60px rgba(31,41,55,.18);
+  --sh-b:   0 8px 26px rgba(91,76,255,.32);
+}
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font); font-size: 17px; line-height: 1.65; background: var(--ivory); color: var(--ink); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+h1,h2,h3,h4 { font-family: var(--font-d); font-weight: 700; line-height: 1.12; margin: 0; }
+p { margin: 0; }
+a { text-decoration: none; color: inherit; }
+button { cursor: pointer; border: none; background: none; font: inherit; }
+svg { display: block; }
+
+@keyframes fade-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes check-pop { 0% { transform: scale(0); opacity: 0; } 70% { transform: scale(1.2); } 100% { transform: scale(1); opacity: 1; } }
+
+.reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s cubic-bezier(.22,1,.36,1), transform .7s cubic-bezier(.22,1,.36,1); }
+.reveal.in { opacity: 1; transform: none; }
+.reveal-delay-1 { transition-delay: .12s; }
+.reveal-delay-2 { transition-delay: .22s; }
+.reveal-delay-3 { transition-delay: .32s; }
+
+.wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+/* NAV */
+nav { position: fixed; inset: 0 0 auto; z-index: 100; padding: 18px 0; background: rgba(252,251,248,.95); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); }
+nav.lifted { box-shadow: 0 2px 18px rgba(31,41,55,.07); }
+.nav-inner { max-width: 1080px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; }
+.brand { display: flex; align-items: center; gap: 10px; }
+.brand-mark { width: 26px; height: 27px; flex: none; }
+.brand-name { font-family: var(--font-d); font-weight: 800; font-size: 18px; letter-spacing: -.4px; color: var(--ink); }
+.btn-nav { display: inline-flex; align-items: center; gap: 7px; background: var(--indigo); color: #fff; font-family: var(--font-d); font-size: 13.5px; font-weight: 700; padding: 10px 20px; border-radius: var(--r-pill); box-shadow: var(--sh-b); transition: background .2s, transform .15s; }
+.btn-nav:hover { background: var(--indigo-d); transform: translateY(-1px); }
+
+/* HERO */
+.page-hero {
+  padding: 140px 24px 80px;
+  background:
+    radial-gradient(ellipse 80% 60% at 10% 10%, rgba(254,243,199,.95) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 50% at 90% 90%, rgba(236,253,245,.8) 0%, transparent 55%),
+    var(--ivory);
+  text-align: center;
+}
+.hero-inner { max-width: 720px; margin: 0 auto; }
+.page-kicker { display: inline-flex; align-items: center; gap: 8px; background: var(--amber-0); color: var(--amber-d); font-size: 12px; font-weight: 800; letter-spacing: 1.1px; text-transform: uppercase; padding: 6px 13px; border-radius: var(--r-pill); margin-bottom: 24px; animation: fade-up .5s ease both; }
+.page-h1 { font-size: clamp(34px, 5vw, 56px); font-weight: 900; letter-spacing: -2px; line-height: 1.07; color: var(--ink); margin-bottom: 20px; animation: fade-up .55s .07s ease both; }
+.page-h1 .accent { color: var(--amber-d); }
+.page-sub { font-size: 19px; color: var(--ink-soft); line-height: 1.68; max-width: 560px; margin: 0 auto 36px; animation: fade-up .55s .14s ease both; }
+.btn-cta { display: inline-flex; align-items: center; gap: 10px; background: var(--indigo); color: #fff; font-family: var(--font-d); font-size: 16px; font-weight: 700; padding: 15px 30px; border-radius: var(--r-pill); box-shadow: var(--sh-b); transition: background .2s, transform .15s; animation: fade-up .55s .2s ease both; }
+.btn-cta:hover { background: var(--indigo-d); transform: translateY(-2px); }
+.btn-cta svg { transition: transform .2s; }
+.btn-cta:hover svg { transform: translateX(3px); }
+
+/* TIMELINE PREVIEW */
+.preview-section { padding: 0 24px 96px; }
+.preview-wrap { max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: 1.1fr .9fr; gap: 24px; animation: fade-in .8s .3s ease both; }
+
+.timeline-panel { background: var(--white); border: 1px solid var(--border); border-radius: var(--r-xl); padding: 32px; box-shadow: var(--sh); }
+.timeline-title { font-family: var(--font-d); font-size: 13px; font-weight: 700; color: var(--ink-mute); text-transform: uppercase; letter-spacing: .8px; margin-bottom: 24px; }
+.tl-item { display: grid; grid-template-columns: 36px 1fr; gap: 14px; margin-bottom: 4px; }
+.tl-connector { display: flex; flex-direction: column; align-items: center; }
+.tl-dot { width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex: none; }
+.tl-dot--done { background: var(--green-0); }
+.tl-dot--done svg { display: block; }
+.tl-dot--active { background: var(--amber-0); border: 2px solid var(--amber-d); }
+.tl-dot--upcoming { background: var(--border); }
+.tl-line { width: 2px; flex: 1; background: var(--border); margin: 4px 0; min-height: 20px; }
+.tl-line--done { background: var(--green-0); }
+.tl-body { padding-bottom: 20px; }
+.tl-month { font-size: 11px; font-weight: 700; letter-spacing: .6px; text-transform: uppercase; margin-bottom: 3px; }
+.tl-month--done { color: var(--green); }
+.tl-month--active { color: var(--amber-d); }
+.tl-month--upcoming { color: var(--ink-mute); }
+.tl-task { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 3px; }
+.tl-task--upcoming { color: var(--ink-mute); }
+.tl-desc { font-size: 12.5px; color: var(--ink-soft); line-height: 1.55; }
+
+.checklist-panel { background: var(--white); border: 1px solid var(--border); border-radius: var(--r-xl); padding: 32px; box-shadow: var(--sh); }
+.cl-title { font-family: var(--font-d); font-size: 13px; font-weight: 700; color: var(--ink-mute); text-transform: uppercase; letter-spacing: .8px; margin-bottom: 20px; }
+.cl-item { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.cl-item:last-child { border-bottom: none; }
+.cl-check { width: 20px; height: 20px; border-radius: 6px; flex: none; margin-top: 1px; display: flex; align-items: center; justify-content: center; }
+.cl-check--done { background: var(--green-0); }
+.cl-check--pending { background: var(--ivory2); border: 1.5px solid var(--border); }
+.cl-text { flex: 1; }
+.cl-name { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 2px; }
+.cl-name--pending { color: var(--ink-mute); }
+.cl-hint { font-size: 12px; color: var(--ink-mute); }
+
+/* WHAT'S INSIDE */
+.inside-section { background: var(--white); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 96px 0; }
+.section-kicker { display: inline-block; font-size: 12px; font-weight: 800; letter-spacing: 1.1px; text-transform: uppercase; color: var(--indigo); background: var(--indigo-0); padding: 5px 12px; border-radius: var(--r-pill); margin-bottom: 16px; }
+.section-h2 { font-size: clamp(26px,3.6vw,40px); font-weight: 900; letter-spacing: -1.1px; color: var(--ink); margin-bottom: 12px; }
+.section-sub { font-size: 18px; color: var(--ink-soft); max-width: 520px; margin: 0 auto; line-height: 1.65; }
+.section-header { text-align: center; margin-bottom: 60px; }
+.topics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.topic-card { background: var(--ivory); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 28px 24px; transition: transform .25s, box-shadow .25s; }
+.topic-card:hover { transform: translateY(-4px); box-shadow: var(--sh-lg); }
+.topic-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+.topic-icon--indigo { background: var(--indigo-0); }
+.topic-icon--amber { background: var(--amber-0); }
+.topic-icon--green { background: var(--green-0); }
+.topic-h3 { font-size: 16px; font-weight: 700; letter-spacing: -.2px; margin-bottom: 7px; }
+.topic-p { font-size: 14px; color: var(--ink-soft); line-height: 1.65; }
+
+/* HOW IT WORKS */
+.how-section { padding: 96px 0; background: var(--ivory); }
+.steps { display: flex; flex-direction: column; max-width: 680px; margin: 0 auto; }
+.step { display: grid; grid-template-columns: 48px 1fr; gap: 20px; padding: 28px 0; border-bottom: 1px solid var(--border); }
+.step:last-child { border-bottom: none; }
+.step-num { width: 48px; height: 48px; border-radius: 50%; background: var(--amber-0); color: var(--amber-d); font-family: var(--font-d); font-size: 18px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex: none; }
+.step-body { padding-top: 10px; }
+.step-h3 { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+.step-p { font-size: 15px; color: var(--ink-soft); line-height: 1.65; }
+
+/* REGIME COMPARE */
+.compare-section { background: var(--dark-s); padding: 96px 0; }
+.compare-section .section-kicker { background: rgba(255,255,255,.08); color: rgba(255,255,255,.5); }
+.compare-section .section-h2 { color: #fff; }
+.compare-section .section-sub { color: rgba(255,255,255,.5); }
+.regime-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 780px; margin: 0 auto; }
+.regime-card { border-radius: var(--r-lg); padding: 28px; }
+.regime-card--old { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); }
+.regime-card--new { background: rgba(249,189,94,.1); border: 1px solid rgba(249,189,94,.25); }
+.regime-label { font-size: 11px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; margin-bottom: 12px; }
+.regime-label--old { color: rgba(255,255,255,.4); }
+.regime-label--new { color: var(--amber); }
+.regime-h3 { font-family: var(--font-d); font-size: 20px; font-weight: 800; color: #fff; margin-bottom: 16px; }
+.regime-rows { display: flex; flex-direction: column; gap: 10px; }
+.regime-row { display: flex; justify-content: space-between; align-items: center; }
+.regime-row-label { font-size: 13px; color: rgba(255,255,255,.55); }
+.regime-row-val { font-size: 13px; font-weight: 600; color: rgba(255,255,255,.85); }
+.regime-row-val--good { color: var(--green); }
+.regime-row-val--warn { color: var(--amber); }
+.regime-verdict { margin-top: 18px; padding: 10px 14px; border-radius: 10px; font-size: 13px; line-height: 1.55; }
+.regime-verdict--old { background: rgba(255,255,255,.05); color: rgba(255,255,255,.6); }
+.regime-verdict--new { background: rgba(249,189,94,.12); color: rgba(249,189,94,.9); }
+
+/* CTA */
+.cta-section { padding: 96px 24px; text-align: center; background: linear-gradient(180deg, var(--amber-0) 0%, var(--ivory) 70%); border-top: 1px solid var(--border); }
+.cta-inner { max-width: 520px; margin: 0 auto; }
+.cta-h2 { font-size: clamp(26px,3.8vw,42px); font-weight: 900; letter-spacing: -1.4px; line-height: 1.1; color: var(--ink); margin-bottom: 14px; }
+.cta-sub { font-size: 17px; color: var(--ink-soft); margin-bottom: 32px; line-height: 1.65; }
+
+/* FOOTER */
+footer { background: var(--dark-s); padding: 40px 0; }
+.foot-inner { max-width: 1080px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; }
+.foot-brand { display: flex; align-items: center; gap: 8px; }
+.foot-mark { width: 22px; height: 23px; flex: none; }
+.foot-name { font-family: var(--font-d); font-weight: 800; font-size: 16px; letter-spacing: -.3px; color: #fff; }
+.foot-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+.foot-copy { font-size: 13px; color: #9797AE; font-style: italic; }
+.foot-contact { font-size: 13px; color: #9797AE; }
+.foot-contact a { color: rgba(255,255,255,.55); transition: color .2s; }
+.foot-contact a:hover { color: #fff; }
+
+@media (max-width: 760px) {
+  .preview-wrap, .regime-grid { grid-template-columns: 1fr; }
+  .topics-grid { grid-template-columns: 1fr 1fr; }
+  .foot-right { align-items: flex-start; }
+}
+@media (max-width: 520px) {
+  .topics-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<nav id="site-nav">
+  <div class="nav-inner">
+    <a href="index.html" class="brand">
+      <svg class="brand-mark" viewBox="0 0 316 325" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M240.178 163.895C244.542 163.998 247.534 170.007 248.001 173.902C249.111 183.152 238.403 187.845 231.549 191.077C219.924 196.56 208.144 201.455 197.535 208.874C170.196 226.784 150.549 259.408 171.265 290.495C165.885 290.79 122.505 290.695 120.059 289.823C119.398 287.06 122.818 276.455 123.867 273.178C120.956 271.82 117.934 270.558 114.992 269.22C112.355 273.628 107.704 285.13 106.674 289.863C105.478 289.783 104.192 289.76 102.987 289.718C94.7369 289.613 86.4868 289.575 78.2367 289.605C74.2662 289.608 67.0854 289.428 63.3944 289.928C66.8709 282.11 70.5689 274.67 75.204 267.61C104.453 223.058 155.293 200.105 205.916 190.105C214.555 188.399 225.168 186.122 233.1 182.253C241.993 177.915 244.605 173.056 240.178 163.895Z" fill="#F37C5E"/>
+        <path d="M77.4292 92.2555C79.6298 88.7425 82.9019 85.2103 85.7589 82.1965C101.177 66.127 120.917 54.8988 142.58 49.8775C171.938 42.8493 202.877 47.837 228.562 63.7388C236.656 68.828 244.105 74.8825 250.746 81.77C251.985 83.0325 254.098 85.0878 254.893 86.6235C254.811 88.489 233.935 108.256 231.719 111.133C231.673 111.192 231.216 111.565 231.111 111.649C227.118 107.852 224.606 104.433 219.977 100.597C204.566 87.8268 187.342 81.3308 167.282 82.094C149.34 82.7765 133.585 89.1083 119.572 100.432C116.821 102.654 113.076 106.674 110.509 109.305L109.762 108.991C108.315 109.293 107.47 109.675 106.122 110.234C105.914 103.658 102.975 107.382 100.057 106.061C94.7135 103.641 90.1719 100.881 84.0941 100.336C83.0322 100.24 81.6035 99.5775 80.5035 99.4878C78.8956 99.3973 76.7222 100.743 75.1843 100.138C75.6563 98.8878 76.3152 97.6653 75.8031 96.4375L75.2172 96.3755C75.2063 95.702 77.0881 93.8258 77.4292 92.2555Z" fill="#5B4DE6"/>
+        <path d="M81.1051 234.533C64.3531 215.327 54.2648 188.6 54.0228 163.119C54.0116 161.935 54.0066 160.748 54.0136 159.564C54.2668 138.967 60.1514 118.835 71.026 101.362C72.5908 98.8512 75.4587 94.21 77.4292 92.2555C77.0881 93.8257 75.2063 95.702 75.2172 96.3755L75.8031 96.4375C76.3153 97.6652 75.6563 98.8877 75.1843 100.138C76.7222 100.743 78.8956 99.3972 80.5035 99.4877C81.6035 99.5775 83.0323 100.24 84.0941 100.335C90.1719 100.881 94.7135 103.641 100.057 106.06C102.975 107.382 105.914 103.658 106.122 110.234C107.47 109.675 108.315 109.293 109.762 108.991L110.509 109.305C105.489 114.461 99.1804 126.148 96.8269 132.906C89.4168 154.184 91.1426 175.438 101.386 195.245C102.682 197.8 104.152 200.262 105.787 202.613C107.005 204.347 109.828 208.025 110.652 209.838C110.097 211.152 106.016 213.171 104.539 214.3C97.8509 219.409 85.8331 228.016 81.1051 234.533Z" fill="#402EBA"/>
+        <path d="M186.093 264.283C185.676 258.86 189.393 249.956 192.734 245.705C194.437 243.539 199.196 242.623 201.856 241.606C204.875 240.451 208.049 239.32 210.996 237.936C219.872 233.787 228.546 228.258 236.06 222.009C251.046 209.544 262.243 194.364 271.184 177.12C273.066 173.491 274.763 169.766 276.575 166.096C277.058 165.117 278.152 162.695 278.735 161.905C280.258 162.666 280.395 169.988 280.512 171.855C281.738 191.302 276.926 211.551 267.76 228.667C258.739 245.609 245.524 259.938 229.388 270.278C226.418 272.208 220.685 275.628 217.336 276.918C214.253 279.448 198.142 284.19 193.806 285.49C189.76 279.048 186.411 272.005 186.093 264.283Z" fill="#3F2CB8"/>
+        <path d="M261.936 107.682C264.929 108.532 265.423 113.397 266.17 116.126C267.282 120.169 268.254 124.45 270.292 128.159C275.354 130.905 285.584 132.516 287.951 135.106C289.018 139.084 275.132 140.917 271.885 142.97C266.422 146.423 266.629 162.096 262.554 164.211C262.088 164.141 260.989 163.993 260.77 163.62C257.453 157.425 257.984 150.942 254.193 144.618C251.417 139.983 236.433 140.022 236.206 135.781C237.131 131.736 250.33 131.423 253.57 128.2C258.131 123.661 257.445 110.608 261.936 107.682Z" fill="#F9BD5E"/>
+      </svg>
+      <span class="brand-name">Onward</span>
+    </a>
+    <a href="index.html#waitlist" class="btn-nav">
+      Join Waitlist
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="page-hero">
+  <div class="hero-inner">
+    <div class="page-kicker">Taxes Journey</div>
+    <h1 class="page-h1">Taxes, without<br><span class="accent">the panic.</span></h1>
+    <p class="page-sub">Every July, millions of first-time earners scramble through tax filing with no idea what they're doing. We change that — by walking you through it long before the deadline arrives.</p>
+    <a href="index.html#waitlist" class="btn-cta">
+      Get Early Access
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+</section>
+
+<!-- TIMELINE PREVIEW -->
+<section class="preview-section">
+  <div class="preview-wrap">
+    <div class="timeline-panel">
+      <div class="timeline-title">Your tax year, mapped out</div>
+
+      <div class="tl-item">
+        <div class="tl-connector">
+          <div class="tl-dot tl-dot--done">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#10B981" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="tl-line tl-line--done"></div>
+        </div>
+        <div class="tl-body">
+          <div class="tl-month tl-month--done">April</div>
+          <div class="tl-task">New financial year begins</div>
+          <div class="tl-desc">Declare your tax regime to your employer. Choose between old and new — this affects how much TDS is deducted monthly.</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-connector">
+          <div class="tl-dot tl-dot--done">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#10B981" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="tl-line tl-line--done"></div>
+        </div>
+        <div class="tl-body">
+          <div class="tl-month tl-month--done">June</div>
+          <div class="tl-task">Form 16 issued</div>
+          <div class="tl-desc">Your employer gives you Form 16 — a summary of your salary and TDS deducted. This is your most important tax document.</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-connector">
+          <div class="tl-dot tl-dot--active"></div>
+          <div class="tl-line"></div>
+        </div>
+        <div class="tl-body">
+          <div class="tl-month tl-month--active">July 31 — Deadline</div>
+          <div class="tl-task">File your ITR</div>
+          <div class="tl-desc">Income Tax Return filing deadline for salaried individuals. Missing this means penalties and interest on any tax due.</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-connector">
+          <div class="tl-dot tl-dot--upcoming"></div>
+        </div>
+        <div class="tl-body">
+          <div class="tl-month tl-month--upcoming">Aug – Dec</div>
+          <div class="tl-task tl-task--upcoming">Refund & notices</div>
+          <div class="tl-desc" style="color:var(--ink-mute)">If you overpaid TDS, your refund arrives here. Notices from the department, if any, also come in this window.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="checklist-panel">
+      <div class="cl-title">Documents checklist</div>
+      <div class="cl-item">
+        <div class="cl-check cl-check--done">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#10B981" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="cl-text">
+          <div class="cl-name">Form 16</div>
+          <div class="cl-hint">From your employer — Part A & Part B</div>
+        </div>
+      </div>
+      <div class="cl-item">
+        <div class="cl-check cl-check--done">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#10B981" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="cl-text">
+          <div class="cl-name">PAN Card</div>
+          <div class="cl-hint">Required for filing</div>
+        </div>
+      </div>
+      <div class="cl-item">
+        <div class="cl-check cl-check--done">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#10B981" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="cl-text">
+          <div class="cl-name">AIS / Form 26AS</div>
+          <div class="cl-hint">Annual Information Statement from IT portal</div>
+        </div>
+      </div>
+      <div class="cl-item">
+        <div class="cl-check cl-check--pending"></div>
+        <div class="cl-text">
+          <div class="cl-name cl-name--pending">Bank interest certificates</div>
+          <div class="cl-hint">Savings account & FD interest is taxable</div>
+        </div>
+      </div>
+      <div class="cl-item">
+        <div class="cl-check cl-check--pending"></div>
+        <div class="cl-text">
+          <div class="cl-name cl-name--pending">Investment proofs (80C)</div>
+          <div class="cl-hint">ELSS, PPF, LIC — only for old regime</div>
+        </div>
+      </div>
+      <div class="cl-item">
+        <div class="cl-check cl-check--pending"></div>
+        <div class="cl-text">
+          <div class="cl-name cl-name--pending">Rent receipts</div>
+          <div class="cl-hint">For HRA exemption claim</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REGIME COMPARE -->
+<section class="compare-section">
+  <div class="wrap">
+    <div class="section-header">
+      <p class="section-kicker reveal">The big decision</p>
+      <h2 class="section-h2 reveal reveal-delay-1" style="color:#fff;">Old regime or new?<br>Here's what it actually means.</h2>
+      <p class="section-sub reveal reveal-delay-2">We walk you through both — and help you calculate which one saves you more money based on your actual situation.</p>
+    </div>
+    <div class="regime-grid reveal">
+      <div class="regime-card regime-card--old">
+        <div class="regime-label regime-label--old">Old Regime</div>
+        <div class="regime-h3">More deductions, more work</div>
+        <div class="regime-rows">
+          <div class="regime-row"><span class="regime-row-label">Tax slabs</span><span class="regime-row-val">5%, 20%, 30%</span></div>
+          <div class="regime-row"><span class="regime-row-label">80C deductions</span><span class="regime-row-val regime-row-val--good">Yes — up to ₹1.5L</span></div>
+          <div class="regime-row"><span class="regime-row-label">HRA exemption</span><span class="regime-row-val regime-row-val--good">Yes</span></div>
+          <div class="regime-row"><span class="regime-row-label">Standard deduction</span><span class="regime-row-val">₹50,000</span></div>
+          <div class="regime-row"><span class="regime-row-label">Best for</span><span class="regime-row-val">High investments & rent</span></div>
+        </div>
+        <div class="regime-verdict regime-verdict--old">Worth it only if your total deductions exceed ₹3.75L. Otherwise, new regime likely saves more.</div>
+      </div>
+      <div class="regime-card regime-card--new">
+        <div class="regime-label regime-label--new">New Regime</div>
+        <div class="regime-h3">Lower rates, simpler filing</div>
+        <div class="regime-rows">
+          <div class="regime-row"><span class="regime-row-label">Tax slabs</span><span class="regime-row-val">5%, 10%, 15%, 20%, 30%</span></div>
+          <div class="regime-row"><span class="regime-row-label">80C deductions</span><span class="regime-row-val regime-row-val--warn">Not available</span></div>
+          <div class="regime-row"><span class="regime-row-label">HRA exemption</span><span class="regime-row-val regime-row-val--warn">Not available</span></div>
+          <div class="regime-row"><span class="regime-row-label">Standard deduction</span><span class="regime-row-val regime-row-val--good">₹75,000</span></div>
+          <div class="regime-row"><span class="regime-row-label">Best for</span><span class="regime-row-val">Freshers, low investments</span></div>
+        </div>
+        <div class="regime-verdict regime-verdict--new">Default from FY 2024–25. Most freshers and early-career earners benefit more from this regime.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT'S INSIDE -->
+<section class="inside-section">
+  <div class="wrap">
+    <div class="section-header">
+      <p class="section-kicker reveal">What's covered</p>
+      <h2 class="section-h2 reveal reveal-delay-1">Every tax concept you'll<br>actually encounter.</h2>
+      <p class="section-sub reveal reveal-delay-2">We don't teach you tax law. We teach you what you need to know to handle your own taxes with confidence.</p>
+    </div>
+    <div class="topics-grid">
+      <div class="topic-card reveal">
+        <div class="topic-icon topic-icon--amber">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M10 3v14M10 3l-3 3M10 3l3 3" stroke="#D97706" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            <rect x="4" y="13" width="12" height="4" rx="1.5" fill="#F9BD5E" opacity=".25" stroke="#D97706" stroke-width="1.2"/>
+            <path d="M7 15h2M12 15h1" stroke="#D97706" stroke-width="1.1" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h3 class="topic-h3">What is TDS?</h3>
+        <p class="topic-p">Why tax is already deducted from your salary every month, how TDS is calculated, and what happens if too much or too little was deducted.</p>
+      </div>
+      <div class="topic-card reveal reveal-delay-1">
+        <div class="topic-icon topic-icon--indigo">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M10 4v5" stroke="#5B4CFF" stroke-width="1.4" stroke-linecap="round"/>
+            <path d="M10 9l-4 6" stroke="#5B4CFF" stroke-width="1.4" stroke-linecap="round"/>
+            <path d="M10 9l4 6" stroke="#5B4CFF" stroke-width="1.4" stroke-linecap="round"/>
+            <rect x="3" y="14" width="5" height="3.5" rx="1.5" fill="#5B4CFF" opacity=".2" stroke="#5B4CFF" stroke-width="1.2"/>
+            <rect x="12" y="14" width="5" height="3.5" rx="1.5" fill="#5B4CFF" opacity=".2" stroke="#5B4CFF" stroke-width="1.2"/>
+            <circle cx="10" cy="3.5" r="1.5" fill="#5B4CFF" opacity=".4"/>
+          </svg>
+        </div>
+        <h3 class="topic-h3">Old vs New Regime</h3>
+        <p class="topic-p">A side-by-side breakdown of both regimes, when each one makes sense, and how to calculate which saves you more based on your income and deductions.</p>
+      </div>
+      <div class="topic-card reveal reveal-delay-2">
+        <div class="topic-icon topic-icon--green">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <rect x="3" y="3" width="14" height="14" rx="2.5" stroke="#10B981" stroke-width="1.3"/>
+            <rect x="3" y="3" width="14" height="14" rx="2.5" fill="#10B981" opacity=".1"/>
+            <path d="M7 8h6M7 11h4" stroke="#10B981" stroke-width="1.3" stroke-linecap="round"/>
+            <path d="M13 12.5l1.5 1.5L17 11" stroke="#10B981" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3 class="topic-h3">Deductions & Savings</h3>
+        <p class="topic-p">80C, 80D, HRA, standard deduction — what each means, which investments qualify, and exactly how much they can reduce your taxable income.</p>
+      </div>
+      <div class="topic-card reveal">
+        <div class="topic-icon topic-icon--amber">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <rect x="4" y="2" width="12" height="16" rx="2" stroke="#D97706" stroke-width="1.3"/>
+            <rect x="4" y="2" width="12" height="5" rx="2" fill="#F9BD5E" opacity=".3"/>
+            <rect x="4" y="5" width="12" height="2" fill="#F9BD5E" opacity=".3"/>
+            <path d="M7 11h6M7 14h4" stroke="#D97706" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h3 class="topic-h3">Form 16 & Form 26AS</h3>
+        <p class="topic-p">What these documents contain, where to get them, how to read them, and why they're the foundation of your ITR filing every year.</p>
+      </div>
+      <div class="topic-card reveal reveal-delay-1">
+        <div class="topic-icon topic-icon--green">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M10 13V3M10 3l-3 3M10 3l3 3" stroke="#10B981" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M4 13v4h12v-4" stroke="#10B981" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3 class="topic-h3">Filing Basics</h3>
+        <p class="topic-p">Which ITR form applies to you, what to fill in, what a pre-filled return is, and how to verify and submit — step by step, without the jargon.</p>
+      </div>
+      <div class="topic-card reveal reveal-delay-2">
+        <div class="topic-icon topic-icon--indigo">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M15 10a5 5 0 1 1-5-5" stroke="#5B4CFF" stroke-width="1.3" stroke-linecap="round"/>
+            <path d="M13 5h3v3" stroke="#5B4CFF" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M16 5l-4 4" stroke="#5B4CFF" stroke-width="1.3" stroke-linecap="round"/>
+            <circle cx="10" cy="10" r="2" fill="#5B4CFF" opacity=".25"/>
+          </svg>
+        </div>
+        <h3 class="topic-h3">Refunds & Notices</h3>
+        <p class="topic-p">How tax refunds work, when to expect yours, and what to do if you receive a notice from the Income Tax department — without panicking.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section">
+  <div class="wrap">
+    <div class="section-header">
+      <p class="section-kicker reveal">How it works</p>
+      <h2 class="section-h2 reveal reveal-delay-1">Understand it first.<br>File it with confidence.</h2>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3 class="step-h3">We explain the concepts before you need them</h3>
+          <p class="step-p">TDS, regimes, deductions — all explained in plain English, with real examples using realistic Indian salaries. No prior knowledge needed.</p>
+        </div>
+      </div>
+      <div class="step reveal reveal-delay-1">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3 class="step-h3">We help you choose the right regime</h3>
+          <p class="step-p">Answer a few questions about your income, rent, and investments — and we tell you which regime saves you more, with the numbers shown clearly.</p>
+        </div>
+      </div>
+      <div class="step reveal reveal-delay-2">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h3 class="step-h3">We walk you through the documents</h3>
+          <p class="step-p">Form 16, AIS, investment proofs — we tell you exactly what each document is, where to find it, and what section of your return it maps to.</p>
+        </div>
+      </div>
+      <div class="step reveal reveal-delay-3">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h3 class="step-h3">You file it yourself — and understand every line</h3>
+          <p class="step-p">We don't file for you. We make sure you understand what you're submitting, so you can do it again next year without needing help.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-inner">
+    <p class="section-kicker reveal">Early Access</p>
+    <h2 class="cta-h2 reveal reveal-delay-1">Never dread tax season<br>again.</h2>
+    <p class="cta-sub reveal reveal-delay-2">Join the waitlist and be among the first to experience Tax Season, Guided when Onward launches.</p>
+    <a href="index.html#waitlist" class="btn-cta reveal reveal-delay-3">
+      Join the Waitlist
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-inner">
+    <div class="foot-brand">
+      <svg class="foot-mark" viewBox="0 0 316 325" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M240.178 163.895C244.542 163.998 247.534 170.007 248.001 173.902C249.111 183.152 238.403 187.845 231.549 191.077C219.924 196.56 208.144 201.455 197.535 208.874C170.196 226.784 150.549 259.408 171.265 290.495C165.885 290.79 122.505 290.695 120.059 289.823C119.398 287.06 122.818 276.455 123.867 273.178C120.956 271.82 117.934 270.558 114.992 269.22C112.355 273.628 107.704 285.13 106.674 289.863C105.478 289.783 104.192 289.76 102.987 289.718C94.7369 289.613 86.4868 289.575 78.2367 289.605C74.2662 289.608 67.0854 289.428 63.3944 289.928C66.8709 282.11 70.5689 274.67 75.204 267.61C104.453 223.058 155.293 200.105 205.916 190.105C214.555 188.399 225.168 186.122 233.1 182.253C241.993 177.915 244.605 173.056 240.178 163.895Z" fill="#F37C5E"/>
+        <path d="M77.4292 92.2555C79.6298 88.7425 82.9019 85.2103 85.7589 82.1965C101.177 66.127 120.917 54.8988 142.58 49.8775C171.938 42.8493 202.877 47.837 228.562 63.7388C236.656 68.828 244.105 74.8825 250.746 81.77C251.985 83.0325 254.098 85.0878 254.893 86.6235C254.811 88.489 233.935 108.256 231.719 111.133C231.673 111.192 231.216 111.565 231.111 111.649C227.118 107.852 224.606 104.433 219.977 100.597C204.566 87.8268 187.342 81.3308 167.282 82.094C149.34 82.7765 133.585 89.1083 119.572 100.432C116.821 102.654 113.076 106.674 110.509 109.305L109.762 108.991C108.315 109.293 107.47 109.675 106.122 110.234C105.914 103.658 102.975 107.382 100.057 106.061C94.7135 103.641 90.1719 100.881 84.0941 100.336C83.0322 100.24 81.6035 99.5775 80.5035 99.4878C78.8956 99.3973 76.7222 100.743 75.1843 100.138C75.6563 98.8878 76.3152 97.6653 75.8031 96.4375L75.2172 96.3755C75.2063 95.702 77.0881 93.8258 77.4292 92.2555Z" fill="#5B4DE6"/>
+        <path d="M81.1051 234.533C64.3531 215.327 54.2648 188.6 54.0228 163.119C54.0116 161.935 54.0066 160.748 54.0136 159.564C54.2668 138.967 60.1514 118.835 71.026 101.362C72.5908 98.8512 75.4587 94.21 77.4292 92.2555C77.0881 93.8257 75.2063 95.702 75.2172 96.3755L75.8031 96.4375C76.3153 97.6652 75.6563 98.8877 75.1843 100.138C76.7222 100.743 78.8956 99.3972 80.5035 99.4877C81.6035 99.5775 83.0323 100.24 84.0941 100.335C90.1719 100.881 94.7135 103.641 100.057 106.06C102.975 107.382 105.914 103.658 106.122 110.234C107.47 109.675 108.315 109.293 109.762 108.991L110.509 109.305C105.489 114.461 99.1804 126.148 96.8269 132.906C89.4168 154.184 91.1426 175.438 101.386 195.245C102.682 197.8 104.152 200.262 105.787 202.613C107.005 204.347 109.828 208.025 110.652 209.838C110.097 211.152 106.016 213.171 104.539 214.3C97.8509 219.409 85.8331 228.016 81.1051 234.533Z" fill="#402EBA"/>
+        <path d="M186.093 264.283C185.676 258.86 189.393 249.956 192.734 245.705C194.437 243.539 199.196 242.623 201.856 241.606C204.875 240.451 208.049 239.32 210.996 237.936C219.872 233.787 228.546 228.258 236.06 222.009C251.046 209.544 262.243 194.364 271.184 177.12C273.066 173.491 274.763 169.766 276.575 166.096C277.058 165.117 278.152 162.695 278.735 161.905C280.258 162.666 280.395 169.988 280.512 171.855C281.738 191.302 276.926 211.551 267.76 228.667C258.739 245.609 245.524 259.938 229.388 270.278C226.418 272.208 220.685 275.628 217.336 276.918C214.253 279.448 198.142 284.19 193.806 285.49C189.76 279.048 186.411 272.005 186.093 264.283Z" fill="#3F2CB8"/>
+        <path d="M261.936 107.682C264.929 108.532 265.423 113.397 266.17 116.126C267.282 120.169 268.254 124.45 270.292 128.159C275.354 130.905 285.584 132.516 287.951 135.106C289.018 139.084 275.132 140.917 271.885 142.97C266.422 146.423 266.629 162.096 262.554 164.211C262.088 164.141 260.989 163.993 260.77 163.62C257.453 157.425 257.984 150.942 254.193 144.618C251.417 139.983 236.433 140.022 236.206 135.781C237.131 131.736 250.33 131.423 253.57 128.2C258.131 123.661 257.445 110.608 261.936 107.682Z" fill="#F9BD5E"/>
+      </svg>
+      <span class="foot-name">Onward</span>
+    </div>
+    <div class="foot-right">
+      <p class="foot-copy">© 2026 Onward. All rights reserved.</p>
+      <p class="foot-contact">Contact: <a href="mailto:onwardsupport@gmail.com">onwardsupport@gmail.com</a></p>
+    </div>
+  </div>
+</footer>
+
+<script>
+const nav = document.getElementById('site-nav');
+window.addEventListener('scroll', () => nav.classList.toggle('lifted', window.scrollY > 10), { passive: true });
+const revealObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); revealObs.unobserve(e.target); } });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+</script>
+</body>
+</html>

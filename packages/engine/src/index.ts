@@ -1,0 +1,10 @@
+﻿export * from "./constants";
+export * from "./types";
+export { newRegimeTax, oldRegimeTax } from "./tax";
+export { computeSalary, earningsFromCTC, basicAmt, hraAmt, specialAmt } from "./salary";
+export { computeOffer, compareOffers } from "./offer";
+export type { OfferInput, OfferResult, OfferComparison } from "./offer";
+export { evaluateOpportunities } from "./opportunities/evaluate";
+export { RULES } from "./opportunities/rules";
+export type { Rule, EvalContext } from "./opportunities/rules";
+export { benchmarkFor, experienceBand } from "./opportunities/benchmarks";

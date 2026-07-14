@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Salary Demystified — Onward</title>
+<meta name="description" content="See a payslip like yours, edit the numbers, and watch your take-home update live — with plain-English explanations and the money you could save."/>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-QH8KCWJXD4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-QH8KCWJXD4');
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --indigo:#5B4CFF; --indigo-d:#4A3EE0; --indigo-1:#E8E5FF; --indigo-0:#F3F1FF;
+  --coral:#FF7A59; --coral-d:#E05B3A; --amber:#F9BD5E; --amber-d:#D97706;
+  --ink:#1F2937; --ink-soft:#6B7280; --ink-mute:#9CA3AF;
+  --border:#E5E7EB; --border-s:#D1D5DB; --ivory:#FCFBF8; --ivory2:#F6F5F2; --white:#FFF;
+  --dark:#111827; --dark-s:#1F2937; --green:#16A34A; --green-0:#ECFDF3;
+  --font:'Inter',ui-sans-serif,system-ui,sans-serif; --font-d:'Manrope',var(--font);
+  --r-pill:9999px; --r-xl:32px; --r-lg:24px;
+  --sh:0 4px 14px rgba(31,41,55,.07),0 8px 22px rgba(31,41,55,.06);
+  --sh-lg:0 12px 36px rgba(31,41,55,.14);
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font);font-size:17px;line-height:1.65;background:var(--ivory);color:var(--ink);overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+h1,h2,h3,h4{font-family:var(--font-d);font-weight:800;line-height:1.1;margin:0;}
+p{margin:0;} a{text-decoration:none;color:inherit;}
+button{cursor:pointer;border:none;background:none;font:inherit;}
+input{font:inherit;} svg{display:block;}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px;}
+
+@keyframes fade-up{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:none;}}
+@keyframes fade-in{from{opacity:0;}to{opacity:1;}}
+@keyframes pop{from{opacity:0;transform:scale(.9);}to{opacity:1;transform:none;}}
+@keyframes flash{0%{background:var(--indigo-0);}100%{background:transparent;}}
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .8s var(--ease),transform .8s var(--ease);}
+.reveal.in{opacity:1;transform:none;}
+.reveal-delay-1{transition-delay:.1s;} .reveal-delay-2{transition-delay:.2s;}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01s!important;transition-duration:.01s!important;}}
+
+/* NAV */
+nav{position:fixed;inset:0 0 auto;z-index:100;padding:15px 0;background:rgba(252,251,248,.92);backdrop-filter:blur(16px);border-bottom:1px solid transparent;transition:border-color .3s,box-shadow .3s;}
+nav.lifted{border-color:var(--border);box-shadow:0 2px 18px rgba(31,41,55,.06);}
+.nav-inner{max-width:1080px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;}
+.brand{display:flex;align-items:center;gap:10px;}
+.brand-mark{width:27px;height:28px;flex:none;}
+.brand-name{font-family:var(--font-d);font-weight:800;font-size:19px;letter-spacing:-.4px;}
+.btn-nav{display:inline-flex;align-items:center;gap:7px;background:var(--indigo);color:#fff;font-family:var(--font-d);font-size:13.5px;font-weight:700;padding:10px 20px;border-radius:var(--r-pill);box-shadow:0 8px 26px rgba(91,76,255,.32);transition:background .2s,transform .15s;}
+.btn-nav:hover{background:var(--indigo-d);transform:translateY(-1px);}
+
+/* HERO — heading left, square upload banner right */
+.page-hero{padding:116px 24px 34px;background:radial-gradient(ellipse 70% 60% at 15% -5%,rgba(232,229,255,.9) 0%,transparent 60%),var(--ivory);}
+.hero-two{max-width:1080px;margin:0 auto;display:grid;grid-template-columns:1fr 300px;gap:44px;align-items:center;}
+.hero-left{text-align:left;}
+.page-kicker{display:inline-flex;align-items:center;gap:8px;background:var(--indigo-0);color:var(--indigo);font-family:var(--font-d);font-size:12px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;padding:7px 15px;border-radius:var(--r-pill);margin-bottom:20px;animation:fade-up .5s ease both;}
+.page-h1{font-size:clamp(30px,4.6vw,52px);font-weight:900;letter-spacing:-2px;line-height:1.07;animation:fade-up .55s .06s ease both;}
+.page-h1 .accent{color:var(--indigo);}
+/* square coming-soon upload banner */
+.hero-right{display:flex;justify-content:flex-end;animation:fade-up .6s .16s ease both;}
+.upload-square{position:relative;width:300px;max-width:100%;aspect-ratio:1/1;display:flex;flex-direction:column;justify-content:center;text-align:left;background:linear-gradient(150deg,var(--dark) 0%,#241d54 100%);border-radius:var(--r-xl);padding:28px;overflow:hidden;}
+.us-icon{width:52px;height:52px;border-radius:15px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;margin-bottom:16px;}
+.us-h{font-family:var(--font-d);font-size:19px;font-weight:800;color:#fff;letter-spacing:-.4px;margin-bottom:8px;}
+.us-p{font-size:13px;color:rgba(255,255,255,.6);line-height:1.55;margin-bottom:18px;}
+.us-btn{align-self:flex-start;background:rgba(255,255,255,.12);color:rgba(255,255,255,.55);font-family:var(--font-d);font-size:12.5px;font-weight:700;padding:9px 18px;border-radius:var(--r-pill);cursor:not-allowed;}
+.ub-soon{position:absolute;top:16px;right:16px;background:var(--amber);color:var(--ink);font-family:var(--font-d);font-size:9.5px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;padding:4px 10px;border-radius:var(--r-pill);}
+@media (max-width:820px){.hero-two{grid-template-columns:1fr;gap:28px;}.hero-right{justify-content:flex-start;}.upload-square{width:100%;aspect-ratio:auto;}.us-p{max-width:420px;}}
+
+/* JOURNEY STEPPER */
+.journey{padding:20px 24px 72px;}
+.journey-inner{max-width:920px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+.jstage{position:relative;background:var(--white);border:1px solid var(--border);border-radius:18px;padding:20px 18px;}
+.jstage--active{border-color:var(--indigo);box-shadow:0 0 0 3px rgba(91,76,255,.12);}
+.jstage-top{display:flex;align-items:center;gap:9px;margin-bottom:9px;}
+.jstage-num{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-d);font-size:12px;font-weight:800;flex:none;background:var(--indigo-0);color:var(--indigo);}
+.jstage--active .jstage-num{background:var(--indigo);color:#fff;}
+.jstage--soon .jstage-num{background:var(--ivory2);color:var(--ink-mute);}
+.jstage-badge{font-family:var(--font-d);font-size:9.5px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;padding:3px 8px;border-radius:var(--r-pill);}
+.jstage-badge--now{background:var(--green-0);color:var(--green);}
+.jstage-badge--soon{background:var(--ivory2);color:var(--ink-mute);}
+.jstage-h{font-size:14.5px;font-weight:800;letter-spacing:-.2px;margin-bottom:3px;}
+.jstage-p{font-size:12.5px;color:var(--ink-soft);line-height:1.5;}
+@media (max-width:820px){.journey-inner{grid-template-columns:1fr 1fr;}}
+
+/* SECTION BASICS */
+.sec{padding:84px 0;border-top:1px solid var(--border);}
+#learn{padding-top:44px;}
+.sec--white{background:var(--white);} .sec--ivory{background:var(--ivory);}
+.sec-head{max-width:640px;margin:0 auto 40px;text-align:center;}
+.sec-kicker{display:inline-block;font-family:var(--font-d);font-size:12.5px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--indigo);background:var(--indigo-0);padding:6px 14px;border-radius:var(--r-pill);margin-bottom:16px;}
+.sec-h2{font-size:clamp(26px,3.6vw,40px);font-weight:900;letter-spacing:-1.2px;margin-bottom:12px;}
+.sec-sub{font-size:17.5px;color:var(--ink-soft);line-height:1.68;}
+
+/* UPLOAD COMING SOON BANNER */
+.sec-band{padding:44px 24px 8px;}
+.upload-banner{max-width:820px;margin:0 auto;position:relative;background:linear-gradient(120deg,var(--dark) 0%,#241d54 100%);border-radius:var(--r-lg);padding:18px 22px;display:flex;align-items:center;gap:18px;overflow:hidden;}
+.ub-soon{position:absolute;top:12px;right:12px;background:var(--amber);color:var(--ink);font-family:var(--font-d);font-size:9.5px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;padding:3px 9px;border-radius:var(--r-pill);}
+.ub-icon{flex:none;width:46px;height:46px;border-radius:13px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;}
+.ub-body{flex:1;}
+.ub-h{font-size:16px;font-weight:800;color:#fff;letter-spacing:-.3px;margin-bottom:3px;}
+.ub-p{font-size:13px;color:rgba(255,255,255,.6);line-height:1.5;}
+.ub-btn{flex:none;background:rgba(255,255,255,.12);color:rgba(255,255,255,.55);font-family:var(--font-d);font-size:12.5px;font-weight:700;padding:9px 18px;border-radius:var(--r-pill);cursor:not-allowed;}
+@media (max-width:640px){.upload-banner{flex-direction:column;text-align:center;}}
+
+/* PERSONA TABS */
+.persona-tabs{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:32px;}
+.persona-tab{font-family:var(--font-d);font-size:13.5px;font-weight:700;color:var(--ink-soft);background:var(--white);border:1.5px solid var(--border);padding:10px 20px;border-radius:var(--r-pill);transition:all .2s;}
+.persona-tab:hover{border-color:var(--indigo);color:var(--indigo);}
+.persona-tab.active{background:var(--indigo);border-color:var(--indigo);color:#fff;}
+
+/* CALCULATOR LAYOUT */
+.calc{max-width:920px;margin:0 auto;display:grid;grid-template-columns:1.15fr .85fr;gap:22px;align-items:start;}
+@media (max-width:820px){.calc{grid-template-columns:1fr;}}
+
+/* payslip card (editable) */
+.slip{background:var(--white);border:1px solid var(--border);border-radius:var(--r-xl);overflow:hidden;box-shadow:var(--sh);}
+.slip-head{background:var(--ivory2);border-bottom:1px solid var(--border);padding:18px 24px;display:flex;align-items:center;justify-content:space-between;}
+.slip-title{font-family:var(--font-d);font-size:15px;font-weight:800;display:flex;align-items:center;gap:9px;}
+.slip-edit-hint{font-size:11.5px;font-weight:700;color:var(--indigo);background:var(--indigo-0);padding:4px 11px;border-radius:var(--r-pill);display:flex;align-items:center;gap:5px;}
+.slip-body{padding:10px 24px 22px;}
+.slip-ctc{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--indigo-0);border:1px solid var(--indigo-1);border-radius:12px;padding:12px 14px 12px 16px;margin:12px 0 4px;}
+.slip-ctc-lbl{font-family:var(--font-d);font-size:14px;font-weight:800;color:var(--indigo);display:flex;align-items:center;gap:7px;}
+.slip-ctc-opt{font-family:var(--font-d);font-size:9.5px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--ink-mute);background:var(--white);border:1px solid var(--border);padding:2px 7px;border-radius:var(--r-pill);}
+.slip-ctc-input{width:132px;font-size:16px;}
+.slip-group-label{font-family:var(--font-d);font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--ink-mute);margin:18px 0 4px;}
+.slip-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px dashed var(--border);}
+.slip-row:last-child{border-bottom:none;}
+.slip-lbl{display:flex;align-items:center;gap:8px;font-size:14.5px;color:var(--ink);}
+.slip-info{width:17px;height:17px;flex:none;border-radius:50%;background:var(--indigo-0);color:var(--indigo);font-size:11px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:background .2s,color .2s;}
+.slip-info:hover,.slip-info.on{background:var(--indigo);color:#fff;}
+.slip-amount{display:flex;align-items:center;gap:2px;}
+.slip-cur{font-family:var(--font-d);font-size:14px;font-weight:700;color:var(--ink-mute);}
+.slip-input{width:96px;text-align:right;font-family:var(--font-d);font-size:15px;font-weight:800;color:var(--ink);background:var(--ivory);border:1.5px solid transparent;border-radius:9px;padding:6px 10px;outline:none;transition:border-color .15s,background .15s;font-variant-numeric:tabular-nums;-moz-appearance:textfield;}
+.slip-input::-webkit-outer-spin-button,.slip-input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
+.slip-input:hover{background:var(--indigo-0);}
+.slip-input:focus{border-color:var(--indigo);background:#fff;}
+.slip-static{font-family:var(--font-d);font-size:15px;font-weight:800;font-variant-numeric:tabular-nums;padding:6px 10px;}
+.slip-static.deduct{color:var(--coral-d);}
+.slip-total{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;background:var(--indigo);color:#fff;}
+.slip-total-lbl{font-family:var(--font-d);font-size:15px;font-weight:800;}
+.slip-total-val{font-family:var(--font-d);font-size:24px;font-weight:900;font-variant-numeric:tabular-nums;transition:transform .2s;}
+.slip-total-val.bump{animation:pop .3s ease;}
+.slip-total-sub{font-size:11px;opacity:.75;font-weight:600;}
+/* editable components */
+.slip-left{display:flex;align-items:center;gap:6px;flex:1;min-width:0;}
+.slip-name-input{flex:1;min-width:0;font-family:var(--font);font-size:14.5px;color:var(--ink);background:transparent;border:1.5px solid transparent;border-radius:8px;padding:5px 8px;outline:none;transition:border-color .15s,background .15s;}
+.slip-name-input:hover{background:var(--ivory);}
+.slip-name-input:focus{border-color:var(--indigo);background:#fff;}
+.slip-auto-lbl{font-size:14.5px;color:var(--ink);}
+.slip-tag-auto{font-size:9px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--ink-mute);background:var(--ivory2);padding:2px 6px;border-radius:var(--r-pill);}
+.slip-remove{flex:none;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--ink-mute);background:transparent;font-size:15px;line-height:1;transition:background .15s,color .15s;}
+.slip-remove:hover{background:#FFE4DB;color:var(--coral-d);}
+.slip-add{padding:12px 0 4px;display:flex;gap:7px;flex-wrap:wrap;align-items:center;}
+.slip-add-btn{display:inline-flex;align-items:center;gap:5px;font-family:var(--font-d);font-size:12.5px;font-weight:700;color:var(--indigo);background:var(--indigo-0);padding:7px 13px;border-radius:var(--r-pill);transition:background .15s;}
+.slip-add-btn:hover{background:var(--indigo-1);}
+.slip-chip{font-size:11.5px;font-weight:600;color:var(--ink-soft);background:var(--white);border:1px solid var(--border);padding:5px 11px;border-radius:var(--r-pill);transition:all .15s;}
+.slip-chip:hover{border-color:var(--indigo);color:var(--indigo);background:var(--indigo-0);}
+.slip-chips-wrap{display:none;flex-wrap:wrap;gap:6px;width:100%;margin-top:8px;padding-top:10px;border-top:1px dashed var(--border);}
+.slip-chips-wrap.open{display:flex;}
+.slip-chips-lbl{font-size:11px;font-weight:700;color:var(--ink-mute);width:100%;margin-bottom:1px;}
+
+/* explanation + opportunities panel */
+.panel{position:sticky;top:88px;display:flex;flex-direction:column;gap:16px;}
+.explain{background:var(--dark-s);border-radius:var(--r-lg);padding:22px;color:#fff;min-height:150px;}
+.explain-tag{font-family:var(--font-d);font-size:10px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:8px;}
+.explain-title{font-family:var(--font-d);font-size:17px;font-weight:800;color:#fff;margin-bottom:9px;}
+.explain-body{font-size:13.5px;color:rgba(255,255,255,.68);line-height:1.66;}
+.explain-body strong{color:#A89EFF;}
+.opps{background:linear-gradient(180deg,var(--green-0) 0%,var(--white) 62%);border:1.5px solid #BBF7D0;border-radius:var(--r-lg);padding:20px;box-shadow:0 12px 30px rgba(22,163,74,.12);}
+.opps-h{font-family:var(--font-d);font-size:12.5px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--green);display:flex;align-items:center;gap:8px;margin-bottom:14px;}
+.opps-h .spark{width:22px;height:22px;border-radius:7px;background:#fff;box-shadow:var(--sh);display:flex;align-items:center;justify-content:center;}
+/* headline savings figure */
+.opps-total{display:none;margin-bottom:16px;}
+.opps-total.show{display:block;}
+.opps-total .ot-lbl{font-size:12px;color:var(--ink-soft);margin-bottom:2px;}
+.opps-total .ot-val{font-family:var(--font-d);font-size:30px;font-weight:900;letter-spacing:-1px;color:var(--green);line-height:1.05;font-variant-numeric:tabular-nums;}
+.opps-total .ot-val small{font-size:14px;font-weight:800;color:var(--ink-soft);}
+.opp{display:flex;gap:11px;padding:12px 0;border-bottom:1px dashed rgba(22,163,74,.2);}
+.opp:last-child{border-bottom:none;}
+.opp-ic{flex:none;width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;background:#fff;box-shadow:var(--sh);}
+.opp-txt{flex:1;font-size:12.5px;color:var(--ink-soft);line-height:1.5;}
+.opp-txt strong{display:block;font-family:var(--font-d);font-size:13px;color:var(--ink);margin-bottom:1px;}
+.opp-save{font-family:var(--font-d);font-size:13px;font-weight:800;color:var(--green);white-space:nowrap;align-self:center;}
+.opp-none{font-size:13px;color:var(--ink-mute);text-align:center;padding:14px 0;}
+.calc-note{max-width:920px;margin:22px auto 0;font-size:12.5px;color:var(--ink-mute);text-align:center;line-height:1.6;}
+
+/* regime compare mini */
+.regime{display:flex;gap:10px;margin-top:6px;}
+.regime-card{flex:1;border:1.5px solid var(--border);border-radius:12px;padding:12px 14px;transition:border-color .2s,background .2s;}
+.regime-card.win{border-color:var(--green);background:var(--green-0);}
+.regime-lbl{font-size:10.5px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--ink-mute);margin-bottom:4px;}
+.regime-val{font-family:var(--font-d);font-size:17px;font-weight:900;font-variant-numeric:tabular-nums;}
+.regime-card.win .regime-tag{display:inline-block;margin-top:4px;font-size:10px;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:.5px;}
+
+/* CTA */
+.cta-section{padding:110px 24px;text-align:center;background:var(--dark);position:relative;overflow:hidden;}
+.cta-glow{position:absolute;width:860px;height:460px;left:50%;top:-150px;transform:translateX(-50%);background:radial-gradient(ellipse,rgba(91,76,255,.35) 0%,transparent 65%);pointer-events:none;}
+.cta-inner{position:relative;z-index:2;max-width:540px;margin:0 auto;}
+.cta-kicker{font-family:var(--font-d);font-size:12.5px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--amber);margin-bottom:16px;}
+.cta-h2{font-size:clamp(28px,4.2vw,44px);font-weight:900;letter-spacing:-1.4px;line-height:1.1;color:#fff;margin-bottom:16px;}
+.cta-sub{font-size:17px;color:rgba(255,255,255,.6);margin-bottom:34px;line-height:1.7;}
+.cta-form{display:flex;gap:10px;max-width:460px;margin:0 auto;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:var(--r-pill);padding:6px 6px 6px 22px;transition:border-color .25s,box-shadow .25s;}
+.cta-form:focus-within{border-color:var(--indigo);box-shadow:0 0 0 4px rgba(91,76,255,.22);}
+.cta-input{flex:1;color:#fff;font-size:15.5px;min-width:0;background:none;border:none;outline:none;}
+.cta-input::placeholder{color:rgba(255,255,255,.38);}
+.cta-btn{flex:none;background:var(--indigo);color:#fff;font-family:var(--font-d);font-size:14.5px;font-weight:700;padding:13px 26px;border-radius:var(--r-pill);transition:background .2s,transform .15s;}
+.cta-btn:hover{background:var(--indigo-d);transform:translateY(-1px);}
+.cta-btn:disabled{opacity:.6;cursor:default;}
+.cta-note{margin-top:16px;font-size:13px;color:rgba(255,255,255,.4);}
+.cta-success{display:none;margin:0 auto;max-width:460px;background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.4);color:#86EFAC;font-size:15.5px;font-weight:600;border-radius:18px;padding:18px 24px;align-items:center;justify-content:center;gap:10px;}
+.cta-success.show{display:flex;animation:fade-up .5s var(--ease) both;}
+@media (max-width:560px){.cta-form{flex-direction:column;padding:10px;gap:8px;}.cta-input{padding:10px 14px;text-align:center;}}
+
+/* FOOTER */
+footer{background:var(--dark-s);padding:42px 0;border-top:1px solid rgba(255,255,255,.07);}
+.foot-inner{max-width:1080px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;}
+.foot-brand{display:flex;align-items:center;gap:8px;}
+.foot-mark{width:22px;height:23px;flex:none;}
+.foot-name{font-family:var(--font-d);font-weight:800;font-size:16px;color:#fff;}
+.foot-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px;}
+.foot-copy{font-size:13px;color:#9797AE;font-style:italic;}
+.foot-contact{font-size:13px;color:#9797AE;}
+.foot-contact a{color:rgba(255,255,255,.55);transition:color .2s;}
+.foot-contact a:hover{color:#fff;}
+@media (max-width:640px){.foot-right{align-items:flex-start;}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="site-nav">
+  <div class="nav-inner">
+    <a href="index.html" class="brand">
+      <svg class="brand-mark" viewBox="0 0 316 325" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M240.178 163.895C244.542 163.998 247.534 170.007 248.001 173.902C249.111 183.152 238.403 187.845 231.549 191.077C219.924 196.56 208.144 201.455 197.535 208.874C170.196 226.784 150.549 259.408 171.265 290.495C165.885 290.79 122.505 290.695 120.059 289.823C119.398 287.06 122.818 276.455 123.867 273.178C120.956 271.82 117.934 270.558 114.992 269.22C112.355 273.628 107.704 285.13 106.674 289.863C105.478 289.783 104.192 289.76 102.987 289.718C94.7369 289.613 86.4868 289.575 78.2367 289.605C74.2662 289.608 67.0854 289.428 63.3944 289.928C66.8709 282.11 70.5689 274.67 75.204 267.61C104.453 223.058 155.293 200.105 205.916 190.105C214.555 188.399 225.168 186.122 233.1 182.253C241.993 177.915 244.605 173.056 240.178 163.895Z" fill="#F37C5E"/>
+        <path d="M77.4292 92.2555C79.6298 88.7425 82.9019 85.2103 85.7589 82.1965C101.177 66.127 120.917 54.8988 142.58 49.8775C171.938 42.8493 202.877 47.837 228.562 63.7388C236.656 68.828 244.105 74.8825 250.746 81.77C251.985 83.0325 254.098 85.0878 254.893 86.6235C254.811 88.489 233.935 108.256 231.719 111.133C231.673 111.192 231.216 111.565 231.111 111.649C227.118 107.852 224.606 104.433 219.977 100.597C204.566 87.8268 187.342 81.3308 167.282 82.094C149.34 82.7765 133.585 89.1083 119.572 100.432C116.821 102.654 113.076 106.674 110.509 109.305L109.762 108.991C108.315 109.293 107.47 109.675 106.122 110.234C105.914 103.658 102.975 107.382 100.057 106.061C94.7135 103.641 90.1719 100.881 84.0941 100.336C83.0322 100.24 81.6035 99.5775 80.5035 99.4878C78.8956 99.3973 76.7222 100.743 75.1843 100.138C75.6563 98.8878 76.3152 97.6653 75.8031 96.4375L75.2172 96.3755C75.2063 95.702 77.0881 93.8258 77.4292 92.2555Z" fill="#5B4DE6"/>
+        <path d="M81.1051 234.533C64.3531 215.327 54.2648 188.6 54.0228 163.119C54.0116 161.935 54.0066 160.748 54.0136 159.564C54.2668 138.967 60.1514 118.835 71.026 101.362C72.5908 98.8512 75.4587 94.21 77.4292 92.2555C77.0881 93.8257 75.2063 95.702 75.2172 96.3755L75.8031 96.4375C76.3153 97.6652 75.6563 98.8877 75.1843 100.138C76.7222 100.743 78.8956 99.3972 80.5035 99.4877C81.6035 99.5775 83.0323 100.24 84.0941 100.335C90.1719 100.881 94.7135 103.641 100.057 106.06C102.975 107.382 105.914 103.658 106.122 110.234C107.47 109.675 108.315 109.293 109.762 108.991L110.509 109.305C105.489 114.461 99.1804 126.148 96.8269 132.906C89.4168 154.184 91.1426 175.438 101.386 195.245C102.682 197.8 104.152 200.262 105.787 202.613C107.005 204.347 109.828 208.025 110.652 209.838C110.097 211.152 106.016 213.171 104.539 214.3C97.8509 219.409 85.8331 228.016 81.1051 234.533Z" fill="#402EBA"/>
+        <path d="M186.093 264.283C185.676 258.86 189.393 249.956 192.734 245.705C194.437 243.539 199.196 242.623 201.856 241.606C204.875 240.451 208.049 239.32 210.996 237.936C219.872 233.787 228.546 228.258 236.06 222.009C251.046 209.544 262.243 194.364 271.184 177.12C273.066 173.491 274.763 169.766 276.575 166.096C277.058 165.117 278.152 162.695 278.735 161.905C280.258 162.666 280.395 169.988 280.512 171.855C281.738 191.302 276.926 211.551 267.76 228.667C258.739 245.609 245.524 259.938 229.388 270.278C226.418 272.208 220.685 275.628 217.336 276.918C214.253 279.448 198.142 284.19 193.806 285.49C189.76 279.048 186.411 272.005 186.093 264.283Z" fill="#3F2CB8"/>
+        <path d="M261.936 107.682C264.929 108.532 265.423 113.397 266.17 116.126C267.282 120.169 268.254 124.45 270.292 128.159C275.354 130.905 285.584 132.516 287.951 135.106C289.018 139.084 275.132 140.917 271.885 142.97C266.422 146.423 266.629 162.096 262.554 164.211C262.088 164.141 260.989 163.993 260.77 163.62C257.453 157.425 257.984 150.942 254.193 144.618C251.417 139.983 236.433 140.022 236.206 135.781C237.131 131.736 250.33 131.423 253.57 128.2C258.131 123.661 257.445 110.608 261.936 107.682Z" fill="#F9BD5E"/>
+      </svg>
+      <span class="brand-name">Onward</span>
+    </a>
+    <a href="#waitlist" class="btn-nav">Join Waitlist
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+</nav>
+
+<!-- HERO — heading left, square upload banner right -->
+<section class="page-hero">
+  <div class="hero-two">
+    <div class="hero-left">
+      <div class="page-kicker" id="hero-kicker">Salary Journey</div>
+      <h1 class="page-h1">Your salary,<br><span class="accent">finally in plain English.</span></h1>
+    </div>
+    <div class="hero-right">
+      <div class="upload-square">
+        <span class="ub-soon">Coming soon</span>
+        <div class="us-icon">
+          <svg width="30" height="30" viewBox="0 0 42 42" fill="none">
+            <rect x="8" y="5" width="26" height="32" rx="4" stroke="rgba(255,255,255,.55)" stroke-width="1.6"/>
+            <path d="M14 14h14M14 19h14M14 24h9" stroke="rgba(255,255,255,.3)" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="31" cy="31" r="9" fill="#5B4CFF"/>
+            <path d="M31 35v-8M27.5 30.5L31 27l3.5 3.5" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <p class="us-h">Have your own offer?</p>
+        <p class="us-p">Upload your real offer letter or payslip and get it decoded automatically — your exact numbers, your exact clauses. We're building this now.</p>
+        <button class="us-btn" disabled>Notify me &rarr;</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION: EDITABLE TEMPLATE -->
+<section class="sec sec--ivory" id="learn">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="sec-kicker">Understand</p>
+      <h2 class="sec-h2">See the money you could be keeping.</h2>
+      <p class="sec-sub">This is a sample payslip — explore it as it is. Curious about your own? Drop in a number and watch how it changes. Either way, keep an eye on the <strong>opportunities we spot</strong> — that's where the money is. Nothing is ever saved or sent.</p>
+    </div>
+
+    <div class="calc reveal reveal-delay-1">
+      <!-- editable payslip -->
+      <div class="slip">
+        <div class="slip-head">
+          <span class="slip-title">
+            <svg width="17" height="17" viewBox="0 0 20 20" fill="none"><rect x="4" y="2" width="12" height="16" rx="2" stroke="#5B4CFF" stroke-width="1.4"/><path d="M7 7h6M7 10.5h6M7 14h3.5" stroke="#5B4CFF" stroke-width="1.3" stroke-linecap="round"/></svg>
+            <span id="slip-title-txt">Monthly payslip</span>
+          </span>
+          <span class="slip-edit-hint">
+            <svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M9 2l3 3-7 7H2v-3l7-7z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
+            Editable
+          </span>
+        </div>
+        <div class="slip-body">
+          <div class="slip-ctc">
+            <span class="slip-ctc-lbl">Annual CTC <span class="slip-ctc-opt">optional</span> <span class="slip-info" data-x="ctc">i</span></span>
+            <span class="slip-amount"><span class="slip-cur">&#8377;</span><input class="slip-input slip-ctc-input" type="number" id="in-ctc"/></span>
+          </div>
+          <p class="slip-group-label">Earnings</p>
+          <div id="earn-list"></div>
+          <div class="slip-add">
+            <button class="slip-add-btn" id="earn-add-btn"><svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M6 2v8M2 6h8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg> Add earning</button>
+            <div class="slip-chips-wrap" id="earn-chips"><span class="slip-chips-lbl">Common earnings — tap to add</span></div>
+          </div>
+          <div class="slip-row">
+            <span class="slip-lbl" style="font-weight:700">Gross (monthly)</span>
+            <span class="slip-static" id="out-gross">&#8377; 0</span>
+          </div>
+
+          <p class="slip-group-label">Deductions</p>
+          <div id="deduct-list"></div>
+          <div class="slip-add">
+            <button class="slip-add-btn" id="deduct-add-btn"><svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M6 2v8M2 6h8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg> Add deduction</button>
+            <div class="slip-chips-wrap" id="deduct-chips"><span class="slip-chips-lbl">Common deductions — tap to add</span></div>
+          </div>
+        </div>
+        <div class="slip-total">
+          <div>
+            <div class="slip-total-lbl">Take-home / month</div>
+            <div class="slip-total-sub" id="out-annual">&#8377;0 / year in hand</div>
+          </div>
+          <div class="slip-total-val" id="out-net">&#8377; 0</div>
+        </div>
+      </div>
+
+      <!-- opportunities (the USP) + explanation -->
+      <div class="panel">
+        <div class="opps">
+          <div class="opps-h"><span class="spark"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1l1.6 3.9L13 6.2 9.8 9l.9 4.3L7 11.1 3.3 13.3l.9-4.3L1 6.2l4.4-.3L7 1z" fill="#16A34A"/></svg></span> Opportunities we spotted</div>
+          <div class="opps-total" id="opps-total"></div>
+          <div id="opps-list"></div>
+          <div class="regime" id="regime-compare"></div>
+        </div>
+
+        <div class="explain" id="explain">
+          <div class="explain-tag">Tap any <b style="color:#A89EFF">i</b> to learn</div>
+          <div class="explain-title">This payslip is yours to poke at.</div>
+          <div class="explain-body">Change any earning and everything recalculates — EPF is 12% of Basic, TDS is your estimated income tax spread across the year. Tap the <strong>i</strong> next to any line to see exactly what it means and why it's there.</div>
+        </div>
+      </div>
+    </div>
+    <p class="calc-note">Figures are estimates for FY 2025&ndash;26 to help you learn, not tax advice. Your actual tax depends on declarations, exemptions, and your employer's calculation. Onward will personalise this precisely at launch.</p>
+  </div>
+</section>
+
+<!-- SECTION: YOUR OWN NUMBERS -->
+<section class="sec sec--white" id="own">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="sec-kicker">Optimize</p>
+      <h2 class="sec-h2">Now try your own numbers.</h2>
+      <p class="sec-sub">Same tool, your figures. Type in what you earn — no documents, nothing official — and see what each number means, plus where the savings hide. Start from any template above and just edit it.</p>
+    </div>
+    <div style="text-align:center">
+      <a href="#learn" class="btn-nav" style="font-size:15px;padding:14px 28px">
+        Edit the template with your numbers
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- WAITLIST -->
+<section class="cta-section" id="waitlist">
+  <div class="cta-glow"></div>
+  <div class="cta-inner">
+    <p class="cta-kicker reveal">Early access</p>
+    <h2 class="cta-h2 reveal reveal-delay-1">This is just stage one.</h2>
+    <p class="cta-sub reveal reveal-delay-2">Auto-decoding your real offer, negotiation help, and year-round tax planning are next. Join the waitlist and get it all free as an early member.</p>
+    <div id="cta-form-wrap" class="reveal reveal-delay-2">
+      <form class="cta-form" id="waitlist-form">
+        <input class="cta-input" type="email" name="email" id="email-input" placeholder="your@email.com" autocomplete="email" required/>
+        <button type="submit" class="cta-btn">Join Waitlist</button>
+      </form>
+      <p class="cta-note">No spam. Just a heads-up when we launch.</p>
+    </div>
+    <div class="cta-success" id="cta-success">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#4ADE80" stroke-width="1.6"/><path d="M6 10.2l2.6 2.6L14 7.4" stroke="#4ADE80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      You're on the list! We'll be in touch.
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-inner">
+    <div class="foot-brand">
+      <svg class="foot-mark" viewBox="0 0 316 325" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M240.178 163.895C244.542 163.998 247.534 170.007 248.001 173.902C249.111 183.152 238.403 187.845 231.549 191.077C219.924 196.56 208.144 201.455 197.535 208.874C170.196 226.784 150.549 259.408 171.265 290.495C165.885 290.79 122.505 290.695 120.059 289.823C119.398 287.06 122.818 276.455 123.867 273.178C120.956 271.82 117.934 270.558 114.992 269.22C112.355 273.628 107.704 285.13 106.674 289.863C105.478 289.783 104.192 289.76 102.987 289.718C94.7369 289.613 86.4868 289.575 78.2367 289.605C74.2662 289.608 67.0854 289.428 63.3944 289.928C66.8709 282.11 70.5689 274.67 75.204 267.61C104.453 223.058 155.293 200.105 205.916 190.105C214.555 188.399 225.168 186.122 233.1 182.253C241.993 177.915 244.605 173.056 240.178 163.895Z" fill="#F37C5E"/>
+        <path d="M77.4292 92.2555C79.6298 88.7425 82.9019 85.2103 85.7589 82.1965C101.177 66.127 120.917 54.8988 142.58 49.8775C171.938 42.8493 202.877 47.837 228.562 63.7388C236.656 68.828 244.105 74.8825 250.746 81.77C251.985 83.0325 254.098 85.0878 254.893 86.6235C254.811 88.489 233.935 108.256 231.719 111.133C231.673 111.192 231.216 111.565 231.111 111.649C227.118 107.852 224.606 104.433 219.977 100.597C204.566 87.8268 187.342 81.3308 167.282 82.094C149.34 82.7765 133.585 89.1083 119.572 100.432C116.821 102.654 113.076 106.674 110.509 109.305L109.762 108.991C108.315 109.293 107.47 109.675 106.122 110.234C105.914 103.658 102.975 107.382 100.057 106.061C94.7135 103.641 90.1719 100.881 84.0941 100.336C83.0322 100.24 81.6035 99.5775 80.5035 99.4878C78.8956 99.3973 76.7222 100.743 75.1843 100.138C75.6563 98.8878 76.3152 97.6653 75.8031 96.4375L75.2172 96.3755C75.2063 95.702 77.0881 93.8258 77.4292 92.2555Z" fill="#5B4DE6"/>
+        <path d="M81.1051 234.533C64.3531 215.327 54.2648 188.6 54.0228 163.119C54.0116 161.935 54.0066 160.748 54.0136 159.564C54.2668 138.967 60.1514 118.835 71.026 101.362C72.5908 98.8512 75.4587 94.21 77.4292 92.2555C77.0881 93.8257 75.2063 95.702 75.2172 96.3755L75.8031 96.4375C76.3153 97.6652 75.6563 98.8877 75.1843 100.138C76.7222 100.743 78.8956 99.3972 80.5035 99.4877C81.6035 99.5775 83.0323 100.24 84.0941 100.335C90.1719 100.881 94.7135 103.641 100.057 106.06C102.975 107.382 105.914 103.658 106.122 110.234C107.47 109.675 108.315 109.293 109.762 108.991L110.509 109.305C105.489 114.461 99.1804 126.148 96.8269 132.906C89.4168 154.184 91.1426 175.438 101.386 195.245C102.682 197.8 104.152 200.262 105.787 202.613C107.005 204.347 109.828 208.025 110.652 209.838C110.097 211.152 106.016 213.171 104.539 214.3C97.8509 219.409 85.8331 228.016 81.1051 234.533Z" fill="#402EBA"/>
+        <path d="M186.093 264.283C185.676 258.86 189.393 249.956 192.734 245.705C194.437 243.539 199.196 242.623 201.856 241.606C204.875 240.451 208.049 239.32 210.996 237.936C219.872 233.787 228.546 228.258 236.06 222.009C251.046 209.544 262.243 194.364 271.184 177.12C273.066 173.491 274.763 169.766 276.575 166.096C277.058 165.117 278.152 162.695 278.735 161.905C280.258 162.666 280.395 169.988 280.512 171.855C281.738 191.302 276.926 211.551 267.76 228.667C258.739 245.609 245.524 259.938 229.388 270.278C226.418 272.208 220.685 275.628 217.336 276.918C214.253 279.448 198.142 284.19 193.806 285.49C189.76 279.048 186.411 272.005 186.093 264.283Z" fill="#3F2CB8"/>
+        <path d="M261.936 107.682C264.929 108.532 265.423 113.397 266.17 116.126C267.282 120.169 268.254 124.45 270.292 128.159C275.354 130.905 285.584 132.516 287.951 135.106C289.018 139.084 275.132 140.917 271.885 142.97C266.422 146.423 266.629 162.096 262.554 164.211C262.088 164.141 260.989 163.993 260.77 163.62C257.453 157.425 257.984 150.942 254.193 144.618C251.417 139.983 236.433 140.022 236.206 135.781C237.131 131.736 250.33 131.423 253.57 128.2C258.131 123.661 257.445 110.608 261.936 107.682Z" fill="#F9BD5E"/>
+      </svg>
+      <span class="foot-name">Onward</span>
+    </div>
+    <div class="foot-right">
+      <p class="foot-copy">© 2026 Onward. All rights reserved.</p>
+      <p class="foot-contact">Contact: <a href="mailto:onwardsupport@gmail.com">onwardsupport@gmail.com</a></p>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* nav lift */
+const nav = document.getElementById('site-nav');
+window.addEventListener('scroll',()=>nav.classList.toggle('lifted',window.scrollY>10),{passive:true});
+
+/* reveal */
+const ro=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');ro.unobserve(e.target);}})},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+
+/* ── reverse-calc a payslip from an annual CTC ── */
+let ctc = 1200000;
+function earningsFromCTC(annualCTC){
+  const m = (annualCTC || 0) / 12;              // monthly CTC
+  const basic = Math.round(m * 0.40);           // Basic = 40% of CTC
+  const hra   = Math.round(basic * 0.50);       // HRA = 50% of Basic
+  const employerPF = Math.round(basic * 0.12);  // employer PF (part of CTC, not paid out)
+  const special = Math.max(0, Math.round(m - basic - hra - employerPF));
+  return [
+    { name:'Basic salary',      amount:basic,   x:'basic' },
+    { name:'HRA',               amount:hra,     x:'hra' },
+    { name:'Special allowance', amount:special, x:'special' }
+  ];
+}
+
+/* quick-add presets */
+const earnPresets = [
+  {name:'HRA',x:'hra'}, {name:'Special allowance',x:'special'}, {name:'LTA',x:'lta'},
+  {name:'Conveyance',x:'conveyance'}, {name:'Medical allowance',x:'medical'},
+  {name:'Bonus / Variable',x:'variable'}, {name:'Food coupons',x:'food'}
+];
+const deductPresets = [
+  {name:'Professional tax',x:'pt'}, {name:'Health insurance',x:'insurance'},
+  {name:'VPF (extra PF)',x:'vpf'}, {name:'LWF',x:'lwf'},
+  {name:'Loan / advance',x:'loan'}, {name:'ESI',x:'esi'}
+];
+
+/* ── explanations ── */
+const explains = {
+  ctc:     { tag:'The headline number', title:'Annual CTC', body:"Cost To Company — the <strong>total</strong> your employer spends on you in a year, including parts you never see in your bank account (like their PF contribution and gratuity). We split it into a realistic monthly payslip below — tweak any line to match yours." },
+  basic:   { tag:'Earning', title:'Basic salary', body:"The core of your pay and the number everything else keys off. <strong>EPF, gratuity and HRA limits are all calculated from Basic</strong> — so a higher Basic means more retirement savings but a slightly lower take-home today." },
+  hra:     { tag:'Earning', title:'House Rent Allowance', body:"Paid to cover rent. If you actually pay rent, a big chunk of HRA can be <strong>tax-exempt</strong> in the old regime — one of the easiest ways to lower your tax. Don't pay rent? It's fully taxable." },
+  special: { tag:'Earning', title:'Special allowance', body:"The balancing figure that makes your salary add up to the agreed total. It's <strong>fully taxable</strong> with no special benefit — often the first thing to rework if you want a more tax-efficient structure." },
+  lta:     { tag:'Earning', title:'Leave Travel Allowance', body:"Reimburses travel when you take leave. Can be <strong>tax-exempt twice in four years</strong> against actual travel bills, in the old regime." },
+  conveyance:{ tag:'Earning', title:'Conveyance allowance', body:"Meant for your commute. Mostly taxable now, but still a common line — good to know it's not a special saving." },
+  medical: { tag:'Earning', title:'Medical allowance', body:"A fixed allowance towards medical costs — fully taxable unless it's a reimbursement made against actual bills." },
+  variable:{ tag:'Earning', title:'Bonus / Variable pay', body:"Paid only if you or the company hit targets. Real money, but <strong>not guaranteed</strong> — don't count it as fixed salary." },
+  food:    { tag:'Earning', title:'Food coupons / Meal card', body:"Meal benefits (Sodexo, etc.) up to ~₹50/meal can be <strong>tax-free</strong> — a small but genuine perk." },
+  epf:     { tag:'Deduction', title:'EPF — your 12%', body:"12% of your Basic goes into your Provident Fund every month, and your employer adds a matching 12%. It <strong>leaves your take-home but isn't lost</strong> — it's your retirement corpus, earning tax-free interest." },
+  pt:      { tag:'Deduction', title:'Professional tax', body:"A small state tax on being employed — usually around <strong>₹200/month</strong> (max ₹2,500/year). It varies by state and some states don't charge it at all." },
+  tds:     { tag:'Deduction', title:'TDS — income tax', body:"Your employer estimates your yearly income tax and deducts it in <strong>12 monthly slices</strong> so you don't face one big bill. Pick the wrong regime or forget to declare investments, and this is often higher than it needs to be." },
+  insurance:{ tag:'Deduction', title:'Health insurance premium', body:"Your share of the group health cover. Counts towards <strong>Section 80D</strong> in the old regime." },
+  vpf:     { tag:'Deduction', title:'VPF — Voluntary PF', body:"Extra PF beyond the mandatory 12%. Same tax-free interest, and it counts towards your ₹1.5L 80C limit." },
+  lwf:     { tag:'Deduction', title:'Labour Welfare Fund', body:"A tiny state levy (often ₹5–₹50) funding worker welfare. Nothing to optimise here — just good to recognise." },
+  loan:    { tag:'Deduction', title:'Loan / salary advance', body:"Repayment of a company loan or advance. Not a tax item — just money going back each month." },
+  esi:     { tag:'Deduction', title:'ESI contribution', body:"Employee State Insurance — applies below a salary threshold and gives medical benefits. Around 0.75% of gross." },
+  generic: { tag:'Component', title:'Your custom line', body:"A component you added. Rename it to match your payslip and set the amount — it flows straight into your gross and take-home." }
+};
+function setExplain(x){
+  const e = explains[x] || explains.generic;
+  document.getElementById('explain').innerHTML =
+    `<div class="explain-tag">${e.tag}</div><div class="explain-title">${e.title}</div><div class="explain-body">${e.body}</div>`;
+  document.querySelectorAll('.slip-info').forEach(i=>i.classList.toggle('on', i.dataset.x===x));
+}
+
+/* ── component state ── */
+let earnings = [], deductions = [], includeEPF = true, includeTDS = true;
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const findAmt = (arr, key, re) => { const c = arr.find(c => c.x===key || re.test(c.name)); return c ? (+c.amount||0) : 0; };
+const basicAmt   = () => findAmt(earnings,'basic',/basic/i);
+const hraAmt     = () => findAmt(earnings,'hra',/hra/i);
+const specialAmt = () => findAmt(earnings,'special',/special/i);
+
+function rowHTML(group,i,c){
+  return `<div class="slip-row">
+    <span class="slip-left">
+      <input class="slip-name-input" data-group="${group}" data-idx="${i}" data-field="name" value="${esc(c.name)}" placeholder="Component name"/>
+      ${c.x?`<span class="slip-info" data-x="${c.x}">i</span>`:''}
+    </span>
+    <span class="slip-amount">
+      <span class="slip-cur">&#8377;</span>
+      <input class="slip-input" type="number" data-group="${group}" data-idx="${i}" data-field="amount" value="${+c.amount||0}"/>
+      <button class="slip-remove" data-group="${group}" data-idx="${i}" title="Remove">&times;</button>
+    </span>
+  </div>`;
+}
+function autoRowHTML(x,label,valId){
+  return `<div class="slip-row">
+    <span class="slip-left"><span class="slip-auto-lbl">${label}</span><span class="slip-info" data-x="${x}">i</span><span class="slip-tag-auto">auto</span></span>
+    <span class="slip-amount"><span class="slip-static deduct" id="${valId}">&minus; &#8377; 0</span><button class="slip-remove" data-group="${x}" title="Remove">&times;</button></span>
+  </div>`;
+}
+function renderEarnings(){ document.getElementById('earn-list').innerHTML = earnings.map((c,i)=>rowHTML('earn',i,c)).join(''); }
+function renderDeductions(){
+  let h = deductions.map((c,i)=>rowHTML('deduct',i,c)).join('');
+  if(includeEPF) h += autoRowHTML('epf','EPF &mdash; your 12%','out-epf');
+  if(includeTDS) h += autoRowHTML('tds','TDS &mdash; income tax','out-tds');
+  document.getElementById('deduct-list').innerHTML = h;
+}
+
+/* ── tax engines (FY 2025-26, simplified, annual) ── */
+function newRegimeTax(gross){
+  let inc = gross - 75000;            // standard deduction
+  if (inc <= 1200000) return 0;      // 87A rebate up to 12L
+  const bands=[[400000,0],[800000,.05],[1200000,.10],[1600000,.15],[2000000,.20],[2400000,.25],[Infinity,.30]];
+  let tax=0, prev=0;
+  for(const [upper,rate] of bands){ if(inc>prev){ tax += (Math.min(inc,upper)-prev)*rate; prev=upper; } else break; }
+  return Math.round(tax*1.04);       // 4% cess
+}
+function oldRegimeTax(gross, deductions){
+  let inc = gross - 50000 - (deductions||0);   // std ded + 80C/HRA etc
+  if (inc <= 500000) return 0;                 // 87A rebate up to 5L
+  const bands=[[250000,0],[500000,.05],[1000000,.20],[Infinity,.30]];
+  let tax=0, prev=0;
+  for(const [upper,rate] of bands){ if(inc>prev){ tax += (Math.min(inc,upper)-prev)*rate; prev=upper; } else break; }
+  return Math.round(tax*1.04);
+}
+const fmt = n => '₹ ' + Math.round(n).toLocaleString('en-IN');
+
+/* ── recompute (reads state, updates numbers in place — no re-render) ── */
+function recompute(bump){
+  const grossM = earnings.reduce((s,c)=>s+(+c.amount||0),0);
+  const custM  = deductions.reduce((s,c)=>s+(+c.amount||0),0);
+  const epfM   = includeEPF ? Math.round(basicAmt() * 0.12) : 0;
+  const grossA = grossM * 12;
+
+  const taxNew = newRegimeTax(grossA);
+  const taxOldNoInv = oldRegimeTax(grossA, 0);
+  const tdsM = includeTDS ? Math.round(Math.min(taxNew, taxOldNoInv) / 12) : 0;
+
+  const netM = grossM - epfM - tdsM - custM;
+
+  document.getElementById('out-gross').innerHTML = fmt(grossM);
+  const epfEl = document.getElementById('out-epf'); if(epfEl) epfEl.innerHTML = '− ' + fmt(epfM);
+  const tdsEl = document.getElementById('out-tds'); if(tdsEl) tdsEl.innerHTML = '− ' + fmt(tdsM);
+  const netEl = document.getElementById('out-net');
+  netEl.innerHTML = fmt(netM);
+  document.getElementById('out-annual').innerHTML = fmt(netM * 12) + ' / year in hand';
+  if(bump){ netEl.classList.remove('bump'); void netEl.offsetWidth; netEl.classList.add('bump'); }
+
+  buildRegime(taxNew, taxOldNoInv, grossA);
+  buildOpps({ basic: basicAmt(), hra: hraAmt(), special: specialAmt(), grossA, taxNew, taxOldNoInv });
+}
+
+/* ── regime comparison ── */
+function buildRegime(taxNew, taxOld, grossA){
+  const el = document.getElementById('regime-compare');
+  const newWins = taxNew <= taxOld;
+  el.innerHTML =
+    `<div class="regime-card ${newWins?'win':''}">
+       <div class="regime-lbl">New regime</div>
+       <div class="regime-val">${fmt(taxNew)}</div>
+       ${newWins?'<span class="regime-tag">✓ Lower for you</span>':''}
+     </div>
+     <div class="regime-card ${!newWins?'win':''}">
+       <div class="regime-lbl">Old regime</div>
+       <div class="regime-val">${fmt(taxOld)}</div>
+       ${!newWins?'<span class="regime-tag">✓ Lower for you</span>':''}
+     </div>`;
+}
+
+/* ── opportunities that react to the numbers ── */
+function buildOpps({ basic, hra, special, grossA, taxNew, taxOldNoInv }){
+  const list = document.getElementById('opps-list');
+  const opps = [];
+
+  let totalSave = 0;
+
+  // 1. regime saving
+  const regimeSave = Math.abs(taxNew - taxOldNoInv);
+  if (regimeSave >= 500){
+    const cheaper = taxNew < taxOldNoInv ? 'new' : 'old';
+    totalSave += regimeSave;
+    opps.push({
+      c:'#F3F1FF', ic:'<path d="M10 3v14M4 10h12" stroke="#5B4CFF" stroke-width="1.8" stroke-linecap="round"/>',
+      t:`Pick the ${cheaper} regime`, d:`On these numbers the ${cheaper} regime is cheaper.`, s:`Save ${fmt(regimeSave)}/yr`
+    });
+  }
+
+  // 2. 80C headroom (old regime benefit)
+  const taxOldInvested = oldRegimeTax(grossA, 150000);
+  const invSave = taxOldNoInv - taxOldInvested;
+  if (invSave >= 500){
+    totalSave += invSave;
+    opps.push({
+      c:'#ECFDF3', ic:'<path d="M3 15l4.5-5 3.5 3 6-7" stroke="#16A34A" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>',
+      t:'Use your ₹1.5L 80C limit', d:'EPF, ELSS, PPF and insurance count — in the old regime this lowers taxable income.', s:`Save up to ${fmt(invSave)}/yr`
+    });
+  }
+
+  // 3. HRA claim
+  if (hra > 0){
+    opps.push({
+      c:'#FFE4DB', ic:'<rect x="3" y="8" width="14" height="9" rx="2" stroke="#FF7A59" stroke-width="1.5"/><path d="M6 8V6a4 4 0 0 1 8 0v2" stroke="#FF7A59" stroke-width="1.5"/>',
+      t:'Claim HRA if you pay rent', d:`You get ${fmt(hra)}/mo as HRA. Declaring rent can make a big part of it tax-exempt (old regime).`, s:'Often ₹1,000s/yr'
+    });
+  }
+
+  // 4. structure: special allowance heavy
+  if (special > basic){
+    opps.push({
+      c:'#FEF3C7', ic:'<circle cx="10" cy="10" r="7" stroke="#D97706" stroke-width="1.5"/><path d="M10 6v4l2.5 2" stroke="#D97706" stroke-width="1.5" stroke-linecap="round"/>',
+      t:'Your special allowance is high', d:'It’s fully taxable. Shifting some into Basic or tax-friendly components can help — worth asking HR.', s:'Structure tip'
+    });
+  }
+
+  const totalEl = document.getElementById('opps-total');
+
+  if (!opps.length){
+    totalEl.classList.remove('show');
+    list.innerHTML = '<p class="opp-none">Tweak the payslip above and we\'ll surface where you could save.</p>';
+    return;
+  }
+
+  if (totalSave >= 500){
+    totalEl.innerHTML = `<div class="ot-lbl">You could be keeping up to</div><div class="ot-val">${fmt(totalSave)} <small>/ year</small></div>`;
+    totalEl.classList.add('show');
+  } else {
+    totalEl.classList.remove('show');
+  }
+
+  list.innerHTML = opps.map(o=>
+    `<div class="opp">
+       <span class="opp-ic"><svg width="17" height="17" viewBox="0 0 20 20" fill="none">${o.ic}</svg></span>
+       <span class="opp-txt"><strong>${o.t}</strong>${o.d}</span>
+       <span class="opp-save">${o.s}</span>
+     </div>`).join('');
+}
+
+/* ── structural render ── */
+function renderAll(){ renderEarnings(); renderDeductions(); recompute(true); }
+/* build the whole payslip from a CTC figure */
+function loadCTC(annualCTC){
+  ctc = annualCTC || 0;
+  earnings   = earningsFromCTC(ctc);
+  deductions = [{ name:'Professional tax', amount:200, x:'pt' }];
+  includeEPF = true; includeTDS = true;
+  document.getElementById('in-ctc').value = ctc;
+  renderAll();
+}
+/* re-derive earnings when CTC changes, but keep any custom rows the user added */
+function applyCTC(annualCTC){
+  ctc = annualCTC || 0;
+  const std = earningsFromCTC(ctc);
+  // replace the three standard rows, keep extras
+  const extras = earnings.filter(c => !['basic','hra','special'].includes(c.x) && !/basic|hra|special/i.test(c.name));
+  earnings = [...std, ...extras];
+  renderEarnings();
+  recompute(true);
+}
+
+/* ── quick-add chips ── */
+function mkChip(label){ const b=document.createElement('button'); b.className='slip-chip'; b.textContent=label; return b; }
+function buildChips(){
+  const ec = document.getElementById('earn-chips');
+  ec.querySelectorAll('.slip-chip').forEach(n=>n.remove());
+  earnPresets.forEach(p=>{ const b=mkChip(p.name); b.onclick=()=>{ earnings.push({name:p.name,amount:0,x:p.x}); renderEarnings(); recompute(true); }; ec.appendChild(b); });
+  const ecc=mkChip('+ Custom'); ecc.onclick=()=>{ earnings.push({name:'',amount:0,x:''}); renderEarnings(); recompute(true); focusLast('earn'); }; ec.appendChild(ecc);
+
+  const dc = document.getElementById('deduct-chips');
+  dc.querySelectorAll('.slip-chip').forEach(n=>n.remove());
+  deductPresets.forEach(p=>{ const b=mkChip(p.name); b.onclick=()=>{ deductions.push({name:p.name,amount:0,x:p.x}); renderDeductions(); recompute(true); }; dc.appendChild(b); });
+  const epfC=mkChip('EPF (12%)'); epfC.onclick=()=>{ includeEPF=true; renderDeductions(); recompute(true); }; dc.appendChild(epfC);
+  const tdsC=mkChip('TDS'); tdsC.onclick=()=>{ includeTDS=true; renderDeductions(); recompute(true); }; dc.appendChild(tdsC);
+  const dcc=mkChip('+ Custom'); dcc.onclick=()=>{ deductions.push({name:'',amount:0,x:''}); renderDeductions(); recompute(true); focusLast('deduct'); }; dc.appendChild(dcc);
+}
+function focusLast(group){
+  const list = document.getElementById(group==='earn'?'earn-list':'deduct-list');
+  const inputs = list.querySelectorAll('.slip-name-input');
+  if(inputs.length) inputs[inputs.length-1].focus();
+}
+document.getElementById('earn-add-btn').addEventListener('click', ()=>document.getElementById('earn-chips').classList.toggle('open'));
+document.getElementById('deduct-add-btn').addEventListener('click', ()=>document.getElementById('deduct-chips').classList.toggle('open'));
+
+/* ── delegated events on the payslip ── */
+const slipEl = document.querySelector('.slip');
+slipEl.addEventListener('input', e=>{
+  const el=e.target;
+  if(!el.dataset || el.dataset.idx===undefined) return;
+  const arr = el.dataset.group==='earn' ? earnings : deductions;
+  const c = arr[+el.dataset.idx]; if(!c) return;
+  if(el.dataset.field==='amount') c.amount = +el.value||0; else c.name = el.value;
+  recompute(true);
+});
+slipEl.addEventListener('focusin', e=>{
+  const el=e.target;
+  if(el.classList && (el.classList.contains('slip-input')||el.classList.contains('slip-name-input')) && el.dataset.idx!==undefined){
+    const arr = el.dataset.group==='earn' ? earnings : deductions;
+    const c = arr[+el.dataset.idx]; if(c && c.x) setExplain(c.x);
+  }
+});
+slipEl.addEventListener('click', e=>{
+  const info = e.target.closest('.slip-info');
+  if(info){ setExplain(info.dataset.x); return; }
+  const rm = e.target.closest('.slip-remove');
+  if(rm){
+    const g = rm.dataset.group;
+    if(g==='epf'){ includeEPF=false; renderDeductions(); recompute(true); }
+    else if(g==='tds'){ includeTDS=false; renderDeductions(); recompute(true); }
+    else if(g==='earn'){ earnings.splice(+rm.dataset.idx,1); renderEarnings(); recompute(true); }
+    else { deductions.splice(+rm.dataset.idx,1); renderDeductions(); recompute(true); }
+  }
+});
+
+/* ── CTC input drives the reverse calc ── */
+const ctcInput = document.getElementById('in-ctc');
+ctcInput.addEventListener('input', ()=> applyCTC(+ctcInput.value||0));
+ctcInput.addEventListener('focus', ()=> setExplain('ctc'));
+buildChips();
+
+/* ── personalise from onboarding (?level=) ── */
+const params = new URLSearchParams(location.search);
+const level = params.get('level');
+const levelToCTC = { fresher:600000, basic:1200000, experienced:2400000 };
+const kickerText = { fresher:'Your Salary Journey · Fresher', basic:'Your Salary Journey · Getting the hang of it', experienced:'Your Salary Journey · Optimizer' };
+if (level && kickerText[level]) document.getElementById('hero-kicker').textContent = kickerText[level];
+loadCTC(levelToCTC[level] || 1200000);
+
+/* ── waitlist form ── */
+const APPS_SCRIPT_URL='https://script.google.com/macros/s/AKfycbwngSUTczA_i_mfcE97IGzSQ6oA59Uvj4eYVZhjOVCpjZlCJkQTUi8r1PRna0YfQXZz/exec';
+document.getElementById('waitlist-form').addEventListener('submit', async function(e){
+  e.preventDefault();
+  const btn=e.target.querySelector('.cta-btn');
+  const email=document.getElementById('email-input').value;
+  btn.textContent='Joining...'; btn.disabled=true;
+  try{
+    await fetch(APPS_SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email,timestamp:new Date().toISOString(),level:level||'',source:'salary-demystified'})});
+    document.getElementById('cta-form-wrap').style.display='none';
+    document.getElementById('cta-success').classList.add('show');
+  }catch{ btn.textContent='Try again'; btn.disabled=false; }
+});
+</script>
+</body>
+</html>
