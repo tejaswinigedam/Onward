@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { createClient, isConfigured } from "@/lib/supabase/server";
+import { auth } from "@clerk/nextjs/server";
+import { getServiceClient } from "@/lib/supabase";
 import { salaryInputSchema, offersSchema } from "@/lib/schemas";
 
 const saveSchema = z.discriminatedUnion("kind", [
@@ -8,16 +9,21 @@ const saveSchema = z.discriminatedUnion("kind", [
   z.object({ kind: z.literal("offer"), inputs: offersSchema, results: z.unknown() }),
 ]);
 
-/** List the signed-in user's saved computations (RLS scopes to them). */
+const clerkEnabled = Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);
+
+/** List the signed-in user's saved computations (scoped by Clerk user id). */
 export async function GET() {
-  if (!isConfigured()) return NextResponse.json({ items: [] });
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return NextResponse.json({ error: "Not signed in" }, { status: 401 });
+  if (!clerkEnabled) return NextResponse.json({ items: [] });
+  const { userId } = await auth();
+  if (!userId) return NextResponse.json({ error: "Not signed in" }, { status: 401 });
+
+  const supabase = getServiceClient();
+  if (!supabase) return NextResponse.json({ items: [] });
 
   const { data, error } = await supabase
     .from("computations")
     .select("id, kind, inputs, results, created_at")
+    .eq("user_id", userId)
     .order("created_at", { ascending: false })
     .limit(50);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
@@ -26,10 +32,12 @@ export async function GET() {
 
 /** Save a computation for the signed-in user. */
 export async function POST(req: Request) {
-  if (!isConfigured()) return NextResponse.json({ error: "Auth not configured" }, { status: 503 });
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return NextResponse.json({ error: "Not signed in" }, { status: 401 });
+  if (!clerkEnabled) return NextResponse.json({ error: "Auth not configured" }, { status: 503 });
+  const { userId } = await auth();
+  if (!userId) return NextResponse.json({ error: "Not signed in" }, { status: 401 });
+
+  const supabase = getServiceClient();
+  if (!supabase) return NextResponse.json({ error: "Storage not configured" }, { status: 503 });
 
   let body: unknown;
   try {
@@ -42,7 +50,7 @@ export async function POST(req: Request) {
 
   const { error, data } = await supabase
     .from("computations")
-    .insert({ user_id: user.id, kind: parsed.data.kind, inputs: parsed.data.inputs, results: parsed.data.results })
+    .insert({ user_id: userId, kind: parsed.data.kind, inputs: parsed.data.inputs, results: parsed.data.results })
     .select("id")
     .single();
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });

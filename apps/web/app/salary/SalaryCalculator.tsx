@@ -281,7 +281,7 @@ export function SalaryCalculator() {
       <p className="auth-cta">
         <button className="slip-add-btn" onClick={save}>Save this calculation</button>
         {saveMsg ? <span style={{ marginLeft: 10 }}>{saveMsg}</span> : (
-          <> — <a href="/login">sign in</a> to save and get fully personalised opportunities.</>
+          <> — <a href="/sign-in">sign in</a> to save and get fully personalised opportunities.</>
         )}
       </p>
     </div>

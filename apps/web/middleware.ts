@@ -1,29 +1,21 @@
-import { type NextRequest, NextResponse } from "next/server";
-import { createServerClient } from "@supabase/ssr";
+import { NextResponse, type NextRequest } from "next/server";
+import { clerkMiddleware } from "@clerk/nextjs/server";
 
 /**
- * Refreshes the Supabase auth session on each request so Server Components see a
- * valid user. No-ops when Supabase env isn't configured (local dev before keys).
+ * Clerk auth middleware. When Clerk env isn't configured (local dev before keys),
+ * it no-ops so the app still runs and builds. Routes are not force-protected here;
+ * API routes check `auth()` themselves and return 401 when signed out.
  */
-export async function middleware(request: NextRequest) {
-  const response = NextResponse.next({ request });
+const clerkEnabled = Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);
 
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  if (!url || !key) return response;
-
-  const supabase = createServerClient(url, key, {
-    cookies: {
-      getAll: () => request.cookies.getAll(),
-      setAll: (toSet: { name: string; value: string; options?: Record<string, unknown> }[]) => {
-        toSet.forEach(({ name, value, options }) => response.cookies.set(name, value, options));
-      },
-    },
-  });
-  await supabase.auth.getUser();
-  return response;
-}
+export default clerkEnabled
+  ? clerkMiddleware()
+  : (_req: NextRequest) => NextResponse.next();
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)"],
+  matcher: [
+    // Skip static assets; run on app routes and API.
+    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/(api|trpc)(.*)",
+  ],
 };

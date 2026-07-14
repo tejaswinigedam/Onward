@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Inter, Manrope } from "next/font/google";
+import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
+
+const clerkEnabled = Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);
 
 const inter = Inter({ subsets: ["latin"], weight: ["400", "500", "600"], variable: "--font-inter" });
 const manrope = Manrope({ subsets: ["latin"], weight: ["500", "600", "700", "800"], variable: "--font-manrope" });
@@ -12,9 +15,11 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return (
+  const html = (
     <html lang="en" className={`${inter.variable} ${manrope.variable}`}>
       <body>{children}</body>
     </html>
   );
+  // Only mount ClerkProvider when configured, so the app still builds/runs without keys.
+  return clerkEnabled ? <ClerkProvider>{html}</ClerkProvider> : html;
 }

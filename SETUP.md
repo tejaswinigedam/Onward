@@ -15,30 +15,43 @@ Pages: `/` (landing) · `/salary` (Salary Demystifier) · `/offer` (Offer Analyz
 · `/login` · `/account`. Calculators work fully without any backend config; sign-in
 and saved history need Supabase (below).
 
-## Phase 4 — activate auth & saved history (needs your Supabase project)
+## Phase 4 — activate auth & saved history
 
-1. Create a Supabase project → Project Settings → API. Copy `apps/web/.env.example`
-   to `apps/web/.env.local` and fill:
+**Auth = Clerk. Data store = Supabase Postgres** (not Supabase Auth).
+
+1. Copy `apps/web/.env.example` to `apps/web/.env.local` and fill:
+   - Clerk (Clerk dashboard → API Keys): `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`,
+     `CLERK_SECRET_KEY`.
+   - Supabase (Project Settings → API): `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`.
+   - `NEXT_PUBLIC_SITE_URL` (`http://localhost:3000` locally; the Vercel URL in prod).
+2. Run the schema in the Supabase SQL editor, in order:
+   `supabase/migrations/0001_init.sql` then `supabase/migrations/0002_clerk_auth.sql`
+   (0002 switches `user_id` to Clerk text ids and drops the Supabase-auth RLS).
+3. In the Clerk dashboard, enable the sign-in methods you want (e.g. Google, email).
+   Sign-in/up pages are already wired at `/sign-in` and `/sign-up`.
+4. Restart `npm run dev`. The nav shows Sign in → Clerk; after signing in it shows
+   Account + the Clerk user button. `/account` lists saved computations; "Save this
+   calculation" on `/salary` persists per user (ownership enforced by the API via the
+   Clerk user id + Supabase service role).
+
+## Phase 5 — deploy (reuse existing Vercel project)
+
+The repo `github.com/tejaswinigedam/Onward` now holds the monorepo (legacy static
+site under `legacy/`). In the existing Vercel project → Settings:
+
+1. **Build & Development → Root Directory** = `apps/web` (Vercel auto-detects the
+   npm workspace and installs from the repo root). Framework = **Next.js**.
+2. **Environment Variables** (Production + Preview) — from your Supabase project:
    - `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-   - `SUPABASE_URL` (same value), `SUPABASE_SERVICE_ROLE_KEY`
-   - `NEXT_PUBLIC_SITE_URL` (`http://localhost:3000` locally; your domain in prod)
-2. Run the schema: paste `supabase/migrations/0001_init.sql` into the Supabase SQL
-   editor (creates `profiles`, `waitlist`, `computations` + RLS).
-3. Auth providers (Supabase → Authentication):
-   - **Google**: enable the Google provider, add OAuth client ID/secret, and add
-     `<site>/auth/callback` to redirect URLs. (Primary sign-in — no email limits.)
-   - **Magic link**: set an SMTP provider (Resend/SendGrid/SES) under Auth → SMTP,
-     since Supabase's built-in sender is test-only and rate-limited.
-4. Restart `npm run dev`. `/login` now shows Google + magic link; `/account` lists
-   saved computations; "Save this calculation" on `/salary` persists per-user (RLS).
+   - `SUPABASE_URL` (same URL), `SUPABASE_SERVICE_ROLE_KEY`
+   - `NEXT_PUBLIC_SITE_URL` = your `https://<project>.vercel.app` URL
+3. Redeploy (Deployments → Redeploy, or it auto-builds on the push).
+4. In Supabase → Authentication → URL Configuration, add
+   `https://<project>.vercel.app/auth/callback` to the redirect allow-list, and add
+   the same to the Google OAuth client's authorized redirect URIs.
 
-## Phase 5 — deploy (needs your Vercel project)
+The app builds and the calculators work **without** any env vars; auth simply
+stays inactive until the Supabase vars are present.
 
-1. Import the repo in Vercel. Set the project root to `apps/web` (or keep root and
-   let `next` build the app dir).
-2. Add all env vars from `.env.local` to Vercel (Production + Preview).
-3. Set `NEXT_PUBLIC_SITE_URL` to the production URL and add it to Supabase Auth
-   redirect URLs.
-4. Point the `onward.app` domain at Vercel; TLS is automatic.
-5. Hardening (tracked): rate-limit public API routes, add Sentry, keep GA.
+Hardening (tracked): rate-limit public API routes, add Sentry, keep GA.
 ```
