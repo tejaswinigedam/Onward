@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { extractText, getDocumentProxy } from "unpdf";
 import { extractOffer } from "@onward/engine";
+import { extractOfferViaGemini, geminiConfigured } from "@/lib/gemini";
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
@@ -46,10 +47,25 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "File too large (max 8 MB)." }, { status: 413 });
   }
 
+  const bytes = new Uint8Array(await file.arrayBuffer());
+
+  // Primary: Gemini reads the raw PDF, so it handles any layout (and scanned
+  // files). Falls back to the heuristic text parser if the key is unset or the
+  // call fails.
+  if (geminiConfigured()) {
+    try {
+      const base64 = Buffer.from(bytes).toString("base64");
+      const extracted = await extractOfferViaGemini(base64, file.type);
+      return NextResponse.json({ extracted, via: "gemini" });
+    } catch (err) {
+      console.warn("[offer/extract] Gemini failed, falling back to heuristic:", err);
+    }
+  }
+
+  // Fallback: extract text and run the heuristic parser.
   let text: string;
   try {
-    const buffer = new Uint8Array(await file.arrayBuffer());
-    const pdf = await getDocumentProxy(buffer);
+    const pdf = await getDocumentProxy(bytes);
     const result = await extractText(pdf, { mergePages: true });
     text = Array.isArray(result.text) ? result.text.join("\n") : result.text ?? "";
   } catch {
@@ -58,11 +74,11 @@ export async function POST(req: Request) {
 
   if (text.trim().length < 20) {
     return NextResponse.json(
-      { error: "This looks like a scanned/image PDF with no selectable text — enter the numbers manually for now." },
+      { error: "This looks like a scanned/image PDF with no selectable text. Add a Gemini key to read scanned offers, or enter the numbers manually." },
       { status: 422 },
     );
   }
 
   const extracted = extractOffer(text);
-  return NextResponse.json({ extracted });
+  return NextResponse.json({ extracted, via: "heuristic" });
 }
