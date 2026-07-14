@@ -8,3 +8,5 @@ export { evaluateOpportunities } from "./opportunities/evaluate";
 export { RULES } from "./opportunities/rules";
 export type { Rule, EvalContext } from "./opportunities/rules";
 export { benchmarkFor, experienceBand } from "./opportunities/benchmarks";
+export { extractOffer, parseAmount } from "./extract";
+export type { ExtractedOffer } from "./extract";

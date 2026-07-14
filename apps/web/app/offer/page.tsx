@@ -3,6 +3,7 @@ import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { WaitlistForm } from "@/components/WaitlistForm";
 import { OfferComparator } from "./OfferComparator";
+import { OfferUpload } from "./OfferUpload";
 
 export const metadata: Metadata = {
   title: "Offer Letter Analyzer — Onward",
@@ -32,6 +33,19 @@ export default function OfferPage() {
 
         <section className="sec">
           <div className="wrap">
+            <div className="section-head" style={{ textAlign: "center", maxWidth: 640, margin: "0 auto 28px" }}>
+              <p className="page-kicker">Upload &amp; decode</p>
+              <h2 className="sec-h2" style={{ fontSize: 28 }}>Have your offer letter? Upload it.</h2>
+            </div>
+            <OfferUpload />
+          </div>
+        </section>
+
+        <section className="sec" style={{ borderTop: "1px solid var(--border)" }}>
+          <div className="wrap">
+            <div className="section-head" style={{ textAlign: "center", maxWidth: 640, margin: "0 auto 28px" }}>
+              <h2 className="sec-h2" style={{ fontSize: 28 }}>Or compare two offers by hand</h2>
+            </div>
             <OfferComparator />
           </div>
         </section>

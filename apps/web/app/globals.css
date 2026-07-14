@@ -168,6 +168,14 @@ nav.site-nav.lifted{border-color:var(--border);box-shadow:0 2px 18px rgba(31,41,
 .offer-verdict{max-width:920px;margin:22px auto 0;text-align:center;font-family:var(--font-manrope);font-size:16px;font-weight:800;color:var(--ink);}
 .offer-verdict .hl{color:var(--green);}
 
+/* ===== OFFER UPLOAD ===== */
+.upload-card{max-width:920px;margin:0 auto;}
+.upload-drop{border:2px dashed var(--border);border-radius:var(--r-xl);padding:40px 20px;text-align:center;cursor:pointer;background:var(--white);transition:border-color .2s,background .2s;}
+.upload-drop:hover{border-color:var(--indigo);background:var(--indigo-0);}
+.upload-drop svg{margin:0 auto 14px;}
+.upload-card .um-t{font-family:var(--font-manrope);font-size:16px;font-weight:800;margin-bottom:4px;}
+.upload-card .um-s{font-size:13px;color:var(--ink-mute);}
+
 /* FOOTER — shared */
 footer.site-foot{background:var(--dark-s);padding:42px 0;border-top:1px solid rgba(255,255,255,.07);}
 .foot-inner{max-width:1080px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;}
