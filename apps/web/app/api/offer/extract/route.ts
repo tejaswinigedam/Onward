@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { extractText, getDocumentProxy } from "unpdf";
-import { extractOffer } from "@onward/engine";
-import { extractOfferFromText, extractOfferFromPdf, geminiConfigured } from "@/lib/gemini";
+import { analyseOfferFromText, analyseOfferFromPdf, geminiConfigured } from "@/lib/gemini";
+import { analysisFromGemini, analysisFromText } from "@/lib/offer-analysis";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -62,23 +62,23 @@ export async function POST(req: Request) {
 
   const hasText = text.trim().length >= 20;
 
-  // Text PDF: Gemini-on-text (any layout, low latency) → heuristic fallback.
+  // Text PDF: Gemini-on-text (rich analysis, low latency) → heuristic fallback.
   if (hasText) {
     if (geminiConfigured()) {
       try {
-        return NextResponse.json({ extracted: await extractOfferFromText(text), via: "gemini-text" });
+        return NextResponse.json({ analysis: analysisFromGemini(await analyseOfferFromText(text)), via: "gemini-text" });
       } catch (err) {
         console.warn("[offer/extract] Gemini(text) failed, using heuristic:", err);
       }
     }
-    return NextResponse.json({ extracted: extractOffer(text), via: "heuristic" });
+    return NextResponse.json({ analysis: analysisFromText(text), via: "heuristic" });
   }
 
   // No selectable text (scanned/image): only Gemini vision can read it.
   if (geminiConfigured()) {
     try {
       const base64 = Buffer.from(bytes).toString("base64");
-      return NextResponse.json({ extracted: await extractOfferFromPdf(base64, file.type), via: "gemini-pdf" });
+      return NextResponse.json({ analysis: analysisFromGemini(await analyseOfferFromPdf(base64, file.type)), via: "gemini-pdf" });
     } catch (err) {
       console.warn("[offer/extract] Gemini(pdf) failed:", err);
     }
