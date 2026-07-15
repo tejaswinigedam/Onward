@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
-import { WaitlistForm } from "@/components/WaitlistForm";
 import { SalaryCalculator } from "./SalaryCalculator";
 
 export const metadata: Metadata = {
@@ -36,15 +36,18 @@ export default function SalaryPage() {
           </div>
         </section>
 
-        <section className="cta-section" id="waitlist">
+        <section className="cta-section">
           <div className="cta-glow" />
           <div className="cta-inner">
-            <p className="cta-kicker">Early access</p>
-            <h2 className="cta-h2">This is just stage one.</h2>
+            <p className="cta-kicker">Got a real offer or payslip?</p>
+            <h2 className="cta-h2">Decode the real thing.</h2>
             <p className="cta-sub">
-              Auto-decoding your real offer and year-round tax planning are next. Join the waitlist.
+              Upload your offer letter or payslip and Pay Decoder explains every line, flags what
+              matters, and shows where you could save.
             </p>
-            <WaitlistForm source="salary" />
+            <Link href="/offer" className="lp-btn light" style={{ marginTop: 6 }}>
+              Open Pay Decoder →
+            </Link>
           </div>
         </section>
       </main>
