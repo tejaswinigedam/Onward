@@ -1,6 +1,6 @@
 import type { ExtractedOffer } from "@onward/engine";
 
-const MODEL = process.env.GEMINI_MODEL ?? "gemini-2.0-flash";
+const MODEL = process.env.GEMINI_MODEL ?? "gemini-flash-latest";
 
 export const geminiConfigured = () => Boolean(process.env.GEMINI_API_KEY);
 
