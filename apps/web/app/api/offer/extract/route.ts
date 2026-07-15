@@ -2,10 +2,10 @@ import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { extractText, getDocumentProxy } from "unpdf";
 import { extractOffer } from "@onward/engine";
-import { extractOfferViaGemini, geminiConfigured } from "@/lib/gemini";
+import { extractOfferFromText, extractOfferFromPdf, geminiConfigured } from "@/lib/gemini";
 
 export const runtime = "nodejs";
-export const maxDuration = 30;
+export const maxDuration = 60;
 
 const clerkEnabled = Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);
 const MAX_BYTES = 8 * 1024 * 1024; // 8 MB
@@ -49,36 +49,42 @@ export async function POST(req: Request) {
 
   const bytes = new Uint8Array(await file.arrayBuffer());
 
-  // Primary: Gemini reads the raw PDF, so it handles any layout (and scanned
-  // files). Falls back to the heuristic text parser if the key is unset or the
-  // call fails.
-  if (geminiConfigured()) {
-    try {
-      const base64 = Buffer.from(bytes).toString("base64");
-      const extracted = await extractOfferViaGemini(base64, file.type);
-      return NextResponse.json({ extracted, via: "gemini" });
-    } catch (err) {
-      console.warn("[offer/extract] Gemini failed, falling back to heuristic:", err);
-    }
-  }
-
-  // Fallback: extract text and run the heuristic parser.
-  let text: string;
+  // Extract the text first — fast, and a small payload keeps the Gemini call
+  // well under the serverless time limit.
+  let text = "";
   try {
     const pdf = await getDocumentProxy(bytes);
     const result = await extractText(pdf, { mergePages: true });
     text = Array.isArray(result.text) ? result.text.join("\n") : result.text ?? "";
   } catch {
-    return NextResponse.json({ error: "Couldn't read that PDF." }, { status: 422 });
+    /* fall through — may still be readable as a scanned PDF by Gemini */
   }
 
-  if (text.trim().length < 20) {
-    return NextResponse.json(
-      { error: "This looks like a scanned/image PDF with no selectable text. Add a Gemini key to read scanned offers, or enter the numbers manually." },
-      { status: 422 },
-    );
+  const hasText = text.trim().length >= 20;
+
+  // Text PDF: Gemini-on-text (any layout, low latency) → heuristic fallback.
+  if (hasText) {
+    if (geminiConfigured()) {
+      try {
+        return NextResponse.json({ extracted: await extractOfferFromText(text), via: "gemini-text" });
+      } catch (err) {
+        console.warn("[offer/extract] Gemini(text) failed, using heuristic:", err);
+      }
+    }
+    return NextResponse.json({ extracted: extractOffer(text), via: "heuristic" });
   }
 
-  const extracted = extractOffer(text);
-  return NextResponse.json({ extracted, via: "heuristic" });
+  // No selectable text (scanned/image): only Gemini vision can read it.
+  if (geminiConfigured()) {
+    try {
+      const base64 = Buffer.from(bytes).toString("base64");
+      return NextResponse.json({ extracted: await extractOfferFromPdf(base64, file.type), via: "gemini-pdf" });
+    } catch (err) {
+      console.warn("[offer/extract] Gemini(pdf) failed:", err);
+    }
+  }
+  return NextResponse.json(
+    { error: "This looks like a scanned/image PDF. Add a Gemini key to read scanned offers, or enter the numbers manually." },
+    { status: 422 },
+  );
 }
