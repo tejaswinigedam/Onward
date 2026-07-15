@@ -68,7 +68,14 @@ async function callGemini(parts: unknown[]): Promise<GeminiAnalysis> {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       contents: [{ parts }],
-      generationConfig: { temperature: 0, responseMimeType: "application/json", responseSchema: schema },
+      generationConfig: {
+        temperature: 0,
+        responseMimeType: "application/json",
+        responseSchema: schema,
+        // Flash models "think" by default which is slow for structured output;
+        // disable it so the call returns in a few seconds.
+        thinkingConfig: { thinkingBudget: 0 },
+      },
     }),
     signal: AbortSignal.timeout(50_000),
   });
