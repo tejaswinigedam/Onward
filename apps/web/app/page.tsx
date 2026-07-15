@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
+import { IconDoc, IconReceipt, IconCompare, IconVs, IconBook, IconScales, IconCheck } from "@/components/icons";
 
 export const metadata: Metadata = {
   title: "Onward — Understand your pay. Own your money.",
@@ -90,12 +91,12 @@ export default function LandingPage() {
                 <p>You don&apos;t need an offer letter to become pay-smart.</p>
                 <div className="lp-tiles">
                   <Link href="/salary" className="lp-tile">
-                    <span className="ic" style={{ background: "var(--green-0)" }}>📖</span>
+                    <span className="ic" style={{ background: "var(--green-0)" }}><IconBook /></span>
                     Offer Explorer — read an offer before you get one
                     <span className="ar">{arrow}</span>
                   </Link>
                   <Link href="/offer" className="lp-tile">
-                    <span className="ic" style={{ background: "var(--green-0)" }}>⚖️</span>
+                    <span className="ic" style={{ background: "var(--green-0)" }}><IconScales /></span>
                     Choose the Better Offer — what actually makes one better
                     <span className="ar">{arrow}</span>
                   </Link>
@@ -109,10 +110,10 @@ export default function LandingPage() {
                 <h3>Bring your offer letter or payslip.</h3>
                 <p>We&apos;ll explain everything — and tell you what actually matters.</p>
                 <div className="lp-tiles">
-                  <Link href="/offer" className="lp-tile"><span className="ic" style={{ background: "var(--indigo-0)" }}>📄</span>Offer Letter<span className="ar">{arrow}</span></Link>
-                  <Link href="/offer" className="lp-tile"><span className="ic" style={{ background: "var(--indigo-0)" }}>🧾</span>Payslip<span className="ar">{arrow}</span></Link>
-                  <Link href="/offer" className="lp-tile"><span className="ic" style={{ background: "var(--indigo-0)" }}>🔀</span>Compare Two Offers<span className="ar">{arrow}</span></Link>
-                  <Link href="/offer" className="lp-tile"><span className="ic" style={{ background: "var(--indigo-0)" }}>🔎</span>Offer Letter vs Payslip<span className="ar">{arrow}</span></Link>
+                  <Link href="/offer" className="lp-tile"><span className="ic" style={{ background: "var(--indigo-0)" }}><IconDoc /></span>Offer Letter<span className="ar">{arrow}</span></Link>
+                  <Link href="/offer" className="lp-tile"><span className="ic" style={{ background: "var(--indigo-0)" }}><IconReceipt /></span>Payslip<span className="ar">{arrow}</span></Link>
+                  <Link href="/offer" className="lp-tile"><span className="ic" style={{ background: "var(--indigo-0)" }}><IconCompare /></span>Compare Two Offers<span className="ar">{arrow}</span></Link>
+                  <Link href="/offer" className="lp-tile"><span className="ic" style={{ background: "var(--indigo-0)" }}><IconVs /></span>Offer Letter vs Payslip<span className="ar">{arrow}</span></Link>
                 </div>
                 <Link href="/offer" className="lp-btn p">Open Pay Decoder {arrow}</Link>
               </div>
@@ -134,7 +135,7 @@ export default function LandingPage() {
               </p>
               <div className="lp-matters">
                 {MATTERS.map((m) => (
-                  <div className="lp-matter" key={m}><span className="d">✓</span>{m}</div>
+                  <div className="lp-matter" key={m}><span className="d"><IconCheck /></span>{m}</div>
                 ))}
               </div>
             </div>
@@ -150,10 +151,7 @@ export default function LandingPage() {
           <div className="lp-wrap">
             <div className="lp-qgrid">
               {QUESTIONS.map(({ q, c }) => (
-                <Link href="/offer" className={`lp-q ${c}`} key={q}>
-                  <span className="qm">?</span>
-                  {q}
-                </Link>
+                <Link href="/offer" className={`lp-q ${c}`} key={q}>{q}</Link>
               ))}
             </div>
           </div>
