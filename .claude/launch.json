@@ -3,14 +3,8 @@
   "configurations": [
     {
       "name": "Onward Web",
-      "runtimeExecutable": "C:\\Program Files\\nodejs\\node.exe",
-      "runtimeArgs": [
-        "D:\\Onward\\node_modules\\next\\dist\\bin\\next",
-        "dev",
-        "apps/web",
-        "-p",
-        "3000"
-      ],
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
       "port": 3000
     }
   ]

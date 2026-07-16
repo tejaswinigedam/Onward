@@ -4,18 +4,17 @@ import { useAuth } from "@clerk/nextjs";
 import { track } from "@/lib/analytics";
 import { GlossaryProvider, GlossaryPanel, Term } from "@/components/Glossary";
 import type { OfferAnalysis } from "@/lib/offer-analysis";
+import { OfferReport } from "./OfferReport";
 
 const clerkEnabled = Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);
-const inr = (n: number) => "₹ " + Math.round(n).toLocaleString("en-IN");
 
 export function OfferUpload() {
-  const { isLoaded, isSignedIn } = useAuth();
-  const fileRef = useRef<HTMLInputElement>(null);
-  const [status, setStatus] = useState<"idle" | "reading" | "done" | "error">("idle");
-  const [error, setError] = useState<string | null>(null);
-  const [a, setA] = useState<OfferAnalysis | null>(null);
+  return clerkEnabled ? <GatedOfferUpload /> : <OfferUploadBody />;
+}
 
-  if (clerkEnabled && isLoaded && !isSignedIn) {
+function GatedOfferUpload() {
+  const { isLoaded, isSignedIn } = useAuth();
+  if (isLoaded && !isSignedIn) {
     return (
       <div className="upload-card">
         <p className="um-t">Upload your offer letter</p>
@@ -23,6 +22,14 @@ export function OfferUpload() {
       </div>
     );
   }
+  return <OfferUploadBody />;
+}
+
+function OfferUploadBody() {
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [status, setStatus] = useState<"idle" | "reading" | "done" | "error">("idle");
+  const [error, setError] = useState<string | null>(null);
+  const [a, setA] = useState<OfferAnalysis | null>(null);
 
   async function onFile(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -68,6 +75,7 @@ export function OfferUpload() {
 
       {error && <p className="opp-none" style={{ color: "var(--coral-d)" }}>{error}</p>}
 
+      {status === "done" && a && <OfferReport a={a} />}
       {status === "done" && a && (
         <GlossaryProvider>
         <div className="rep">

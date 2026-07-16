@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { OfferComparator } from "./OfferComparator";
-import { OfferUpload } from "./OfferUpload";
+import { OfferMultiUpload } from "./OfferMultiUpload";
 
 export const metadata: Metadata = {
   title: "Pay Decoder — Onward",
@@ -33,15 +33,18 @@ export default function OfferPage() {
 
         <section className="sec">
           <div className="wrap">
-            <OfferUpload />
+            <OfferMultiUpload />
           </div>
         </section>
 
         <section className="sec" style={{ borderTop: "1px solid var(--border)" }}>
           <div className="wrap">
             <div className="section-head" style={{ textAlign: "center", maxWidth: 640, margin: "0 auto 28px" }}>
-              <p className="page-kicker">Choosing between two?</p>
-              <h2 className="sec-h2" style={{ fontSize: 28 }}>Compare two offers side by side.</h2>
+              <p className="page-kicker">No PDF handy?</p>
+              <h2 className="sec-h2" style={{ fontSize: 28 }}>Compare offers by hand.</h2>
+              <p className="page-lead" style={{ marginTop: 8 }}>
+                Type in the CTC and variable split and we&apos;ll show which pays more.
+              </p>
             </div>
             <OfferComparator />
           </div>
