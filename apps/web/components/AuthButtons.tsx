@@ -10,7 +10,7 @@ export function AuthButtons() {
 
   if (!isSignedIn) {
     return (
-      <Link href="/sign-in" className="btn-nav">
+      <Link href="/sign-in" className="btn-nav" data-ev="nav_sign_in">
         Sign in
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
           <path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />

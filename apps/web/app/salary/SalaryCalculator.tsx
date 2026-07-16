@@ -7,6 +7,7 @@ import {
   type Profile,
   type SalaryResult,
 } from "@onward/engine";
+import { track } from "@/lib/analytics";
 
 const inr = (n: number) => "₹ " + Math.round(n).toLocaleString("en-IN");
 
@@ -68,17 +69,26 @@ export function SalaryCalculator() {
   const [saveMsg, setSaveMsg] = useState<string | null>(null);
   async function save() {
     setSaveMsg("Saving…");
+    track("salary_save_click");
     try {
       const res = await fetch("/api/me/computations", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ kind: "salary", inputs: input, results: r }),
       });
-      if (res.status === 401) setSaveMsg("Sign in to save.");
-      else if (res.ok) setSaveMsg("Saved to your account.");
-      else setSaveMsg("Could not save.");
+      if (res.status === 401) {
+        setSaveMsg("Sign in to save.");
+        track("salary_save_result", { outcome: "unauthenticated" });
+      } else if (res.ok) {
+        setSaveMsg("Saved to your account.");
+        track("salary_save_result", { outcome: "saved" });
+      } else {
+        setSaveMsg("Could not save.");
+        track("salary_save_result", { outcome: "error" });
+      }
     } catch {
       setSaveMsg("Could not save.");
+      track("salary_save_result", { outcome: "error" });
     }
   }
 
