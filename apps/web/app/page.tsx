@@ -52,8 +52,8 @@ export default function LandingPage() {
               decisions.
             </p>
             <div className="lp-cta-row">
-              <Link href="/offer" className="lp-btn p">Explore Pay Decoder {arrow}</Link>
-              <Link href="/salary" className="lp-btn s">Start Learning</Link>
+              <Link href="/offer" className="lp-btn p" data-ev="cta_click" data-ev-label="hero_decoder">Explore Pay Decoder {arrow}</Link>
+              <Link href="/salary" className="lp-btn s" data-ev="cta_click" data-ev-label="hero_learn">Start Learning</Link>
             </div>
           </div>
         </section>
@@ -90,18 +90,18 @@ export default function LandingPage() {
                 <h3>No documents? No problem.</h3>
                 <p>You don&apos;t need an offer letter to become pay-smart.</p>
                 <div className="lp-tiles">
-                  <Link href="/salary" className="lp-tile">
+                  <Link href="/salary" className="lp-tile" data-ev="tile_click" data-ev-label="learn_offer_explorer">
                     <span className="ic" style={{ background: "var(--green-0)" }}><IconBook /></span>
                     Offer Explorer — read an offer before you get one
                     <span className="ar">{arrow}</span>
                   </Link>
-                  <Link href="/offer" className="lp-tile">
+                  <Link href="/offer" className="lp-tile" data-ev="tile_click" data-ev-label="learn_better_offer">
                     <span className="ic" style={{ background: "var(--green-0)" }}><IconScales /></span>
                     Choose the Better Offer — what actually makes one better
                     <span className="ar">{arrow}</span>
                   </Link>
                 </div>
-                <Link href="/salary" className="lp-btn s">Explore Learning</Link>
+                <Link href="/salary" className="lp-btn s" data-ev="cta_click" data-ev-label="explore_learning">Explore Learning</Link>
               </div>
 
               {/* documents */}
@@ -110,12 +110,12 @@ export default function LandingPage() {
                 <h3>Bring your offer letter or payslip.</h3>
                 <p>We&apos;ll explain everything — and tell you what actually matters.</p>
                 <div className="lp-tiles">
-                  <Link href="/offer" className="lp-tile"><span className="ic" style={{ background: "var(--indigo-0)" }}><IconDoc /></span>Offer Letter<span className="ar">{arrow}</span></Link>
-                  <Link href="/offer" className="lp-tile"><span className="ic" style={{ background: "var(--indigo-0)" }}><IconReceipt /></span>Payslip<span className="ar">{arrow}</span></Link>
-                  <Link href="/offer" className="lp-tile"><span className="ic" style={{ background: "var(--indigo-0)" }}><IconCompare /></span>Compare Two Offers<span className="ar">{arrow}</span></Link>
-                  <Link href="/offer" className="lp-tile"><span className="ic" style={{ background: "var(--indigo-0)" }}><IconVs /></span>Offer Letter vs Payslip<span className="ar">{arrow}</span></Link>
+                  <Link href="/offer" className="lp-tile" data-ev="tile_click" data-ev-label="docs_offer_letter"><span className="ic" style={{ background: "var(--indigo-0)" }}><IconDoc /></span>Offer Letter<span className="ar">{arrow}</span></Link>
+                  <Link href="/offer" className="lp-tile" data-ev="tile_click" data-ev-label="docs_payslip"><span className="ic" style={{ background: "var(--indigo-0)" }}><IconReceipt /></span>Payslip<span className="ar">{arrow}</span></Link>
+                  <Link href="/offer" className="lp-tile" data-ev="tile_click" data-ev-label="docs_compare"><span className="ic" style={{ background: "var(--indigo-0)" }}><IconCompare /></span>Compare Two Offers<span className="ar">{arrow}</span></Link>
+                  <Link href="/offer" className="lp-tile" data-ev="tile_click" data-ev-label="docs_offer_vs_payslip"><span className="ic" style={{ background: "var(--indigo-0)" }}><IconVs /></span>Offer Letter vs Payslip<span className="ar">{arrow}</span></Link>
                 </div>
-                <Link href="/offer" className="lp-btn p">Open Pay Decoder {arrow}</Link>
+                <Link href="/offer" className="lp-btn p" data-ev="cta_click" data-ev-label="open_decoder_docs">Open Pay Decoder {arrow}</Link>
               </div>
             </div>
           </div>
@@ -151,7 +151,7 @@ export default function LandingPage() {
           <div className="lp-wrap">
             <div className="lp-qgrid">
               {QUESTIONS.map(({ q, c }) => (
-                <Link href="/offer" className={`lp-q ${c}`} key={q}>{q}</Link>
+                <Link href="/offer" className={`lp-q ${c}`} key={q} data-ev="question_click" data-ev-label={q}>{q}</Link>
               ))}
             </div>
           </div>
@@ -179,7 +179,7 @@ export default function LandingPage() {
           <h2>Your pay shouldn&apos;t feel like a puzzle. Let&apos;s fix that.</h2>
           <p>Decode your offer or payslip in seconds.</p>
           <div className="lp-cta-row">
-            <Link href="/offer" className="lp-btn light">Explore Pay Decoder {arrow}</Link>
+            <Link href="/offer" className="lp-btn light" data-ev="cta_click" data-ev-label="final_decoder">Explore Pay Decoder {arrow}</Link>
           </div>
         </section>
       </main>
