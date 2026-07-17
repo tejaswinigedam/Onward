@@ -398,6 +398,172 @@
   padding-bottom:96px;
 }
 
+/* Deep-linkable stepper on the landing page */
+.onward-landing a.step{cursor:pointer;transition:transform .2s ease;}
+.onward-landing a.step:hover{transform:translateY(-3px);}
+.onward-landing a.step:hover .step-node{border-color:var(--accent);}
+
+/* ---- Mode picker ---- */
+.onward-landing .decoder-modes{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:16px;
+  max-width:900px;
+  margin:0 auto;
+}
+.onward-landing .decoder-mode-card{
+  text-align:left;
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:var(--radius-card);
+  box-shadow:var(--shadow);
+  padding:24px 24px 22px;
+  cursor:pointer;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  font-family:var(--font-inter),'Inter',sans-serif;
+  transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+.onward-landing .decoder-mode-card:hover{
+  transform:translateY(-3px);
+  border-color:var(--accent);
+  box-shadow:0 12px 32px -14px rgba(var(--accent-rgb),0.4);
+}
+.onward-landing .dm-icon{
+  width:44px;height:44px;
+  flex:none;
+  border-radius:12px;
+  background:var(--accent-soft);
+  color:var(--accent);
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:4px;
+}
+.onward-landing .dm-icon svg{width:22px;height:22px;}
+.onward-landing .dm-chip{
+  align-self:flex-start;
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  color:var(--ink-50);
+  background:rgba(18,23,43,0.04);
+  border-radius:99px;
+  padding:3px 10px;
+}
+.onward-landing .dm-title{
+  font-family:var(--font-fraunces),'Fraunces',serif;
+  font-weight:600;
+  font-size:20px;
+  color:var(--ink);
+  line-height:1.2;
+}
+.onward-landing .dm-tag{
+  font-size:14px;
+  color:var(--ink-70);
+  line-height:1.5;
+}
+.onward-landing .dm-list{
+  list-style:none;
+  margin:6px 0 0;
+  padding:0;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.onward-landing .dm-list li{
+  display:flex;
+  align-items:flex-start;
+  gap:9px;
+  font-size:13.5px;
+  color:var(--ink-70);
+  line-height:1.4;
+}
+.onward-landing .dm-tick{
+  flex:none;
+  width:18px;height:18px;
+  margin-top:1px;
+  border-radius:6px;
+  background:var(--accent-soft);
+  color:var(--accent);
+  display:flex;align-items:center;justify-content:center;
+}
+.onward-landing .dm-tick svg{width:11px;height:11px;}
+.onward-landing .dm-go{
+  margin-top:12px;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-weight:600;
+  font-size:14.5px;
+  color:var(--accent);
+}
+.onward-landing .dm-go svg{width:15px;height:15px;transition:transform .2s ease;}
+.onward-landing .decoder-mode-card:hover .dm-go svg{transform:translateX(3px);}
+@media (max-width:720px){.onward-landing .decoder-modes{grid-template-columns:1fr;}}
+
+/* ---- Selected flow ---- */
+.onward-landing .decoder-back{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  background:transparent;
+  border:none;
+  cursor:pointer;
+  font-family:var(--font-inter),'Inter',sans-serif;
+  font-weight:600;
+  font-size:14px;
+  color:var(--ink-70);
+  padding:0;
+  margin-bottom:22px;
+  transition:color .2s ease;
+}
+.onward-landing .decoder-back:hover{color:var(--accent);}
+.onward-landing .decoder-back svg{width:16px;height:16px;}
+.onward-landing .decoder-flow-head{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  margin-bottom:14px;
+}
+.onward-landing .decoder-flow-title{
+  font-family:var(--font-fraunces),'Fraunces',serif;
+  font-weight:600;
+  font-size:clamp(24px,3vw,32px);
+  color:var(--ink);
+  line-height:1.15;
+}
+.onward-landing .decoder-flow-tag{
+  margin-top:4px;
+  font-size:15px;
+  color:var(--ink-70);
+}
+.onward-landing .decoder-flow-list{
+  list-style:none;
+  margin:0 0 26px;
+  padding:0;
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px 22px;
+}
+.onward-landing .decoder-flow-list li{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  font-size:14px;
+  color:var(--ink-70);
+}
+.onward-landing .decoder-report-label{
+  font-family:var(--font-inter),'Inter',sans-serif;
+  font-weight:600;
+  font-size:12.5px;
+  letter-spacing:.05em;
+  text-transform:uppercase;
+  color:var(--accent);
+  margin-bottom:10px;
+}
+.onward-landing .doc-slot{font-weight:700;color:var(--ink);}
+
 .onward-landing .stepper{
   display:flex;
   align-items:flex-start;

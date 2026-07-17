@@ -228,13 +228,13 @@ export function LandingHero() {
           </div>
 
           <div className="stepper" data-reveal>
-            <div className="step"><div className="step-node"><DocIcon /></div><span className="step-label">Offer Letter</span></div>
+            <Link href="/offer?mode=offer" className="step"><div className="step-node"><DocIcon /></div><span className="step-label">Offer Letter</span></Link>
             <div className="step-connector" />
-            <div className="step"><div className="step-node"><SlipIcon /></div><span className="step-label">Payslip</span></div>
+            <Link href="/offer?mode=payslip" className="step"><div className="step-node"><SlipIcon /></div><span className="step-label">Payslip</span></Link>
             <div className="step-connector" />
-            <div className="step"><div className="step-node"><DocIcon /></div><span className="step-label">Two Offer Letters</span></div>
+            <Link href="/offer?mode=two-offers" className="step"><div className="step-node"><DocIcon /></div><span className="step-label">Two Offer Letters</span></Link>
             <div className="step-connector" />
-            <div className="step"><div className="step-node"><DocIcon /></div><span className="step-label">Offer Letter + Payslip</span></div>
+            <Link href="/offer?mode=offer-payslip" className="step"><div className="step-node"><DocIcon /></div><span className="step-label">Offer Letter + Payslip</span></Link>
           </div>
 
           <div className="yield-grid" data-reveal>

@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
-import { OfferMultiUpload } from "./OfferMultiUpload";
+import { PayDecoder } from "./PayDecoder";
 import "../landing.css";
 
 export const metadata: Metadata = {
   title: "Pay Decoder — Onward",
   description:
-    "Upload your offer letter or payslip and Onward decodes every line — the breakdown, the clauses that matter, and where you could save.",
+    "Analyze an offer letter or payslip, compare two offers, or check an offer against a payslip — Onward decodes every line in plain English.",
 };
 
 export default function OfferPage() {
@@ -19,17 +20,18 @@ export default function OfferPage() {
       <section className="wrap decoder-page-hero">
         <div className="sec-head">
           <span className="eyebrow">Pay Decoder</span>
-          <h2>Upload any salary document</h2>
+          <h2>What would you like to decode?</h2>
           <p className="sec-sub">
-            Drop in your offer letter or payslip. Onward decodes the full breakdown, flags the
-            clauses that matter, shows what to ask HR, and where you could save — in plain English.
+            Pick what you have. We&apos;ll tell you exactly what analysis to expect — then you upload.
           </p>
         </div>
       </section>
 
-      {/* UPLOAD / DECODER TOOL */}
+      {/* MODE PICKER → UPLOAD */}
       <section className="wrap decoder-page-tool">
-        <OfferMultiUpload />
+        <Suspense fallback={<div className="upload-card" />}>
+          <PayDecoder />
+        </Suspense>
       </section>
 
       <SiteFooter />
