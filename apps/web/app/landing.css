@@ -377,6 +377,11 @@
 .onward-landing .decoder .eyebrow{color:var(--accent);}
 .onward-landing .decoder .eyebrow::before{background:var(--accent);}
 .onward-landing .decoder .sec-sub{color:var(--ink-70);}
+/* Pay Decoder is the primary tool — make its heading the most prominent on the page */
+.onward-landing .decoder .sec-head h2{
+  font-size:clamp(38px,5.2vw,58px);
+  line-height:1.04;
+}
 
 .onward-landing .stepper{
   display:flex;
@@ -484,8 +489,8 @@
 }
 .onward-landing .learn{padding:96px 0;}
 .onward-landing .learn .sec-head h2{
-  font-size:clamp(38px,5.4vw,64px);
-  line-height:1.02;
+  font-size:clamp(26px,3vw,36px);
+  line-height:1.12;
 }
 .onward-landing .topic-list{
   display:flex;
