@@ -21,7 +21,17 @@ const labelFromName = (name: string) => name.replace(/\.pdf$/i, "").slice(0, 40)
  * (offer + payslip). All extraction goes through /api/offer/extract; the file
  * is processed in memory and never stored.
  */
-export function DecoderUpload({ mode }: { mode: DecoderModeConfig }) {
+export function DecoderUpload({
+  mode,
+  maxQueueable,
+  onExtracted,
+}: {
+  mode: DecoderModeConfig;
+  /** Cap on files that can be in-flight at once (= the user's credit balance). */
+  maxQueueable?: number;
+  /** Called after each extraction settles, so the gate can refetch credits. */
+  onExtracted?: () => void;
+}) {
   const fileRef = useRef<HTMLInputElement>(null);
   const [docs, setDocs] = useState<UploadedDoc[]>([]);
   const [notice, setNotice] = useState<string | null>(null);
@@ -62,6 +72,7 @@ export function DecoderUpload({ mode }: { mode: DecoderModeConfig }) {
       runningRef.current++;
       void extractOne(id).finally(() => {
         runningRef.current--;
+        onExtracted?.();
         drain();
       });
     }
@@ -74,12 +85,23 @@ export function DecoderUpload({ mode }: { mode: DecoderModeConfig }) {
     setNotice(null);
 
     const messages: string[] = [];
-    let slots = maxFiles - docs.length;
+    // Cap by both the mode's file limit and the user's remaining credits.
+    const inFlight = docs.filter((d) => d.status === "queued" || d.status === "extracting").length;
+    const creditSlots = maxQueueable === undefined ? Infinity : Math.max(0, maxQueueable - inFlight);
+    let slots = Math.min(maxFiles - docs.length, creditSlots);
     const additions: UploadedDoc[] = [];
+
+    if (slots <= 0 && creditSlots <= 0 && maxFiles - docs.length > 0) {
+      setNotice(`You have ${maxQueueable} credit${maxQueueable === 1 ? "" : "s"} left — each analysis uses 1.`);
+    }
 
     for (const file of picked) {
       if (slots <= 0) {
-        messages.push(maxFiles === 1 ? "One file for this analysis." : `Up to ${maxFiles} files at a time.`);
+        if (creditSlots <= 0) {
+          messages.push(`Not enough credits — each analysis uses 1 credit.`);
+        } else {
+          messages.push(maxFiles === 1 ? "One file for this analysis." : `Up to ${maxFiles} files at a time.`);
+        }
         break;
       }
       const fingerprint = `${file.name}:${file.size}:${file.lastModified}`;

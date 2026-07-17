@@ -5,23 +5,23 @@ import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
  * Clerk auth middleware. When Clerk env isn't configured (local dev before keys),
  * it no-ops so the app still runs and builds.
  *
- * When configured, only the landing page and the auth pages are public. Every
- * other page requires an account — signed-out visitors are redirected to
- * sign-up (carrying the intended destination so they land there after joining).
- * API routes are left to enforce their own auth (they return 401 JSON), so a
- * fetch never gets an HTML redirect in place of data.
+ * When configured, browsing is open (PRD §4): the landing, auth pages, and the
+ * decoder tools (/offer, /salary) are public — anonymous visitors can interact
+ * with the tools; analysis is credit-gated in the API, not the page. Only
+ * account-scoped pages (/account, /admin) require sign-in. API routes enforce
+ * their own auth (401 JSON), so a fetch never gets an HTML redirect for data.
  */
 const clerkEnabled = Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);
 
-const isPublicRoute = createRouteMatcher([
-  "/",
-  "/sign-in(.*)",
-  "/sign-up(.*)",
+// Pages that require sign-in. Everything else is browsable anonymously.
+const isProtectedRoute = createRouteMatcher([
+  "/account(.*)",
+  "/admin(.*)",
 ]);
 
 const protect = clerkMiddleware(async (auth, req) => {
-  // Public pages and API routes (which self-enforce auth) pass through.
-  if (isPublicRoute(req) || req.nextUrl.pathname.startsWith("/api")) return;
+  // Open pages and API routes (which self-enforce auth) pass through.
+  if (!isProtectedRoute(req) || req.nextUrl.pathname.startsWith("/api")) return;
 
   const { userId } = await auth();
   if (!userId) {

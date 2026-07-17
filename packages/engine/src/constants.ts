@@ -31,6 +31,10 @@ export interface FiscalConfig {
   readonly cess: number; // health & education cess multiplier, e.g. 1.04 = 4%
   readonly epfEmployeeRate: number; // employee EPF as a fraction of Basic
   readonly employerPfRate: number; // employer PF as a fraction of Basic (part of CTC)
+  /** Statutory EPF wage ceiling (monthly). When an employer caps PF at the
+   *  ceiling, both employer and employee contributions are 12% × this, i.e.
+   *  ₹1,800/mo — NOT 12% of the full basic. */
+  readonly epfWageCeilingMonthly: number;
   readonly ctcBasicShare: number; // Basic as a fraction of monthly CTC
   readonly hraOfBasic: number; // HRA as a fraction of Basic
   readonly section80cLimit: number; // max 80C deduction (old regime)
@@ -43,6 +47,7 @@ export const FISCAL: Record<FiscalYear, FiscalConfig> = {
     cess: 1.04,
     epfEmployeeRate: 0.12,
     employerPfRate: 0.12,
+    epfWageCeilingMonthly: 15000,
     ctcBasicShare: 0.4,
     hraOfBasic: 0.5,
     section80cLimit: 150000,
@@ -76,4 +81,47 @@ export function fiscalConfig(fy: FiscalYear = DEFAULT_FY): FiscalConfig {
   const cfg = FISCAL[fy];
   if (!cfg) throw new Error(`Unknown fiscal year: ${fy}`);
   return cfg;
+}
+
+/**
+ * Statutory employee EPF ceiling as an ANNUAL figure (₹15,000 × 12% × 12 =
+ * ₹21,600/yr). Used when an employer caps PF at the wage ceiling.
+ */
+export function epfCeilingAnnual(fy: FiscalYear = DEFAULT_FY): number {
+  const cfg = fiscalConfig(fy);
+  return Math.round(cfg.epfWageCeilingMonthly * cfg.epfEmployeeRate) * 12;
+}
+
+/**
+ * Annual professional tax by Indian state (levied by state govts; most cap at a
+ * small annual figure). Keyed by common state / city names as they appear in
+ * offer letters. Defaults to ₹2,400/yr when the state is unknown.
+ */
+const PROFESSIONAL_TAX_ANNUAL: Record<string, number> = {
+  maharashtra: 2500,
+  mumbai: 2500,
+  pune: 2500,
+  thane: 2500,
+  telangana: 2400,
+  hyderabad: 2400,
+  karnataka: 2400,
+  bengaluru: 2400,
+  bangalore: 2400,
+  "west bengal": 2400,
+  kolkata: 2400,
+  "tamil nadu": 2440,
+  chennai: 2440,
+  gujarat: 2400,
+  ahmedabad: 2400,
+  "andhra pradesh": 2400,
+};
+
+/** Annual professional tax for a state/city name (best-effort; ₹2,400 default). */
+export function professionalTaxAnnual(stateOrCity?: string): number {
+  if (!stateOrCity) return 2400;
+  const key = stateOrCity.trim().toLowerCase();
+  for (const [name, amt] of Object.entries(PROFESSIONAL_TAX_ANNUAL)) {
+    if (key.includes(name)) return amt;
+  }
+  return 2400;
 }

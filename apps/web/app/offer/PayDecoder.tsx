@@ -1,10 +1,10 @@
 "use client";
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { useAuth } from "@clerk/nextjs";
 import { DECODER_MODES, getDecoderMode, type DecoderModeConfig, type DecoderModeId } from "./decoder-modes";
 import { DecoderModeIcon } from "./decoder-icons";
 import { DecoderUpload } from "./DecoderUpload";
+import { CreditGate } from "./CreditGate";
 
 const clerkEnabled = Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);
 
@@ -80,23 +80,10 @@ function ModeFlow({ mode, onBack }: { mode: DecoderModeConfig; onBack: () => voi
   );
 }
 
-/** Preserves the sign-in gate: uploading requires an account when Clerk is on. */
+/**
+ * Credit-gated when Clerk is configured (browsing open, analysis costs credits;
+ * see {@link CreditGate}). Local dev without Clerk keys decodes freely.
+ */
 function DecoderGate({ mode }: { mode: DecoderModeConfig }) {
-  return clerkEnabled ? <GatedUpload mode={mode} /> : <DecoderUpload mode={mode} />;
-}
-
-function GatedUpload({ mode }: { mode: DecoderModeConfig }) {
-  const { isLoaded, isSignedIn } = useAuth();
-  if (isLoaded && !isSignedIn) {
-    return (
-      <div className="upload-card">
-        <p className="um-t">Sign in to decode your document</p>
-        <p className="um-s">
-          <a href="/sign-up" style={{ color: "var(--accent)", fontWeight: 700 }}>Create a free account</a> to
-          upload and decode {mode.multi ? "your documents" : "your document"} — processed in memory, never stored.
-        </p>
-      </div>
-    );
-  }
-  return <DecoderUpload mode={mode} />;
+  return clerkEnabled ? <CreditGate mode={mode} /> : <DecoderUpload mode={mode} />;
 }

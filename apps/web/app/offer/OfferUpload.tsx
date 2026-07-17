@@ -2,11 +2,9 @@
 import { useRef, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 import { track } from "@/lib/analytics";
-import { GlossaryProvider, GlossaryPanel, Term } from "@/components/Glossary";
+import { GlossaryProvider, GlossaryPanel } from "@/components/Glossary";
 import type { OfferAnalysis } from "@/lib/offer-analysis";
 import { OfferReport } from "./OfferReport";
-
-const inr = (n: number) => "₹ " + Math.round(n).toLocaleString("en-IN");
 
 const clerkEnabled = Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);
 
@@ -77,89 +75,11 @@ function OfferUploadBody() {
 
       {error && <p className="opp-none" style={{ color: "var(--coral-d)" }}>{error}</p>}
 
-      {status === "done" && a && <OfferReport a={a} />}
       {status === "done" && a && (
         <GlossaryProvider>
-        <div className="rep">
           <p className="rep-hint">Tap any <span className="rep-hint-term">underlined term</span> to see what it means.</p>
-          {/* headline */}
-          <div className="rep-top">
-            <div className="rep-stat"><div className="l"><Term>Annual CTC</Term></div><div className="v">{inr(a.annualCTC)}</div></div>
-            <div className="rep-stat"><div className="l"><Term k="fixed">Fixed (guaranteed)</Term></div><div className="v">{inr(a.fixedAnnual)}</div></div>
-            <div className="rep-stat"><div className="l"><Term k="variable">Variable / at-risk</Term></div><div className="v">{(a.variableShare * 100).toFixed(1)}%</div></div>
-          </div>
-
-          {/* salary breakdown */}
-          <div className="rep-card">
-            <div className="rep-h">Monthly salary breakdown</div>
-            {a.components.map((c, i) => (
-              <div className="rep-row" key={i}><span><Term>{c.name}</Term></span><b>{inr(c.amount)}</b></div>
-            ))}
-            <div className="rep-row" style={{ fontWeight: 700 }}><span><Term k="gross">Gross (monthly)</Term></span><b>{inr(a.grossMonthly)}</b></div>
-            <div className="rep-row deduct"><span><Term k="epf">EPF — your 12%</Term></span><b>− {inr(a.epfMonthly)}</b></div>
-            <div className="rep-row deduct"><span><Term k="tds">TDS — income tax</Term></span><b>− {inr(a.tdsMonthly)}</b></div>
-            <div className="rep-row total"><span><Term k="takehome">Take-home / month</Term></span><b>{inr(a.netMonthly)}</b></div>
-            <div className="rep-row"><span><Term k="takehome">In hand / year (fixed)</Term></span><b>{inr(a.netAnnual)}</b></div>
-          </div>
-
-          {/* regime */}
-          <div className="rep-card">
-            <div className="rep-h"><Term k="regime">Tax regime</Term> — pick the cheaper</div>
-            <div className="regime">
-              <div className={`regime-card${a.regime.newWins ? " win" : ""}`}>
-                <div className="regime-lbl"><Term k="regime">New regime</Term></div><div className="regime-val">{inr(a.regime.taxNew)}</div>
-                {a.regime.newWins && <span className="regime-tag">✓ Lower</span>}
-              </div>
-              <div className={`regime-card${!a.regime.newWins ? " win" : ""}`}>
-                <div className="regime-lbl"><Term k="regime">Old regime</Term></div><div className="regime-val">{inr(a.regime.taxOld)}</div>
-                {!a.regime.newWins && <span className="regime-tag">✓ Lower</span>}
-              </div>
-            </div>
-          </div>
-
-          {/* opportunities */}
-          {a.opportunities.length > 0 && (
-            <div className="opps">
-              <div className="opps-h">★ Money you could save</div>
-              {a.opportunities.map((o) => (
-                <div className="opp" key={o.id}>
-                  <span className="opp-txt"><strong>{o.title}</strong>{o.detail}</span>
-                  <span className="opp-save">{o.savingLabel}</span>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* clauses */}
-          {a.clauses.length > 0 && (
-            <div className="rep-card">
-              <div className="rep-h">Clauses, in plain English</div>
-              {a.clauses.map((c, i) => (
-                <div className={`clause ${c.flag}`} key={i}>
-                  <div className="clause-head">
-                    <span className="clause-title"><Term>{c.title}</Term></span>
-                    <span className={`clause-flag ${c.flag}`}>{c.flag}</span>
-                  </div>
-                  <div className="clause-exp">{c.explanation}</div>
-                  {c.action && <div className="clause-action"><b>Do this:</b> {c.action}</div>}
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* actions */}
-          {a.actions.length > 0 && (
-            <div className="rep-card">
-              <div className="rep-h">What to do after reading this offer</div>
-              <ul className="rep-actions">
-                {a.actions.map((t, i) => <li key={i}>{t}</li>)}
-              </ul>
-            </div>
-          )}
-
-          {a.warnings.length > 0 && <p className="rep-warn">{a.warnings.join(" ")}</p>}
-        </div>
-        <GlossaryPanel />
+          <OfferReport a={a} />
+          <GlossaryPanel />
         </GlossaryProvider>
       )}
     </div>
