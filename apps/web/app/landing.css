@@ -503,6 +503,9 @@
 @media (max-width:720px){.onward-landing .decoder-modes{grid-template-columns:1fr;}}
 
 /* ---- Selected flow ---- */
+/* Constrain the whole flow to one column so the heading, list, free/paid strip
+   and upload card all share the same left/right edges (upload-card is 920). */
+.onward-landing .decoder-flow{max-width:920px;margin-left:auto;margin-right:auto;}
 .onward-landing .decoder-back{
   display:inline-flex;
   align-items:center;

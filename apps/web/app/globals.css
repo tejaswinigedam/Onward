@@ -193,7 +193,7 @@ nav.site-nav.lifted{border-color:var(--border);box-shadow:0 2px 18px rgba(31,41,
 .credit-empty-note{max-width:920px;margin:0 auto 12px;text-align:center;font-size:12.5px;line-height:1.5;color:var(--ink-soft);}
 
 /* Free-vs-paid strip on the decoder mode flow */
-.fp-strip{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:920px;margin:0 auto 18px;}
+.fp-strip{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0 0 18px;}
 @media(max-width:640px){.fp-strip{grid-template-columns:1fr;}}
 .fp-col{border:1px solid var(--border);border-radius:14px;padding:14px 16px;background:var(--white);}
 .fp-col.fp-paid{background:var(--indigo-0);border-color:var(--indigo-1);}
