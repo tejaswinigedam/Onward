@@ -54,25 +54,7 @@ export default function PricingPage() {
         </div>
       </section>
 
-      {/* What's free vs paid */}
-      <section className="wrap pricing-split">
-        <div className="pcol pcol-free">
-          <div className="pcol-head"><span className="ptag free">Always free</span></div>
-          <ul>
-            {FREE_FEATURES.map((f) => <li key={f}><span className="pi free"><Check /></span>{f}</li>)}
-          </ul>
-        </div>
-        <div className="pcol pcol-paid">
-          <div className="pcol-head"><span className="ptag paid"><Lock /> Unlocked with 1 credit</span></div>
-          <ul>
-            {PAID_FEATURES.map((f) => <li key={f}><span className="pi paid"><Lock /></span>{f}</li>)}
-          </ul>
-        </div>
-      </section>
-
-      <p className="wrap credit-rule">{CREDIT_RULE}</p>
-
-      {/* Plans */}
+      {/* Plans / prices first */}
       <section className="wrap plans-section">
         <p className="plans-offer">{OFFER_LABEL}</p>
         <div className="plans-grid">
@@ -90,6 +72,24 @@ export default function PricingPage() {
           ))}
         </div>
         <p className="plans-foot">{CREDITS_FOOTER}</p>
+      </section>
+
+      <p className="wrap credit-rule">{CREDIT_RULE}</p>
+
+      {/* Then: what each credit unlocks vs what's free */}
+      <section className="wrap pricing-split">
+        <div className="pcol pcol-free">
+          <div className="pcol-head"><span className="ptag free">Always free</span></div>
+          <ul>
+            {FREE_FEATURES.map((f) => <li key={f}><span className="pi free"><Check /></span>{f}</li>)}
+          </ul>
+        </div>
+        <div className="pcol pcol-paid">
+          <div className="pcol-head"><span className="ptag paid"><Lock /> Unlocked with 1 credit</span></div>
+          <ul>
+            {PAID_FEATURES.map((f) => <li key={f}><span className="pi paid"><Lock /></span>{f}</li>)}
+          </ul>
+        </div>
       </section>
 
       <section className="wrap pricing-cta">

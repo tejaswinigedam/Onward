@@ -24,6 +24,11 @@ export default function OfferPage() {
           <p className="sec-sub">
             Pick what you have. We&apos;ll tell you exactly what analysis to expect — then you upload.
           </p>
+          <p className="decoder-free-note">
+            <span className="dfn-free">Free — your full salary &amp; component breakdown</span>
+            <span className="dfn-dot">•</span>
+            <span className="dfn-paid">1 credit — the analysis: tax regime, savings, clauses &amp; what to ask HR</span>
+          </p>
         </div>
       </section>
 

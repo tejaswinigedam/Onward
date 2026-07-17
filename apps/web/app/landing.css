@@ -931,6 +931,7 @@
 
 /* ===== Pricing: dedicated page ===== */
 .onward-landing .pricing-hero{padding:56px 0 8px;text-align:center;}
+.onward-landing .pricing-hero .sec-head{margin-left:auto;margin-right:auto;margin-bottom:8px;}
 .onward-landing .pricing-split{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:880px;margin:24px auto 0;}
 @media(max-width:720px){.onward-landing .pricing-split{grid-template-columns:1fr;}}
 .onward-landing .pcol{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-card);padding:24px 26px;box-shadow:var(--shadow);}
@@ -962,3 +963,10 @@
 .onward-landing .pricing-cta{text-align:center;padding:56px 0 72px;}
 .onward-landing .pricing-cta h2{margin-bottom:8px;}
 .onward-landing .pricing-disclaimer{max-width:520px;margin:22px auto 0;font-size:12px;line-height:1.5;color:var(--ink-50);}
+
+/* Free/paid one-liner on the Pay Decoder hero */
+.onward-landing .decoder-free-note{display:inline-flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:14px;font-size:13.5px;line-height:1.5;}
+.onward-landing .dfn-free{font-weight:700;color:#0a7a52;}
+.onward-landing .dfn-paid{font-weight:600;color:var(--accent);}
+.onward-landing .dfn-dot{color:var(--ink-50);}
+@media(max-width:560px){.onward-landing .decoder-free-note .dfn-dot{display:none;}.onward-landing .decoder-free-note{flex-direction:column;align-items:flex-start;gap:4px;}}
