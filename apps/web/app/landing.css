@@ -520,6 +520,7 @@
 }
 .onward-landing .topic-row .why{
   margin-top:4px;
+  padding:0; /* reset — the .why *section* rule sets padding:96px 0, which must not leak onto this description span */
   font-size:14px;
   font-weight:400;
   color:var(--ink-70);
