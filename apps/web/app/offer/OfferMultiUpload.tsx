@@ -24,6 +24,14 @@ export interface UploadedDoc {
   analysis?: OfferAnalysis;
   docType: "offer" | "payslip" | "unknown"; // Phase 1: always "offer"
   error?: string;
+  /** Server id for the stored full analysis; used to unlock the locked half. */
+  analysisId?: string;
+  /** True while the analysis sections are behind the credit lock. */
+  locked?: boolean;
+  /** Unlock request in flight. */
+  unlocking?: boolean;
+  /** Error from the last unlock attempt. */
+  unlockError?: string;
 }
 
 const labelFromName = (name: string) => name.replace(/\.pdf$/i, "").slice(0, 40) || "Offer";

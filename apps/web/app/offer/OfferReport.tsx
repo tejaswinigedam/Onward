@@ -32,8 +32,32 @@ function Badge({ source }: { source: Provenance }) {
 const termKey = (l: OfferLine) =>
   l.x === "epf" ? "epf" : l.x === "tds" ? "tds" : l.x === "pt" ? "pt" : undefined;
 
-/** The full decoded report for a single offer. Shared by single- and multi-upload. */
-export function OfferReport({ a }: { a: OfferAnalysis }) {
+export interface LockProps {
+  /** When true, the analysis sections are withheld and a lock panel shows instead. */
+  locked?: boolean;
+  /** Panel heading; defaults to "Unlock the full analysis". */
+  title?: string;
+  /** Bullet list of what unlocking reveals; has a sensible default. */
+  items?: string[];
+  /** Label for the unlock button (varies by sign-in / credit state). */
+  unlockLabel?: string;
+  /** Sub-line under the unlock button (e.g. "1 credit" / "You have 2 credits"). */
+  unlockHint?: string;
+  unlockBusy?: boolean;
+  unlockError?: string | null;
+  onUnlock?: () => void;
+}
+
+const DEFAULT_LOCK_ITEMS = [
+  "Which tax regime is cheaper for you",
+  "Money you could save (HRA, 80C & more)",
+  "Clauses & red flags in plain English",
+  "What to do — and what to confirm with HR",
+];
+
+/** The decoded report for a single offer. Shared by single- and multi-upload. */
+export function OfferReport({ a, lock }: { a: OfferAnalysis; lock?: LockProps }) {
+  const locked = Boolean(lock?.locked);
   return (
     <div className="rep">
       {/* headline */}
@@ -93,72 +117,103 @@ export function OfferReport({ a }: { a: OfferAnalysis }) {
         <div className="rep-row"><span><Term k="takehome">In hand / year (fixed)</Term></span><b>{inr(a.netAnnual)}</b></div>
       </div>
 
-      {/* regime */}
-      <div className="rep-card">
-        <div className="rep-h"><Term k="regime">Tax regime</Term> — pick the cheaper</div>
-        <div className="regime">
-          <div className={`regime-card${a.regime.newWins ? " win" : ""}`}>
-            <div className="regime-lbl">New regime</div><div className="regime-val">{inr(a.regime.taxNew)}</div>
-            {a.regime.newWins && <span className="regime-tag">✓ Lower</span>}
-          </div>
-          <div className={`regime-card${!a.regime.newWins ? " win" : ""}`}>
-            <div className="regime-lbl">Old regime</div><div className="regime-val">{inr(a.regime.taxOld)}</div>
-            {!a.regime.newWins && <span className="regime-tag">✓ Lower</span>}
-          </div>
-        </div>
-      </div>
-
-      {/* opportunities */}
-      {a.opportunities.length > 0 && (
-        <div className="opps">
-          <div className="opps-h">★ Money you could save</div>
-          {a.opportunities.map((o) => (
-            <div className="opp" key={o.id}>
-              <span className="opp-txt"><strong>{o.title}</strong>{o.detail}</span>
-              <span className="opp-save">{o.savingLabel}</span>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* clauses */}
-      {a.clauses.length > 0 && (
-        <div className="rep-card">
-          <div className="rep-h">Clauses, in plain English</div>
-          {a.clauses.map((c, i) => (
-            <div className={`clause ${c.flag}`} key={i}>
-              <div className="clause-head">
-                <span className="clause-title">{c.title}</span>
-                <span className={`clause-flag ${c.flag}`}>{c.flag}</span>
+      {/* ── Locked analysis: tax regime, savings, clauses, actions, assumptions ── */}
+      {locked ? (
+        <LockPanel lock={lock!} />
+      ) : (
+        <>
+          {/* regime */}
+          <div className="rep-card">
+            <div className="rep-h"><Term k="regime">Tax regime</Term> — pick the cheaper</div>
+            <div className="regime">
+              <div className={`regime-card${a.regime.newWins ? " win" : ""}`}>
+                <div className="regime-lbl">New regime</div><div className="regime-val">{inr(a.regime.taxNew)}</div>
+                {a.regime.newWins && <span className="regime-tag">✓ Lower</span>}
               </div>
-              <div className="clause-exp">{c.explanation}</div>
-              {c.action && <div className="clause-action"><b>Do this:</b> {c.action}</div>}
+              <div className={`regime-card${!a.regime.newWins ? " win" : ""}`}>
+                <div className="regime-lbl">Old regime</div><div className="regime-val">{inr(a.regime.taxOld)}</div>
+                {!a.regime.newWins && <span className="regime-tag">✓ Lower</span>}
+              </div>
             </div>
-          ))}
-        </div>
-      )}
+          </div>
 
-      {/* actions */}
-      {a.actions.length > 0 && (
-        <div className="rep-card">
-          <div className="rep-h">What to do after reading this offer</div>
-          <ul className="rep-actions">
-            {a.actions.map((t, i) => <li key={i}>{t}</li>)}
-          </ul>
-        </div>
-      )}
+          {/* opportunities */}
+          {a.opportunities.length > 0 && (
+            <div className="opps">
+              <div className="opps-h">★ Money you could save</div>
+              {a.opportunities.map((o) => (
+                <div className="opp" key={o.id}>
+                  <span className="opp-txt"><strong>{o.title}</strong>{o.detail}</span>
+                  <span className="opp-save">{o.savingLabel}</span>
+                </div>
+              ))}
+            </div>
+          )}
 
-      {/* assumptions & what we couldn't find */}
-      {a.assumptions.length > 0 && (
-        <div className="rep-card">
-          <div className="rep-h">Assumptions — confirm these with HR</div>
-          <ul className="rep-actions">
-            {a.assumptions.map((t, i) => <li key={i}>{t}</li>)}
-          </ul>
-        </div>
+          {/* clauses */}
+          {a.clauses.length > 0 && (
+            <div className="rep-card">
+              <div className="rep-h">Clauses, in plain English</div>
+              {a.clauses.map((c, i) => (
+                <div className={`clause ${c.flag}`} key={i}>
+                  <div className="clause-head">
+                    <span className="clause-title">{c.title}</span>
+                    <span className={`clause-flag ${c.flag}`}>{c.flag}</span>
+                  </div>
+                  <div className="clause-exp">{c.explanation}</div>
+                  {c.action && <div className="clause-action"><b>Do this:</b> {c.action}</div>}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* actions */}
+          {a.actions.length > 0 && (
+            <div className="rep-card">
+              <div className="rep-h">What to do after reading this offer</div>
+              <ul className="rep-actions">
+                {a.actions.map((t, i) => <li key={i}>{t}</li>)}
+              </ul>
+            </div>
+          )}
+
+          {/* assumptions & what we couldn't find */}
+          {a.assumptions.length > 0 && (
+            <div className="rep-card">
+              <div className="rep-h">Assumptions — confirm these with HR</div>
+              <ul className="rep-actions">
+                {a.assumptions.map((t, i) => <li key={i}>{t}</li>)}
+              </ul>
+            </div>
+          )}
+        </>
       )}
 
       {a.warnings.length > 0 && <p className="rep-warn">{a.warnings.join(" ")}</p>}
+    </div>
+  );
+}
+
+/** The paywall shown in place of the analysis sections until a credit is spent. */
+export function LockPanel({ lock }: { lock: LockProps }) {
+  const items = lock.items ?? DEFAULT_LOCK_ITEMS;
+  return (
+    <div className="lock-card">
+      <div className="lock-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" width="18" height="18">
+          <rect x="4" y="11" width="16" height="9" rx="2" />
+          <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+        </svg>
+      </div>
+      <p className="lock-title">{lock.title ?? "Unlock the full analysis"}</p>
+      <ul className="lock-list">
+        {items.map((it) => <li key={it}>{it}</li>)}
+      </ul>
+      {lock.unlockError && <p className="lock-error">{lock.unlockError}</p>}
+      <button className="lock-btn" disabled={lock.unlockBusy} onClick={lock.onUnlock} data-ev="unlock_analysis">
+        {lock.unlockBusy ? "Unlocking…" : lock.unlockLabel ?? "Unlock"}
+      </button>
+      {lock.unlockHint && <p className="lock-hint">{lock.unlockHint}</p>}
     </div>
   );
 }

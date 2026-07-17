@@ -3,7 +3,7 @@ import { useMemo, useRef, useState } from "react";
 import type { OfferAnalysis } from "@/lib/offer-analysis";
 import { OfferComparator, type Draft } from "./OfferComparator";
 import { OfferComparisonSummary } from "./OfferComparisonSummary";
-import { OfferReport } from "./OfferReport";
+import { OfferReport, LockPanel } from "./OfferReport";
 import type { UploadedDoc } from "./OfferMultiUpload";
 import type { DecoderModeConfig } from "./decoder-modes";
 import { GlossaryProvider, GlossaryPanel } from "@/components/Glossary";
@@ -23,18 +23,29 @@ const labelFromName = (name: string) => name.replace(/\.pdf$/i, "").slice(0, 40)
  */
 export function DecoderUpload({
   mode,
-  maxQueueable,
-  onExtracted,
+  signedIn = false,
+  credits = 0,
+  onUnlocked,
+  onNeedPayment,
 }: {
   mode: DecoderModeConfig;
-  /** Cap on files that can be in-flight at once (= the user's credit balance). */
-  maxQueueable?: number;
-  /** Called after each extraction settles, so the gate can refetch credits. */
-  onExtracted?: () => void;
+  /** Whether a user is signed in — drives the unlock CTA (sign in vs spend). */
+  signedIn?: boolean;
+  /** Current credit balance — for the unlock button label. */
+  credits?: number;
+  /** Called after a successful unlock so the gate can refetch the balance. */
+  onUnlocked?: () => void;
+  /** Called when an unlock needs credits the user doesn't have (opens the QR pay flow). */
+  onNeedPayment?: () => void;
 }) {
   const fileRef = useRef<HTMLInputElement>(null);
   const [docs, setDocs] = useState<UploadedDoc[]>([]);
   const [notice, setNotice] = useState<string | null>(null);
+  // Compare mode has no per-doc report to lock — its verdict is the analysis, so
+  // it's gated as a whole: 1 credit unlocks the side-by-side comparison.
+  const [compareUnlocked, setCompareUnlocked] = useState(false);
+  const [compareUnlocking, setCompareUnlocking] = useState(false);
+  const [compareUnlockError, setCompareUnlockError] = useState<string | null>(null);
 
   // Non-render state for the extraction pool.
   const filesRef = useRef<Map<string, File>>(new Map());
@@ -60,9 +71,95 @@ export function DecoderUpload({
         updateDoc(id, { status: "error", error: json.error ?? "Couldn't read that file." });
         return;
       }
-      updateDoc(id, { status: "done", analysis: json.analysis as OfferAnalysis, via: json.via, docType: "offer" });
+      updateDoc(id, {
+        status: "done",
+        analysis: json.analysis as OfferAnalysis,
+        via: json.via,
+        docType: "offer",
+        analysisId: json.analysisId,
+        locked: Boolean(json.locked),
+      });
     } catch {
       updateDoc(id, { status: "error", error: "Upload failed. Try again." });
+    }
+  }
+
+  /** Spend 1 credit to unlock the analysis half of a decoded doc. */
+  async function unlock(id: string) {
+    const doc = docs.find((d) => d.id === id);
+    if (!doc?.analysisId) return;
+    if (!signedIn) {
+      const back = typeof window !== "undefined" ? window.location.pathname + window.location.search : "/offer";
+      window.location.href = `/sign-in?redirect_url=${encodeURIComponent(back)}`;
+      return;
+    }
+    updateDoc(id, { unlocking: true, unlockError: undefined });
+    try {
+      const res = await fetch("/api/offer/unlock", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ analysisId: doc.analysisId }),
+      });
+      const json = await res.json();
+      if (res.status === 402) {
+        updateDoc(id, { unlocking: false });
+        onNeedPayment?.(); // no credits → open the QR pay flow
+        return;
+      }
+      if (!res.ok) {
+        updateDoc(id, { unlocking: false, unlockError: json.error ?? "Couldn't unlock. Try again." });
+        return;
+      }
+      updateDoc(id, { unlocking: false, locked: false, analysis: json.analysis as OfferAnalysis });
+      onUnlocked?.();
+    } catch {
+      updateDoc(id, { unlocking: false, unlockError: "Network error. Try again." });
+    }
+  }
+
+  /** Spend 1 credit to unlock the whole two-offer comparison (all docs at once). */
+  async function unlockCompare() {
+    const ids = docs.filter((d) => d.status === "done" && d.analysisId).map((d) => d.analysisId!);
+    if (ids.length === 0) return;
+    if (!signedIn) {
+      const back = typeof window !== "undefined" ? window.location.pathname + window.location.search : "/offer";
+      window.location.href = `/sign-in?redirect_url=${encodeURIComponent(back)}`;
+      return;
+    }
+    setCompareUnlocking(true);
+    setCompareUnlockError(null);
+    try {
+      const res = await fetch("/api/offer/unlock", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ analysisIds: ids }),
+      });
+      const json = await res.json();
+      if (res.status === 402) {
+        setCompareUnlocking(false);
+        onNeedPayment?.();
+        return;
+      }
+      if (!res.ok) {
+        setCompareUnlocking(false);
+        setCompareUnlockError(json.error ?? "Couldn't unlock. Try again.");
+        return;
+      }
+      // Swap the free subsets for the full analyses so the comparison reads real data.
+      const byId = new Map<string, OfferAnalysis>(
+        (json.analyses ?? []).map((a: { id: string; analysis: OfferAnalysis }) => [a.id, a.analysis]),
+      );
+      setDocs((arr) =>
+        arr.map((d) => (d.analysisId && byId.has(d.analysisId)
+          ? { ...d, analysis: byId.get(d.analysisId), locked: false }
+          : d)),
+      );
+      setCompareUnlocking(false);
+      setCompareUnlocked(true);
+      onUnlocked?.();
+    } catch {
+      setCompareUnlocking(false);
+      setCompareUnlockError("Network error. Try again.");
     }
   }
 
@@ -72,7 +169,6 @@ export function DecoderUpload({
       runningRef.current++;
       void extractOne(id).finally(() => {
         runningRef.current--;
-        onExtracted?.();
         drain();
       });
     }
@@ -85,23 +181,13 @@ export function DecoderUpload({
     setNotice(null);
 
     const messages: string[] = [];
-    // Cap by both the mode's file limit and the user's remaining credits.
-    const inFlight = docs.filter((d) => d.status === "queued" || d.status === "extracting").length;
-    const creditSlots = maxQueueable === undefined ? Infinity : Math.max(0, maxQueueable - inFlight);
-    let slots = Math.min(maxFiles - docs.length, creditSlots);
+    // Upload is free; cap only by the mode's file limit.
+    let slots = maxFiles - docs.length;
     const additions: UploadedDoc[] = [];
-
-    if (slots <= 0 && creditSlots <= 0 && maxFiles - docs.length > 0) {
-      setNotice(`You have ${maxQueueable} credit${maxQueueable === 1 ? "" : "s"} left — each analysis uses 1.`);
-    }
 
     for (const file of picked) {
       if (slots <= 0) {
-        if (creditSlots <= 0) {
-          messages.push(`Not enough credits — each analysis uses 1 credit.`);
-        } else {
-          messages.push(maxFiles === 1 ? "One file for this analysis." : `Up to ${maxFiles} files at a time.`);
-        }
+        messages.push(maxFiles === 1 ? "One file for this analysis." : `Up to ${maxFiles} files at a time.`);
         break;
       }
       const fingerprint = `${file.name}:${file.size}:${file.lastModified}`;
@@ -233,25 +319,75 @@ export function DecoderUpload({
       <GlossaryProvider>
         {isCompare ? (
           doneDocs.length >= 2 && (
-            <div style={{ marginTop: 22 }}>
-              <div id="cmp-report">
-                <OfferComparisonSummary docs={doneDocs} />
-                <OfferComparator key={comparatorKey} seedDrafts={seedDrafts} allowAddRemove={false} />
+            (doneDocs.some((d) => d.locked) && !compareUnlocked) ? (
+              <div style={{ marginTop: 22 }}>
+                <LockPanel
+                  lock={{
+                    locked: true,
+                    title: "Unlock the offer comparison",
+                    items: [
+                      "Which offer pays more, guaranteed in hand",
+                      "Side-by-side breakdown of both offers",
+                      "Where the fine print differs",
+                      "The tax-regime and savings angle on each",
+                    ],
+                    unlockBusy: compareUnlocking,
+                    unlockError: compareUnlockError,
+                    onUnlock: unlockCompare,
+                    unlockLabel: !signedIn
+                      ? "Sign in to unlock"
+                      : credits >= 1
+                        ? "Unlock comparison — 1 credit"
+                        : "Unlock comparison",
+                    unlockHint: !signedIn
+                      ? "1 credit unlocks the full side-by-side comparison"
+                      : credits >= 1
+                        ? `You have ${credits} credit${credits === 1 ? "" : "s"}`
+                        : "You'll need 1 credit — tap to buy",
+                  }}
+                />
               </div>
-              <DownloadPdfButton targetId="cmp-report" fileName="Onward — Offer comparison" evLabel="compare" />
-            </div>
+            ) : (
+              <div style={{ marginTop: 22 }}>
+                <div id="cmp-report">
+                  <OfferComparisonSummary docs={doneDocs} />
+                  <OfferComparator key={comparatorKey} seedDrafts={seedDrafts} allowAddRemove={false} />
+                </div>
+                <DownloadPdfButton targetId="cmp-report" fileName="Onward — Offer comparison" evLabel="compare" />
+              </div>
+            )
           )
         ) : (
           doneDocs.map((d, i) => {
             const reportId = `report-${d.id}`;
             const name = slotLabel(i) ?? d.fileName.replace(/\.pdf$/i, "");
+            const lock = d.locked
+              ? {
+                  locked: true,
+                  unlockBusy: d.unlocking,
+                  unlockError: d.unlockError ?? null,
+                  onUnlock: () => unlock(d.id),
+                  unlockLabel: !signedIn
+                    ? "Sign in to unlock"
+                    : credits >= 1
+                      ? "Unlock full analysis — 1 credit"
+                      : "Unlock full analysis",
+                  unlockHint: !signedIn
+                    ? "1 credit unlocks the tax regime, savings, clauses & actions"
+                    : credits >= 1
+                      ? `You have ${credits} credit${credits === 1 ? "" : "s"}`
+                      : "You'll need 1 credit — tap to buy",
+                }
+              : undefined;
             return (
               <div key={d.id} style={{ marginTop: i === 0 ? 8 : 22 }}>
                 {slotLabel(i) && <p className="decoder-report-label">{slotLabel(i)}</p>}
                 <div id={reportId}>
-                  <OfferReport a={d.analysis!} />
+                  <OfferReport a={d.analysis!} lock={lock} />
                 </div>
-                <DownloadPdfButton targetId={reportId} fileName={`Onward — ${name}`} evLabel={mode.id} />
+                {!d.locked && (
+                  <DownloadPdfButton targetId={reportId} fileName={`Onward — ${name}`} evLabel={mode.id} />
+                )}
               </div>
             );
           })

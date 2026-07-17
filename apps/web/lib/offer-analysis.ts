@@ -47,6 +47,29 @@ export interface OfferAnalysis {
   warnings: string[];
 }
 
+/**
+ * The "analysis" half that sits behind the credit lock. The salary/component
+ * breakdown (everything else) is free for everyone; these fields are only
+ * returned after a credit is spent. See {@link freeAnalysis}.
+ */
+export const LOCKED_SECTIONS = ["regime", "opportunities", "assumptions", "clauses", "actions"] as const;
+
+/**
+ * Strip the locked analysis fields so only the free salary/component breakdown
+ * reaches the browser. Locked collections are emptied and the tax-regime figures
+ * are zeroed — the client renders a lock panel in their place.
+ */
+export function freeAnalysis(a: OfferAnalysis): OfferAnalysis {
+  return {
+    ...a,
+    regime: { taxNew: 0, taxOld: 0, newWins: false },
+    opportunities: [],
+    assumptions: [],
+    clauses: [],
+    actions: [],
+  };
+}
+
 /** Default post-offer checklist appended to whatever the model returns. */
 const BASE_ACTIONS = [
   "When your first payslip arrives, reconcile every line against this offer — Basic, HRA, deductions and net should match.",

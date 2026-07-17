@@ -14,30 +14,24 @@ import {
 } from "@/lib/credits-config";
 
 /**
- * Credit-gated upload (PRD §4–5). Browsing is open; analysis needs ≥1 credit.
- * 0 credits → paywall → QR screen → Payment Done (login required) → WhatsApp
- * handoff + next steps. Each successful analysis spends a credit server-side;
- * we refetch the balance after each run.
+ * Freemium gate. Uploading and the salary/component breakdown are FREE for
+ * everyone (anonymous included) — there is no wall before the upload. The
+ * analysis half of each report is locked and costs 1 credit to unlock
+ * ({@link DecoderUpload} handles the per-report unlock). A 0-credit unlock opens
+ * the QR pay flow (login → Payment Done → WhatsApp handoff).
  */
 export function CreditGate({ mode }: { mode: DecoderModeConfig }) {
   const { isLoaded, isSignedIn } = useAuth();
-  const [balance, setBalance] = useState<number | null>(null);
+  const [balance, setBalance] = useState(0);
   const [showPay, setShowPay] = useState(false);
-  // Latch: once this session has held credits and entered the upload view, stay
-  // there even after the balance hits 0 — so spending the LAST credit still shows
-  // that analysis instead of snapping back to the paywall and hiding the result.
-  // Only a real reset (page reload, or leaving and returning) clears this.
-  const [started, setStarted] = useState(false);
 
   const refresh = useCallback(async () => {
     try {
       const res = await fetch("/api/credits", { cache: "no-store" });
       const json = await res.json();
-      const b = typeof json.balance === "number" ? json.balance : 0;
-      if (b >= 1) setStarted(true);
-      setBalance(b);
+      setBalance(typeof json.balance === "number" ? json.balance : 0);
     } catch {
-      setBalance(0);
+      /* leave balance as-is */
     }
   }, []);
 
@@ -45,64 +39,37 @@ export function CreditGate({ mode }: { mode: DecoderModeConfig }) {
     if (isLoaded) void refresh();
   }, [isLoaded, refresh]);
 
-  if (!isLoaded || balance === null) {
-    return <div className="upload-card"><p className="um-s">Loading…</p></div>;
-  }
-
-  if (showPay) {
-    return (
-      <PayFlow
-        signedIn={Boolean(isSignedIn)}
-        onClose={() => setShowPay(false)}
-        onActivated={() => {
-          setShowPay(false);
-          void refresh();
-        }}
-      />
-    );
-  }
-
-  // Paywall only before a working session starts. Once latched (started), we keep
-  // the upload view even at 0 balance so the last result stays on screen.
-  if (balance <= 0 && !started) {
-    return (
-      <div className="upload-card">
-        <div className="paywall-head">
-          <span className="paywall-credits">Available credits: 0</span>
-          <p className="um-t">Make a payment to analyze</p>
-          <p className="um-s">
-            Browsing is free. Running an analysis costs 1 credit — buy credits to
-            decode {mode.multi ? "your documents" : "your document"}.
-          </p>
-        </div>
-        <button className="pay-now-btn" onClick={() => setShowPay(true)} data-ev="pay_now">
-          Pay Now
-        </button>
-        <p className="paywall-disclaimer">{EDU_DISCLAIMER}</p>
-      </div>
-    );
-  }
-
-  // Working view. Balance may be 0 here (last credit just spent) — the results
-  // stay visible; uploads are capped to the balance so no further run is allowed
-  // until they buy more.
-  const empty = balance <= 0;
   return (
     <div>
-      <div className="credit-badge-row">
-        <span className={`credit-badge${empty ? " empty" : ""}`}>
-          {balance} credit{balance === 1 ? "" : "s"} left
-        </span>
-        <button className="credit-buy-link" onClick={() => setShowPay(true)}>
-          {empty ? "Buy credits" : "Buy more"}
-        </button>
-      </div>
-      {empty && (
-        <p className="credit-empty-note">
-          You&apos;ve used all your credits — your latest analysis is below. Buy more to run another.
-        </p>
+      {isSignedIn && balance > 0 && (
+        <div className="credit-badge-row">
+          <span className="credit-badge">{balance} credit{balance === 1 ? "" : "s"} left</span>
+          <button className="credit-buy-link" onClick={() => setShowPay(true)}>Buy more</button>
+        </div>
       )}
-      <DecoderUpload mode={mode} maxQueueable={balance} onExtracted={refresh} />
+
+      <DecoderUpload
+        mode={mode}
+        signedIn={Boolean(isSignedIn)}
+        credits={balance}
+        onUnlocked={refresh}
+        onNeedPayment={() => setShowPay(true)}
+      />
+
+      {showPay && (
+        <div className="pay-modal-backdrop" onClick={() => setShowPay(false)}>
+          <div className="pay-modal" onClick={(e) => e.stopPropagation()}>
+            <PayFlow
+              signedIn={Boolean(isSignedIn)}
+              onClose={() => setShowPay(false)}
+              onActivated={() => {
+                setShowPay(false);
+                void refresh();
+              }}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
