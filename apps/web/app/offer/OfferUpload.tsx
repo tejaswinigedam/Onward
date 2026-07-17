@@ -6,6 +6,8 @@ import { GlossaryProvider, GlossaryPanel, Term } from "@/components/Glossary";
 import type { OfferAnalysis } from "@/lib/offer-analysis";
 import { OfferReport } from "./OfferReport";
 
+const inr = (n: number) => "₹ " + Math.round(n).toLocaleString("en-IN");
+
 const clerkEnabled = Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);
 
 export function OfferUpload() {
