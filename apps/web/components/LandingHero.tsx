@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect } from "react";
 import { BrandMark } from "./BrandMark";
+import { LandingAuthActions } from "./LandingAuthActions";
 
 /* ---- inline outline icons (match the design's stroke SVGs) ---- */
 const ArrowRight = () => (
@@ -170,8 +171,7 @@ export function LandingHero() {
         <div className="nav">
           <Link href="/"><Logo /></Link>
           <div className="nav-actions">
-            <Link href="/sign-up" className="btn btn-ghost">Sign Up</Link>
-            <Link href="/sign-up" className="btn btn-dark">Book a Demo</Link>
+            <LandingAuthActions />
           </div>
         </div>
       </header>
