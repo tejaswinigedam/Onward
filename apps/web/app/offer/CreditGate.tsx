@@ -23,12 +23,19 @@ export function CreditGate({ mode }: { mode: DecoderModeConfig }) {
   const { isLoaded, isSignedIn } = useAuth();
   const [balance, setBalance] = useState<number | null>(null);
   const [showPay, setShowPay] = useState(false);
+  // Latch: once this session has held credits and entered the upload view, stay
+  // there even after the balance hits 0 — so spending the LAST credit still shows
+  // that analysis instead of snapping back to the paywall and hiding the result.
+  // Only a real reset (page reload, or leaving and returning) clears this.
+  const [started, setStarted] = useState(false);
 
   const refresh = useCallback(async () => {
     try {
       const res = await fetch("/api/credits", { cache: "no-store" });
       const json = await res.json();
-      setBalance(typeof json.balance === "number" ? json.balance : 0);
+      const b = typeof json.balance === "number" ? json.balance : 0;
+      if (b >= 1) setStarted(true);
+      setBalance(b);
     } catch {
       setBalance(0);
     }
@@ -55,7 +62,9 @@ export function CreditGate({ mode }: { mode: DecoderModeConfig }) {
     );
   }
 
-  if (balance <= 0) {
+  // Paywall only before a working session starts. Once latched (started), we keep
+  // the upload view even at 0 balance so the last result stays on screen.
+  if (balance <= 0 && !started) {
     return (
       <div className="upload-card">
         <div className="paywall-head">
@@ -74,13 +83,25 @@ export function CreditGate({ mode }: { mode: DecoderModeConfig }) {
     );
   }
 
-  // Has credits → allow upload, cap in-flight files to the balance, refetch after each run.
+  // Working view. Balance may be 0 here (last credit just spent) — the results
+  // stay visible; uploads are capped to the balance so no further run is allowed
+  // until they buy more.
+  const empty = balance <= 0;
   return (
     <div>
       <div className="credit-badge-row">
-        <span className="credit-badge">{balance} credit{balance === 1 ? "" : "s"} left</span>
-        <button className="credit-buy-link" onClick={() => setShowPay(true)}>Buy more</button>
+        <span className={`credit-badge${empty ? " empty" : ""}`}>
+          {balance} credit{balance === 1 ? "" : "s"} left
+        </span>
+        <button className="credit-buy-link" onClick={() => setShowPay(true)}>
+          {empty ? "Buy credits" : "Buy more"}
+        </button>
       </div>
+      {empty && (
+        <p className="credit-empty-note">
+          You&apos;ve used all your credits — your latest analysis is below. Buy more to run another.
+        </p>
+      )}
       <DecoderUpload mode={mode} maxQueueable={balance} onExtracted={refresh} />
     </div>
   );
@@ -101,7 +122,14 @@ function PayFlow({
   const [step, setStep] = useState<"qr" | "done">("qr");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // Kept so the waiting screen can re-open WhatsApp WITHOUT logging another
+  // request (the request is already recorded — server-side dedup also guards it).
+  const [waUrl, setWaUrl] = useState<string | null>(null);
   const plan = getPlan(planId)!;
+
+  function openWhatsApp(url: string) {
+    window.open(url, "_blank", "noopener");
+  }
 
   async function paymentDone() {
     if (!signedIn) {
@@ -126,7 +154,9 @@ function PayFlow({
       }
       // Open WhatsApp: desktop → web.whatsapp.com; mobile → app via wa.me.
       const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-      window.open(isMobile ? json.whatsapp.waMeUrl : json.whatsapp.webUrl, "_blank", "noopener");
+      const url = isMobile ? json.whatsapp.waMeUrl : json.whatsapp.webUrl;
+      setWaUrl(url);
+      openWhatsApp(url);
       setStep("done");
     } catch {
       setError("Network error. Try again.");
@@ -138,19 +168,28 @@ function PayFlow({
     return (
       <div className="upload-card">
         <div className="paywall-head">
-          <span className="paywall-credits ok">Payment logged</span>
-          <p className="um-t">One last step</p>
+          <span className="paywall-credits ok">✓ Request received</span>
+          <p className="um-t">Almost done</p>
           <p className="um-s">
-            Send the pre-filled WhatsApp message and <strong>attach a screenshot of your
-            payment showing the Transaction ID</strong>. We&apos;ll verify and activate your
-            credits, usually within a few hours.
-          </p>
-          <p className="um-s" style={{ marginTop: 10 }}>
-            Didn&apos;t open? WhatsApp <strong>+91 70089 39228</strong> with your payment
-            screenshot.
+            Make sure to share the transaction screenshot. Then you are done.
           </p>
         </div>
-        <button className="pay-now-btn ghost" onClick={onActivated}>Done</button>
+
+        <div className="wait-panel">
+          <p className="wait-relax">
+            Sit back and relax while our team verifies the payment. Once done,
+            you&apos;ll be notified and your account will receive the credits.
+          </p>
+        </div>
+
+        {/* Retry is ONLY for the failure case: WhatsApp never opened / message not sent.
+            It re-opens the same chat and does NOT create a new request. */}
+        {waUrl && (
+          <button className="pay-now-btn ghost" onClick={() => openWhatsApp(waUrl)}>
+            Failed to send the WhatsApp message? Try Again
+          </button>
+        )}
+        <button className="wait-close" onClick={onActivated}>Close</button>
         <p className="paywall-disclaimer">{EDU_DISCLAIMER}</p>
       </div>
     );
