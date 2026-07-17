@@ -49,25 +49,52 @@ export async function POST(req: Request) {
     user?.emailAddresses?.[0]?.emailAddress ??
     "";
 
-  const { data, error } = await supabase
+  // Idempotent: clicking "Payment Done" more than once (e.g. while logging into
+  // WhatsApp) must not stack duplicate rows in the admin panel. Reuse the user's
+  // existing open request instead of creating a new one; if it's still awaiting a
+  // screenshot and the user re-selected a different plan, reflect that change.
+  const { data: existing, error: findErr } = await supabase
     .from("payment_requests")
-    .insert({
-      user_id: userId,
-      name,
-      email,
-      plan: plan.id,
-      credits_requested: plan.credits,
-      amount: plan.amount,
-      status: "PENDING_SCREENSHOT",
-    })
-    .select("id")
-    .single();
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    .select("id, status, plan")
+    .eq("user_id", userId)
+    .in("status", ["PENDING_SCREENSHOT", "SCREENSHOT_RECEIVED"])
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  if (findErr) return NextResponse.json({ error: findErr.message }, { status: 500 });
+
+  let id: string;
+  if (existing) {
+    id = existing.id;
+    if (existing.status === "PENDING_SCREENSHOT" && existing.plan !== plan.id) {
+      const { error: updErr } = await supabase
+        .from("payment_requests")
+        .update({ plan: plan.id, credits_requested: plan.credits, amount: plan.amount })
+        .eq("id", id);
+      if (updErr) return NextResponse.json({ error: updErr.message }, { status: 500 });
+    }
+  } else {
+    const { data, error } = await supabase
+      .from("payment_requests")
+      .insert({
+        user_id: userId,
+        name,
+        email,
+        plan: plan.id,
+        credits_requested: plan.credits,
+        amount: plan.amount,
+        status: "PENDING_SCREENSHOT",
+      })
+      .select("id")
+      .single();
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    id = data.id;
+  }
 
   const text = whatsappMessage(name, email);
   return NextResponse.json({
     ok: true,
-    id: data.id,
+    id,
     whatsapp: {
       number: WHATSAPP_NUMBER,
       text,
