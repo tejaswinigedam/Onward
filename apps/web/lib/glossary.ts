@@ -28,7 +28,7 @@ export const GLOSSARY: GlossaryEntry[] = [
   {
     key: "fixed",
     term: "Fixed pay",
-    short: "The guaranteed part of your pay that doesn't depend on performance.",
+    short: "The part of your pay you're guaranteed every month, no matter how the year goes.",
     long:
       "Fixed pay is the portion of your CTC you're guaranteed regardless of individual or company performance. It's the number to plan your life around — rent, EMIs, savings — because unlike variable pay it doesn't shrink in a bad year.",
     match: ["fixed", "guaranteed"],
