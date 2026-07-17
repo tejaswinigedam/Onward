@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { useEffect } from "react";
-import { BrandMark } from "./BrandMark";
-import { LandingAuthActions } from "./LandingAuthActions";
+import { SiteHeader } from "./SiteHeader";
+import { SiteFooter } from "./SiteFooter";
 
 /* ---- inline outline icons (match the design's stroke SVGs) ---- */
 const ArrowRight = () => (
@@ -97,13 +97,6 @@ const ShieldIcon = () => (
   </svg>
 );
 
-const Logo = () => (
-  <span className="logo">
-    <span className="mark"><BrandMark className="" /></span>
-    Onward
-  </span>
-);
-
 const YIELDS = [
   "Understand every salary component",
   "Compare offers side by side",
@@ -130,10 +123,6 @@ const FAQS = [
 
 export function LandingHero() {
   useEffect(() => {
-    const header = document.getElementById("lp-site-header");
-    const onScroll = () => header?.classList.toggle("scrolled", window.scrollY > 8);
-    window.addEventListener("scroll", onScroll, { passive: true });
-
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
@@ -150,7 +139,6 @@ export function LandingHero() {
     const t = setTimeout(() => document.getElementById("heroDoc")?.classList.add("reveal"), 600);
 
     return () => {
-      window.removeEventListener("scroll", onScroll);
       io.disconnect();
       clearTimeout(t);
     };
@@ -166,15 +154,7 @@ export function LandingHero() {
 
   return (
     <div className="onward-landing">
-      {/* HEADER */}
-      <header id="lp-site-header" className="lp-header">
-        <div className="nav">
-          <Link href="/"><Logo /></Link>
-          <div className="nav-actions">
-            <LandingAuthActions />
-          </div>
-        </div>
-      </header>
+      <SiteHeader />
 
       {/* HERO */}
       <section className="hero wrap">
@@ -341,19 +321,7 @@ export function LandingHero() {
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="lp-footer">
-        <div className="wrap foot-row">
-          <Link href="/"><Logo /></Link>
-          <div className="foot-links">
-            <a href="#decoder">Pay Decoder</a>
-            <a href="#learn">Learning</a>
-            <a href="#">Privacy</a>
-            <a href="#">Contact</a>
-          </div>
-          <span className="foot-mono">© 2026 Onward — Clarity, on every payslip</span>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
