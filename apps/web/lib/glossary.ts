@@ -20,7 +20,7 @@ export const GLOSSARY: GlossaryEntry[] = [
   {
     key: "ctc",
     term: "CTC (Cost to Company)",
-    short: "The total annual cost your employer bears for you — not what lands in your bank.",
+    short: "The full yearly cost of you to the company. It's not the money you actually take home.",
     long:
       "CTC is everything the company spends on you in a year: your salary plus employer contributions (PF, gratuity, insurance) and any variable/bonus pay. Because it includes money that never reaches your account — and pay that depends on performance — your actual take-home is always lower than CTC. Always look at fixed pay and monthly take-home, not just the CTC headline.",
     match: ["ctc", "cost to company", "annual ctc"],
@@ -36,7 +36,7 @@ export const GLOSSARY: GlossaryEntry[] = [
   {
     key: "variable",
     term: "Variable / at-risk pay",
-    short: "Pay that's conditional on performance — you might not get all of it.",
+    short: "A bonus you only get if targets are met. You might not receive the full amount.",
     long:
       "Variable pay (performance bonus, incentive, at-risk pay) is paid only if you and/or the company hit targets. It's quoted at 100% in the offer but often pays out at 60–90%. Ask about historical payout rates, and never assume the full amount when comparing offers.",
     match: ["variable", "at-risk", "at risk", "performance pay", "incentive"],
@@ -84,7 +84,7 @@ export const GLOSSARY: GlossaryEntry[] = [
   {
     key: "epf",
     term: "EPF (Employees' Provident Fund)",
-    short: "A retirement saving where 12% of Basic is deducted and matched by your employer.",
+    short: "A retirement savings pot. 12% of your Basic is set aside each month, and your employer adds the same.",
     long:
       "EPF is a mandatory retirement fund. 12% of your Basic is deducted from your salary each month, and your employer contributes a matching amount. It earns tax-free interest and is your money — you get it on retirement or job change. It lowers your in-hand today but is forced long-term saving.",
     match: ["epf", "pf", "provident fund"],
@@ -132,7 +132,7 @@ export const GLOSSARY: GlossaryEntry[] = [
   {
     key: "regime",
     term: "Tax regime (Old vs New)",
-    short: "Two ways to calculate income tax — pick whichever costs you less.",
+    short: "There are two ways to work out your income tax. Just pick the one that costs you less.",
     long:
       "India has two tax regimes. The OLD regime has higher rates but lets you claim deductions (80C, HRA, home loan). The NEW regime has lower rates but almost no deductions. Which is cheaper depends on how much you invest/claim — Onward computes both and flags the lower one for you.",
     match: ["regime", "new regime", "old regime"],

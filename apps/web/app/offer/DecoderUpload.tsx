@@ -6,6 +6,8 @@ import { OfferComparisonSummary } from "./OfferComparisonSummary";
 import { OfferReport } from "./OfferReport";
 import type { UploadedDoc } from "./OfferMultiUpload";
 import type { DecoderModeConfig } from "./decoder-modes";
+import { GlossaryProvider, GlossaryPanel } from "@/components/Glossary";
+import { DownloadPdfButton } from "@/components/DownloadPdfButton";
 
 const MAX_BYTES = 8 * 1024 * 1024; // mirror the route's 8 MB limit
 const CONCURRENCY = 2; // Gemini can take ~60s/file; keep a small pool
@@ -206,26 +208,40 @@ export function DecoderUpload({ mode }: { mode: DecoderModeConfig }) {
       {notice && <p className="opp-none" style={{ color: "var(--amber-d)" }}>{notice}</p>}
 
       {/* ---- Output ---- */}
-      {isCompare ? (
-        doneDocs.length >= 2 && (
-          <div style={{ marginTop: 22 }}>
-            <OfferComparisonSummary docs={doneDocs} />
-            <OfferComparator key={comparatorKey} seedDrafts={seedDrafts} allowAddRemove={false} />
-          </div>
-        )
-      ) : (
-        doneDocs.map((d, i) => (
-          <div key={d.id} style={{ marginTop: i === 0 ? 8 : 22 }}>
-            {slotLabel(i) && <p className="decoder-report-label">{slotLabel(i)}</p>}
-            <OfferReport a={d.analysis!} />
-          </div>
-        ))
-      )}
+      <GlossaryProvider>
+        {isCompare ? (
+          doneDocs.length >= 2 && (
+            <div style={{ marginTop: 22 }}>
+              <div id="cmp-report">
+                <OfferComparisonSummary docs={doneDocs} />
+                <OfferComparator key={comparatorKey} seedDrafts={seedDrafts} allowAddRemove={false} />
+              </div>
+              <DownloadPdfButton targetId="cmp-report" fileName="Onward — Offer comparison" evLabel="compare" />
+            </div>
+          )
+        ) : (
+          doneDocs.map((d, i) => {
+            const reportId = `report-${d.id}`;
+            const name = slotLabel(i) ?? d.fileName.replace(/\.pdf$/i, "");
+            return (
+              <div key={d.id} style={{ marginTop: i === 0 ? 8 : 22 }}>
+                {slotLabel(i) && <p className="decoder-report-label">{slotLabel(i)}</p>}
+                <div id={reportId}>
+                  <OfferReport a={d.analysis!} />
+                </div>
+                <DownloadPdfButton targetId={reportId} fileName={`Onward — ${name}`} evLabel={mode.id} />
+              </div>
+            );
+          })
+        )}
 
-      {/* Nudge to complete a multi flow. */}
-      {mode.multi && !busy && doneDocs.length > 0 && doneDocs.length < mode.minFiles && (
-        <p className="opp-none">Add {mode.minFiles - doneDocs.length} more to {isCompare ? "compare" : "see both"}.</p>
-      )}
+        {/* Nudge to complete a multi flow. */}
+        {mode.multi && !busy && doneDocs.length > 0 && doneDocs.length < mode.minFiles && (
+          <p className="opp-none">Add {mode.minFiles - doneDocs.length} more to {isCompare ? "compare" : "see both"}.</p>
+        )}
+
+        <GlossaryPanel />
+      </GlossaryProvider>
     </div>
   );
 }

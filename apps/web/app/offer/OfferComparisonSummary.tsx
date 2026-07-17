@@ -1,4 +1,5 @@
 import { compareOffers, type OfferInput } from "@onward/engine";
+import { Term } from "@/components/Glossary";
 import type { UploadedDoc } from "./OfferMultiUpload";
 
 const inr = (n: number) => "₹ " + Math.round(n).toLocaleString("en-IN");
@@ -78,7 +79,7 @@ export function OfferComparisonSummary({ docs }: { docs: UploadedDoc[] }) {
               const bi = bestIndex(r);
               return (
                 <tr key={r.key}>
-                  <td className="cmp-metric">{r.label}</td>
+                  <td className="cmp-metric"><Term>{r.label}</Term></td>
                   {r.values.map((v, i) => (
                     <td key={i} className={i === bi ? "best" : ""}>{r.fmt(v)}</td>
                   ))}
