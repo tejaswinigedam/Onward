@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect } from "react";
 import { SiteHeader } from "./SiteHeader";
 import { SiteFooter } from "./SiteFooter";
+import { PLANS, pricePerCredit, FREE_FEATURES, PAID_FEATURES, OFFER_LABEL } from "@/lib/credits-config";
 
 /* ---- inline outline icons (match the design's stroke SVGs) ---- */
 const ArrowRight = () => (
@@ -250,6 +251,48 @@ export function LandingHero() {
             </p>
             <Link href="/offer" className="btn btn-accent btn-lg" data-ev="cta_click" data-ev-label="decoder_try">
               Try Pay Decoder <ArrowRight />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* PRICING */}
+      <section className="pricing-panel" id="pricing">
+        <div className="wrap">
+          <div className="sec-head" data-reveal>
+            <span className="eyebrow">Pricing</span>
+            <h2>Free to see. Pay to go deeper</h2>
+            <p className="sec-sub">
+              Your full salary breakdown is free for everyone. Spend a credit only when you want the
+              analysis — what to fix, what to ask, and where the money really goes
+            </p>
+          </div>
+
+          <div className="lp-split" data-reveal>
+            <div className="lp-col">
+              <span className="lp-tag free"><Check /> Free for everyone</span>
+              <ul>{FREE_FEATURES.map((f) => <li key={f}>{f}</li>)}</ul>
+            </div>
+            <div className="lp-col paid">
+              <span className="lp-tag paid">1 credit unlocks</span>
+              <ul>{PAID_FEATURES.map((f) => <li key={f}>{f}</li>)}</ul>
+            </div>
+          </div>
+
+          <div className="lp-plans" data-reveal>
+            <span className="lp-offer">{OFFER_LABEL}</span>
+            <div className="lp-plan-row">
+              {PLANS.map((p) => (
+                <div className={`lp-plan${p.badge ? " featured" : ""}`} key={p.id}>
+                  {p.badge && <span className="lp-plan-badge">{p.badge}</span>}
+                  <span className="lp-plan-name">{p.name}</span>
+                  <span className="lp-plan-price">₹{p.amount}</span>
+                  <span className="lp-plan-sub">{p.credits} credit{p.credits > 1 ? "s" : ""} · {pricePerCredit(p)}/credit</span>
+                </div>
+              ))}
+            </div>
+            <Link href="/pricing" className="btn btn-accent btn-lg" data-ev="cta_click" data-ev-label="see_pricing">
+              See full pricing <ArrowRight />
             </Link>
           </div>
         </div>

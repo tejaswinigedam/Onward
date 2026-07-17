@@ -3,7 +3,7 @@ import { useMemo, useRef, useState } from "react";
 import type { OfferAnalysis } from "@/lib/offer-analysis";
 import { OfferComparator, type Draft } from "./OfferComparator";
 import { OfferComparisonSummary } from "./OfferComparisonSummary";
-import { OfferReport, LockPanel } from "./OfferReport";
+import { OfferReport, LockPanel, type LockProps } from "./OfferReport";
 import type { UploadedDoc } from "./OfferMultiUpload";
 import type { DecoderModeConfig } from "./decoder-modes";
 import { GlossaryProvider, GlossaryPanel } from "@/components/Glossary";
@@ -41,11 +41,10 @@ export function DecoderUpload({
   const fileRef = useRef<HTMLInputElement>(null);
   const [docs, setDocs] = useState<UploadedDoc[]>([]);
   const [notice, setNotice] = useState<string | null>(null);
-  // Compare mode has no per-doc report to lock — its verdict is the analysis, so
-  // it's gated as a whole: 1 credit unlocks the side-by-side comparison.
-  const [compareUnlocked, setCompareUnlocked] = useState(false);
-  const [compareUnlocking, setCompareUnlocking] = useState(false);
-  const [compareUnlockError, setCompareUnlockError] = useState<string | null>(null);
+  // One analysis run = 1 credit, however many documents. Unlock state is per-run
+  // (not per-doc): unlocking releases the analysis for every uploaded document.
+  const [unlocking, setUnlocking] = useState(false);
+  const [unlockError, setUnlockError] = useState<string | null>(null);
 
   // Non-render state for the extraction pool.
   const filesRef = useRef<Map<string, File>>(new Map());
@@ -84,50 +83,21 @@ export function DecoderUpload({
     }
   }
 
-  /** Spend 1 credit to unlock the analysis half of a decoded doc. */
-  async function unlock(id: string) {
-    const doc = docs.find((d) => d.id === id);
-    if (!doc?.analysisId) return;
-    if (!signedIn) {
-      const back = typeof window !== "undefined" ? window.location.pathname + window.location.search : "/offer";
-      window.location.href = `/sign-in?redirect_url=${encodeURIComponent(back)}`;
-      return;
-    }
-    updateDoc(id, { unlocking: true, unlockError: undefined });
-    try {
-      const res = await fetch("/api/offer/unlock", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ analysisId: doc.analysisId }),
-      });
-      const json = await res.json();
-      if (res.status === 402) {
-        updateDoc(id, { unlocking: false });
-        onNeedPayment?.(); // no credits → open the QR pay flow
-        return;
-      }
-      if (!res.ok) {
-        updateDoc(id, { unlocking: false, unlockError: json.error ?? "Couldn't unlock. Try again." });
-        return;
-      }
-      updateDoc(id, { unlocking: false, locked: false, analysis: json.analysis as OfferAnalysis });
-      onUnlocked?.();
-    } catch {
-      updateDoc(id, { unlocking: false, unlockError: "Network error. Try again." });
-    }
-  }
-
-  /** Spend 1 credit to unlock the whole two-offer comparison (all docs at once). */
-  async function unlockCompare() {
-    const ids = docs.filter((d) => d.status === "done" && d.analysisId).map((d) => d.analysisId!);
+  /**
+   * Spend 1 credit to unlock the analysis for the WHOLE run — every uploaded
+   * document at once. One analysis in one go costs one credit, regardless of how
+   * many documents are involved.
+   */
+  async function unlockRun() {
+    const ids = docs.filter((d) => d.status === "done" && d.analysisId && d.locked).map((d) => d.analysisId!);
     if (ids.length === 0) return;
     if (!signedIn) {
       const back = typeof window !== "undefined" ? window.location.pathname + window.location.search : "/offer";
       window.location.href = `/sign-in?redirect_url=${encodeURIComponent(back)}`;
       return;
     }
-    setCompareUnlocking(true);
-    setCompareUnlockError(null);
+    setUnlocking(true);
+    setUnlockError(null);
     try {
       const res = await fetch("/api/offer/unlock", {
         method: "POST",
@@ -136,16 +106,16 @@ export function DecoderUpload({
       });
       const json = await res.json();
       if (res.status === 402) {
-        setCompareUnlocking(false);
-        onNeedPayment?.();
+        setUnlocking(false);
+        onNeedPayment?.(); // no credits → open the QR pay flow
         return;
       }
       if (!res.ok) {
-        setCompareUnlocking(false);
-        setCompareUnlockError(json.error ?? "Couldn't unlock. Try again.");
+        setUnlocking(false);
+        setUnlockError(json.error ?? "Couldn't unlock. Try again.");
         return;
       }
-      // Swap the free subsets for the full analyses so the comparison reads real data.
+      // Swap each free subset for the full analysis so locked sections/comparison read real data.
       const byId = new Map<string, OfferAnalysis>(
         (json.analyses ?? []).map((a: { id: string; analysis: OfferAnalysis }) => [a.id, a.analysis]),
       );
@@ -154,14 +124,39 @@ export function DecoderUpload({
           ? { ...d, analysis: byId.get(d.analysisId), locked: false }
           : d)),
       );
-      setCompareUnlocking(false);
-      setCompareUnlocked(true);
+      setUnlocking(false);
       onUnlocked?.();
     } catch {
-      setCompareUnlocking(false);
-      setCompareUnlockError("Network error. Try again.");
+      setUnlocking(false);
+      setUnlockError("Network error. Try again.");
     }
   }
+
+  const unlockHintMulti = () =>
+    !signedIn
+      ? "1 credit unlocks the full analysis for all your documents"
+      : credits >= 1
+        ? `1 credit unlocks all your documents · you have ${credits}`
+        : "1 credit unlocks all your documents — tap to buy";
+
+  /** Shared unlock CTA props for the run (1 credit unlocks everything). */
+  const runLockProps = (extra?: Partial<LockProps>): LockProps => ({
+    locked: true,
+    unlockBusy: unlocking,
+    unlockError,
+    onUnlock: unlockRun,
+    unlockLabel: !signedIn
+      ? "Sign in to unlock"
+      : credits >= 1
+        ? "Unlock full analysis — 1 credit"
+        : "Unlock full analysis",
+    unlockHint: !signedIn
+      ? "1 credit unlocks the tax regime, savings, clauses & actions"
+      : credits >= 1
+        ? `You have ${credits} credit${credits === 1 ? "" : "s"}`
+        : "You'll need 1 credit — tap to buy",
+    ...extra,
+  });
 
   function drain() {
     while (runningRef.current < CONCURRENCY && queueRef.current.length > 0) {
@@ -319,11 +314,10 @@ export function DecoderUpload({
       <GlossaryProvider>
         {isCompare ? (
           doneDocs.length >= 2 && (
-            (doneDocs.some((d) => d.locked) && !compareUnlocked) ? (
+            doneDocs.some((d) => d.locked) ? (
               <div style={{ marginTop: 22 }}>
                 <LockPanel
-                  lock={{
-                    locked: true,
+                  lock={runLockProps({
                     title: "Unlock the offer comparison",
                     items: [
                       "Which offer pays more, guaranteed in hand",
@@ -331,20 +325,8 @@ export function DecoderUpload({
                       "Where the fine print differs",
                       "The tax-regime and savings angle on each",
                     ],
-                    unlockBusy: compareUnlocking,
-                    unlockError: compareUnlockError,
-                    onUnlock: unlockCompare,
-                    unlockLabel: !signedIn
-                      ? "Sign in to unlock"
-                      : credits >= 1
-                        ? "Unlock comparison — 1 credit"
-                        : "Unlock comparison",
-                    unlockHint: !signedIn
-                      ? "1 credit unlocks the full side-by-side comparison"
-                      : credits >= 1
-                        ? `You have ${credits} credit${credits === 1 ? "" : "s"}`
-                        : "You'll need 1 credit — tap to buy",
-                  }}
+                    unlockLabel: !signedIn ? "Sign in to unlock" : credits >= 1 ? "Unlock comparison — 1 credit" : "Unlock comparison",
+                  })}
                 />
               </div>
             ) : (
@@ -361,23 +343,10 @@ export function DecoderUpload({
           doneDocs.map((d, i) => {
             const reportId = `report-${d.id}`;
             const name = slotLabel(i) ?? d.fileName.replace(/\.pdf$/i, "");
-            const lock = d.locked
-              ? {
-                  locked: true,
-                  unlockBusy: d.unlocking,
-                  unlockError: d.unlockError ?? null,
-                  onUnlock: () => unlock(d.id),
-                  unlockLabel: !signedIn
-                    ? "Sign in to unlock"
-                    : credits >= 1
-                      ? "Unlock full analysis — 1 credit"
-                      : "Unlock full analysis",
-                  unlockHint: !signedIn
-                    ? "1 credit unlocks the tax regime, savings, clauses & actions"
-                    : credits >= 1
-                      ? `You have ${credits} credit${credits === 1 ? "" : "s"}`
-                      : "You'll need 1 credit — tap to buy",
-                }
+            // 1 credit unlocks the whole run, so every locked report shares the
+            // same unlock (clicking either reveals all your documents).
+            const lock: LockProps | undefined = d.locked
+              ? runLockProps(mode.multi ? { unlockHint: unlockHintMulti() } : undefined)
               : undefined;
             return (
               <div key={d.id} style={{ marginTop: i === 0 ? 8 : 22 }}>

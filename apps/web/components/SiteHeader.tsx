@@ -32,6 +32,7 @@ export function SiteHeader() {
           </span>
         </Link>
         <div className="nav-actions">
+          <Link href="/pricing" className="nav-link">Pricing</Link>
           <LandingAuthActions />
         </div>
       </div>

@@ -898,3 +898,64 @@
 .onward-landing .ico,
 .onward-landing .tick,
 .onward-landing .step-node{background:var(--accent-soft) !important;border-color:var(--accent-soft) !important;color:var(--accent) !important;}
+
+/* ===== Nav link (Pricing) ===== */
+.onward-landing .nav-link{font-weight:600;font-size:14.5px;color:var(--ink-70);margin-right:6px;transition:color .15s;}
+.onward-landing .nav-link:hover{color:var(--accent);}
+
+/* ===== Pricing: landing section ===== */
+.onward-landing .pricing-panel{padding:70px 0;}
+.onward-landing .lp-split{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:860px;margin:0 auto 34px;}
+@media(max-width:720px){.onward-landing .lp-split{grid-template-columns:1fr;}}
+.onward-landing .lp-col{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-card);padding:22px 24px;box-shadow:var(--shadow);}
+.onward-landing .lp-col.paid{background:var(--accent-soft);border-color:rgba(var(--accent-rgb),0.25);}
+.onward-landing .lp-tag{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:12px;letter-spacing:.4px;text-transform:uppercase;padding:6px 12px;border-radius:999px;margin-bottom:14px;}
+.onward-landing .lp-tag svg{width:13px;height:13px;}
+.onward-landing .lp-tag.free{color:#0a7a52;background:#D6F3E6;}
+.onward-landing .lp-tag.paid{color:var(--accent);background:#fff;}
+.onward-landing .lp-col ul{list-style:none;display:flex;flex-direction:column;gap:10px;}
+.onward-landing .lp-col li{position:relative;padding-left:20px;font-size:14.5px;line-height:1.45;color:var(--ink-70);}
+.onward-landing .lp-col li::before{content:"";position:absolute;left:4px;top:8px;width:6px;height:6px;border-radius:50%;background:var(--accent);}
+.onward-landing .lp-plans{text-align:center;}
+.onward-landing .lp-offer{display:inline-block;font-weight:700;font-size:12px;letter-spacing:.5px;text-transform:uppercase;color:var(--logo-orange);margin-bottom:16px;}
+.onward-landing .lp-plan-row{display:flex;flex-wrap:wrap;justify-content:center;gap:14px;margin-bottom:26px;}
+.onward-landing .lp-plan{position:relative;min-width:170px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius-card);padding:20px 22px;box-shadow:var(--shadow);}
+.onward-landing .lp-plan.featured{border-color:var(--accent);box-shadow:0 0 0 3px rgba(var(--accent-rgb),0.14),var(--shadow);}
+.onward-landing .lp-plan-badge{position:absolute;top:-10px;left:50%;transform:translateX(-50%);font-weight:800;font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:#fff;background:var(--logo-orange);padding:3px 11px;border-radius:999px;}
+.onward-landing .lp-plan-name{display:block;font-weight:700;font-size:13px;color:var(--ink-50);text-transform:uppercase;letter-spacing:.4px;}
+.onward-landing .lp-plan-price{display:block;font-family:var(--font-fraunces),serif;font-size:34px;font-weight:600;color:var(--accent);line-height:1.1;margin:2px 0;}
+.onward-landing .lp-plan-sub{display:block;font-size:13px;color:var(--ink-70);}
+
+/* ===== Pricing: dedicated page ===== */
+.onward-landing .pricing-hero{padding:56px 0 8px;text-align:center;}
+.onward-landing .pricing-split{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:880px;margin:24px auto 0;}
+@media(max-width:720px){.onward-landing .pricing-split{grid-template-columns:1fr;}}
+.onward-landing .pcol{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-card);padding:24px 26px;box-shadow:var(--shadow);}
+.onward-landing .pcol-paid{background:var(--accent-soft);border-color:rgba(var(--accent-rgb),0.25);}
+.onward-landing .pcol-head{margin-bottom:16px;}
+.onward-landing .ptag{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:12.5px;letter-spacing:.4px;text-transform:uppercase;padding:7px 13px;border-radius:999px;}
+.onward-landing .ptag svg{width:14px;height:14px;}
+.onward-landing .ptag.free{color:#0a7a52;background:#D6F3E6;}
+.onward-landing .ptag.paid{color:var(--accent);background:#fff;}
+.onward-landing .pcol ul{list-style:none;display:flex;flex-direction:column;gap:12px;}
+.onward-landing .pcol li{display:flex;align-items:flex-start;gap:10px;font-size:15px;line-height:1.45;color:var(--ink-70);}
+.onward-landing .pi{flex:none;width:18px;height:18px;margin-top:1px;}
+.onward-landing .pi svg{width:18px;height:18px;}
+.onward-landing .pi.free{color:#0a7a52;}
+.onward-landing .pi.paid{color:var(--accent);}
+.onward-landing .credit-rule{max-width:640px;margin:20px auto 0;text-align:center;font-size:14.5px;color:var(--ink-70);}
+.onward-landing .plans-section{text-align:center;padding:40px 0 10px;}
+.onward-landing .plans-offer{display:inline-block;font-weight:700;font-size:12.5px;letter-spacing:.5px;text-transform:uppercase;color:var(--logo-orange);margin-bottom:18px;}
+.onward-landing .plans-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:16px;margin-bottom:20px;}
+.onward-landing .plan-tile{position:relative;display:flex;flex-direction:column;align-items:center;min-width:200px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius-card);padding:26px 24px 22px;box-shadow:var(--shadow);}
+.onward-landing .plan-tile.featured{border-color:var(--accent);box-shadow:0 0 0 3px rgba(var(--accent-rgb),0.14),var(--shadow);}
+.onward-landing .plan-tile-badge{position:absolute;top:-11px;left:50%;transform:translateX(-50%);font-weight:800;font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:#fff;background:var(--logo-orange);padding:4px 12px;border-radius:999px;}
+.onward-landing .plan-tile-name{font-weight:700;font-size:13px;color:var(--ink-50);text-transform:uppercase;letter-spacing:.4px;}
+.onward-landing .plan-tile-price{font-family:var(--font-fraunces),serif;font-size:40px;font-weight:600;color:var(--accent);line-height:1.1;margin:2px 0;}
+.onward-landing .plan-tile-credits{font-weight:700;font-size:15px;color:var(--ink);}
+.onward-landing .plan-tile-per{font-size:12.5px;color:var(--ink-50);margin-bottom:16px;}
+.onward-landing .plan-tile-cta{font-size:14px;padding:11px 22px;}
+.onward-landing .plans-foot{font-size:13.5px;color:var(--ink-50);margin-top:6px;}
+.onward-landing .pricing-cta{text-align:center;padding:56px 0 72px;}
+.onward-landing .pricing-cta h2{margin-bottom:8px;}
+.onward-landing .pricing-disclaimer{max-width:520px;margin:22px auto 0;font-size:12px;line-height:1.5;color:var(--ink-50);}

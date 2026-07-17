@@ -5,8 +5,37 @@ import { DECODER_MODES, getDecoderMode, type DecoderModeConfig, type DecoderMode
 import { DecoderModeIcon } from "./decoder-icons";
 import { DecoderUpload } from "./DecoderUpload";
 import { CreditGate } from "./CreditGate";
+import { FREE_FEATURES, PAID_FEATURES } from "@/lib/credits-config";
 
 const clerkEnabled = Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);
+
+const LockGlyph = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+    <rect x="4" y="11" width="16" height="9" rx="2" />
+    <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+  </svg>
+);
+
+/** Shows exactly what's free vs behind the 1-credit lock for the chosen mode. */
+function FreePaidStrip({ mode }: { mode: DecoderModeConfig }) {
+  const isCompare = mode.id === "two-offers";
+  const free = isCompare ? ["We decode every offer you upload"] : FREE_FEATURES;
+  const paid = isCompare
+    ? ["Which offer pays more, guaranteed in hand", "Side-by-side comparison + where the fine print differs", "Tax regime & savings on each"]
+    : PAID_FEATURES;
+  return (
+    <div className="fp-strip">
+      <div className="fp-col fp-free">
+        <div className="fp-head"><span className="fp-tag free">Free</span><span className="fp-sub">No account needed</span></div>
+        <ul>{free.map((f) => <li key={f}><span className="fp-tick"><Check /></span>{f}</li>)}</ul>
+      </div>
+      <div className="fp-col fp-paid">
+        <div className="fp-head"><span className="fp-tag paid"><LockGlyph /> 1 credit</span><span className="fp-sub">Unlocks the analysis</span></div>
+        <ul>{paid.map((f) => <li key={f}><span className="fp-lock"><LockGlyph /></span>{f}</li>)}</ul>
+      </div>
+    </div>
+  );
+}
 
 const ArrowRight = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
@@ -74,6 +103,8 @@ function ModeFlow({ mode, onBack }: { mode: DecoderModeConfig; onBack: () => voi
           <li key={w}><span className="dm-tick"><Check /></span>{w}</li>
         ))}
       </ul>
+
+      <FreePaidStrip mode={mode} />
 
       <DecoderGate mode={mode} />
     </div>

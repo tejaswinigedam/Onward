@@ -17,6 +17,7 @@ export function SiteFooter() {
         </Link>
         <div className="foot-links">
           <a href="/#decoder">Pay Decoder</a>
+          <a href="/pricing">Pricing</a>
           <a href="/#learn">Learning</a>
           <a href="#">Privacy</a>
           <a href="#">Contact</a>

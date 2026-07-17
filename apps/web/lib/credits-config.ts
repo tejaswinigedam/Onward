@@ -41,6 +41,23 @@ export function pricePerCredit(plan: Plan): string {
   return `₹${Math.round(v * 10) / 10}`;
 }
 
+// ── Free vs paid (single source of truth for pricing/landing/decoder copy) ──
+/** What every visitor gets for free — the salary/component breakdown. */
+export const FREE_FEATURES = [
+  "Full salary & component breakdown — base, HRA, variable, PF",
+  "Gross, deductions & your real monthly take-home",
+  "Equity / ESOP surfaced separately",
+];
+/** What 1 credit unlocks — the analysis. */
+export const PAID_FEATURES = [
+  "Which tax regime is cheaper — old vs new",
+  "Money you could save — HRA, 80C & more",
+  "Clauses & red flags, in plain English",
+  "What to do next + what to confirm with HR",
+];
+/** How credits map to work — used on the pricing page. */
+export const CREDIT_RULE = "1 credit unlocks the full analysis for one run — however many documents you upload together.";
+
 // ── Copy (config-driven, changes post-beta) ────────────────────────────────
 export const OFFER_LABEL = "Early bird discounted price";
 export const CREDITS_FOOTER = "Want more credits at a discounted price? Contact us.";
