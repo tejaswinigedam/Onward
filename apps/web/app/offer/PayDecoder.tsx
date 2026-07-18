@@ -1,6 +1,8 @@
 "use client";
 import { useState } from "react";
-import { useSearchParams } from "next/navigation";
+import Link from "next/link";
+import { usePathname, useSearchParams } from "next/navigation";
+import { useAuth } from "@clerk/nextjs";
 import { DECODER_MODES, getDecoderMode, type DecoderModeConfig, type DecoderModeId } from "./decoder-modes";
 import { DecoderModeIcon } from "./decoder-icons";
 import { DecoderUpload } from "./DecoderUpload";
@@ -80,6 +82,12 @@ function ModePicker({ onPick }: { onPick: (id: DecoderModeId) => void }) {
   );
 }
 
+/**
+ * Once a mode is picked, nothing about that mode — not even the free/paid
+ * breakdown — renders for a signed-out visitor. They see only the back
+ * button and a sign-in prompt; the mode header, "what you get" list, and
+ * upload UI only appear once they're authenticated.
+ */
 function ModeFlow({ mode, onBack }: { mode: DecoderModeConfig; onBack: () => void }) {
   return (
     <div className="decoder-flow">
@@ -91,6 +99,26 @@ function ModeFlow({ mode, onBack }: { mode: DecoderModeConfig; onBack: () => voi
         Choose a different document
       </button>
 
+      <ModeFlowGate mode={mode} />
+    </div>
+  );
+}
+
+/** Gates the whole mode flow (not just the upload) behind sign-in. */
+function ModeFlowGate({ mode }: { mode: DecoderModeConfig }) {
+  return clerkEnabled ? <AuthedModeFlow mode={mode} /> : <ModeFlowBody mode={mode} />;
+}
+
+function AuthedModeFlow({ mode }: { mode: DecoderModeConfig }) {
+  const { isLoaded, isSignedIn } = useAuth();
+  if (!isLoaded) return null;
+  if (!isSignedIn) return <SignInGate />;
+  return <ModeFlowBody mode={mode} />;
+}
+
+function ModeFlowBody({ mode }: { mode: DecoderModeConfig }) {
+  return (
+    <>
       <div className="decoder-flow-head">
         <span className="dm-icon"><DecoderModeIcon id={mode.id} /></span>
         <div>
@@ -106,15 +134,38 @@ function ModeFlow({ mode, onBack }: { mode: DecoderModeConfig; onBack: () => voi
 
       <FreePaidStrip mode={mode} />
 
-      <DecoderGate mode={mode} />
-    </div>
+      <CreditGate mode={mode} />
+    </>
   );
 }
 
-/**
- * Credit-gated when Clerk is configured (browsing open, analysis costs credits;
- * see {@link CreditGate}). Local dev without Clerk keys decodes freely.
- */
-function DecoderGate({ mode }: { mode: DecoderModeConfig }) {
-  return clerkEnabled ? <CreditGate mode={mode} /> : <DecoderUpload mode={mode} />;
+/** Sign-in prompt shown in place of the entire mode flow for anonymous visitors. */
+function SignInGate() {
+  const pathname = usePathname();
+  const sp = useSearchParams();
+  const qs = sp.toString();
+  const backUrl = qs ? `${pathname}?${qs}` : pathname;
+  const redirect = encodeURIComponent(backUrl);
+
+  return (
+    <div className="lock-card">
+      <div className="lock-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" width="18" height="18">
+          <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+          <polyline points="10 17 15 12 10 7" />
+          <line x1="15" y1="12" x2="3" y2="12" />
+        </svg>
+      </div>
+      <p className="lock-title">Sign in to continue</p>
+      <p className="lock-hint" style={{ marginTop: 0 }}>
+        Create a free account (or sign in) to upload your document and see your breakdown.
+      </p>
+      <Link href={`/sign-in?redirect_url=${redirect}`} className="lock-btn" data-ev="decoder_gate_signin">
+        Sign in to continue
+      </Link>
+      <p className="lock-hint">
+        New here? <Link href={`/sign-up?redirect_url=${redirect}`}>Create an account</Link>
+      </p>
+    </div>
+  );
 }

@@ -56,7 +56,7 @@ function DecoderShowcase() {
  * landing page too.
  *
  * Order: name + credits, then (if any) a one-line saved-analyses summary, then
- * the Pay Decoder, then the learning teaser, then buy-credits last.
+ * the Pay Decoder, the learning teaser, buy-credits, and refer-a-friend last.
  */
 export function UserDashboard({
   name,
@@ -85,14 +85,13 @@ export function UserDashboard({
         </section>
       )}
 
-      <section className="acct-sec"><ReferFriendSection /></section>
-
       <DecoderShowcase />
 
       <section className="acct-sec"><LearningTeaser /></section>
 
-      {/* Credits last — the decoder is what they came for. */}
       <BuyCreditsPanel compact={!empty} />
+
+      <section className="acct-sec"><ReferFriendSection /></section>
     </>
   );
 }
