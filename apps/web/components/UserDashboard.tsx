@@ -3,6 +3,7 @@ import { ReferFriend } from "./ReferFriend";
 import { LearningTeaser } from "./LearningTeaser";
 import { BuyCreditsPanel } from "./BuyCreditsPanel";
 import { SavedAnalyses } from "@/app/account/SavedAnalyses";
+import { DECODER_MODES } from "@/app/offer/decoder-modes";
 
 const ArrowRight = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
@@ -10,18 +11,44 @@ const ArrowRight = () => (
   </svg>
 );
 
-/** "Start your analysis" — the decoder entry point, with a line about what it does. */
-function StartAnalysis() {
+/**
+ * The main event on the dashboard: a large, properly explained Pay Decoder
+ * section with every flow one click away. This leads the page — credits and
+ * buying sit further down.
+ */
+function DecoderShowcase() {
   return (
-    <section className="acct-sec dash-start">
-      <h2 className="acct-h2">Start your analysis</h2>
-      <p className="acct-lead">
-        Upload an offer letter or payslip and we&apos;ll decode every line — your full salary
-        and component breakdown, free. Compare two offers, or check an offer against a payslip.
+    <section className="dash-hero">
+      <span className="dash-eyebrow">Pay Decoder</span>
+      <h2 className="dash-hero-h">Start your analysis</h2>
+      <p className="dash-hero-sub">
+        Upload an offer letter or a payslip and Onward reads it like a friend who works in
+        finance — every component, every deduction, and what actually lands in your account.
+        Your full salary breakdown is <strong>free</strong>; one credit unlocks the deeper
+        analysis.
       </p>
-      <Link href="/offer" className="btn btn-accent btn-lg" data-ev="dash_decoder">
-        Explore Decoder <ArrowRight />
-      </Link>
+
+      <div className="dash-modes">
+        {DECODER_MODES.map((m) => (
+          <Link key={m.id} href={`/offer?mode=${m.id}`} className="dash-mode" data-ev="dash_mode" data-ev-label={m.id}>
+            <span className="dash-mode-chip">{m.multi ? `${m.minFiles}+ documents` : "Single document"}</span>
+            <span className="dash-mode-title">{m.title}</span>
+            <span className="dash-mode-tag">{m.tagline}</span>
+            <span className="dash-mode-go">Start <ArrowRight /></span>
+          </Link>
+        ))}
+      </div>
+
+      <div className="dash-hero-foot">
+        <Link href="/offer" className="btn btn-accent btn-lg" data-ev="dash_decoder">
+          Explore Decoder <ArrowRight />
+        </Link>
+        <span className="dash-free-note">
+          <span className="dfn-free">Free — your full salary breakdown</span>
+          <span className="dfn-dot">•</span>
+          <span className="dfn-paid">1 credit — the analysis</span>
+        </span>
+      </div>
     </section>
   );
 }
@@ -30,8 +57,8 @@ function StartAnalysis() {
  * The signed-in user's dashboard. Shown on /account and, once signed in, on the
  * landing page too.
  *
- * - 0 credits  → name · 0 credits · buy credits (pricing plans) · start analysis · learning
- * - has credits → name · credits · saved analyses · start analysis · learning · buy more
+ * The Pay Decoder leads; credits and the buy panel sit below it, so signing in
+ * opens onto the product rather than a paywall.
  */
 export function UserDashboard({
   name,
@@ -55,25 +82,19 @@ export function UserDashboard({
         <ReferFriend />
       </div>
 
-      {empty ? (
-        <>
-          <BuyCreditsPanel />
-          <StartAnalysis />
-          <section className="acct-sec"><LearningTeaser /></section>
-        </>
-      ) : (
-        <>
-          {hasSaved && (
-            <section className="acct-sec">
-              <h2 className="acct-h2">Your saved analyses</h2>
-              <SavedAnalyses />
-            </section>
-          )}
-          <StartAnalysis />
-          <section className="acct-sec"><LearningTeaser /></section>
-          <BuyCreditsPanel compact />
-        </>
+      <DecoderShowcase />
+
+      {hasSaved && (
+        <section className="acct-sec">
+          <h2 className="acct-h2">Your saved analyses</h2>
+          <SavedAnalyses />
+        </section>
       )}
+
+      <section className="acct-sec"><LearningTeaser /></section>
+
+      {/* Credits last — the decoder is what they came for. */}
+      <BuyCreditsPanel compact={!empty} />
     </>
   );
 }
