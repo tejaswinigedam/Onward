@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { getServiceClient } from "@/lib/supabase";
 import { isAdmin } from "@/lib/credits";
+import { lookupPeople } from "@/lib/people";
 
 const clerkEnabled = Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);
 
@@ -35,5 +36,42 @@ export async function GET(req: Request) {
 
   const { data, error } = await query;
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json({ items: data });
+  const rows = data ?? [];
+
+  // Revenue: always the full verified total, independent of the current filter.
+  const { data: verified } = await supabase
+    .from("payment_requests")
+    .select("amount, credits_requested")
+    .eq("status", "VERIFIED");
+  const revenue = {
+    total: (verified ?? []).reduce((sum, v) => sum + (v.amount ?? 0), 0),
+    payments: verified?.length ?? 0,
+    credits: (verified ?? []).reduce((sum, v) => sum + (v.credits_requested ?? 0), 0),
+  };
+
+  // Was this payer referred, and by whom?
+  const payerIds = rows.map((r) => r.user_id);
+  const { data: refs } = payerIds.length
+    ? await supabase
+        .from("referral_signups")
+        .select("referred_id, referrer_id")
+        .in("referred_id", payerIds)
+    : { data: [] as { referred_id: string; referrer_id: string }[] };
+
+  const referrerOf = new Map((refs ?? []).map((r) => [r.referred_id, r.referrer_id]));
+  const people = await lookupPeople([...referrerOf.values()]);
+
+  const items = rows.map((r) => {
+    const referrerId = referrerOf.get(r.user_id);
+    const p = referrerId ? people[referrerId] : undefined;
+    return {
+      ...r,
+      referred: Boolean(referrerId),
+      referred_by_email: p?.email ?? "",
+      referred_by_name: p?.name ?? "",
+      referred_by_id: referrerId ?? "",
+    };
+  });
+
+  return NextResponse.json({ items, revenue });
 }

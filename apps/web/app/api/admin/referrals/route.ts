@@ -1,37 +1,8 @@
 import { NextResponse } from "next/server";
-import { auth, clerkClient } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import { getServiceClient } from "@/lib/supabase";
 import { isAdmin } from "@/lib/credits";
-
-interface Person { email: string; name: string }
-
-/**
- * Resolve Clerk user ids → email/name so the admin table shows people, not ids.
- * Falls back to an empty map if Clerk can't be reached.
- */
-async function lookupPeople(ids: string[]): Promise<Record<string, Person>> {
-  const unique = [...new Set(ids)].filter(Boolean);
-  if (unique.length === 0) return {};
-  try {
-    const client = await clerkClient();
-    const res = await client.users.getUserList({ userId: unique, limit: 500 });
-    const users = Array.isArray(res) ? res : res.data;
-    const map: Record<string, Person> = {};
-    for (const u of users) {
-      map[u.id] = {
-        email:
-          u.primaryEmailAddress?.emailAddress ??
-          u.emailAddresses?.[0]?.emailAddress ??
-          "",
-        name: [u.firstName, u.lastName].filter(Boolean).join(" ").trim() || u.username || "",
-      };
-    }
-    return map;
-  } catch (err) {
-    console.warn("[admin/referrals] Clerk lookup failed:", err);
-    return {};
-  }
-}
+import { lookupPeople, type Person } from "@/lib/people";
 
 export const runtime = "nodejs";
 const clerkEnabled = Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);

@@ -7,7 +7,7 @@ import { isAdmin } from "@/lib/credits";
 const clerkEnabled = Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);
 
 const bodySchema = z.object({
-  action: z.enum(["mark_received", "verify", "reject", "edit_notes"]),
+  action: z.enum(["mark_received", "verify", "reject", "edit_notes", "reopen"]),
   notes: z.string().max(2000).optional(),
 });
 
@@ -62,6 +62,53 @@ export async function POST(req: Request, ctx: { params: Promise<{ id: string }> 
       .eq("id", id);
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
     return NextResponse.json({ ok: true });
+  }
+
+  // Undo an accidental Verify/Reject: put the row back in the actionable queue.
+  // Coming back from VERIFIED we must take the granted credits back, or a second
+  // verify would grant them twice.
+  if (action === "reopen") {
+    if (pr.status === "PENDING_SCREENSHOT" || pr.status === "SCREENSHOT_RECEIVED") {
+      return NextResponse.json({ error: "Already actionable" }, { status: 409 });
+    }
+
+    let revokedTo: number | null = null;
+    if (pr.status === "VERIFIED") {
+      const { data: balance, error: revErr } = await supabase.rpc("revoke_credits", {
+        p_user_id: pr.user_id,
+        p_amount: pr.credits_requested,
+        p_reason: "reversal",
+        p_payment_request_id: id,
+      });
+      if (revErr) return NextResponse.json({ error: revErr.message }, { status: 500 });
+      revokedTo = balance ?? null;
+
+      // If this was their only verified payment, the referral is no longer converted.
+      const { count } = await supabase
+        .from("payment_requests")
+        .select("*", { count: "exact", head: true })
+        .eq("user_id", pr.user_id)
+        .eq("status", "VERIFIED")
+        .neq("id", id);
+      if ((count ?? 0) === 0) {
+        await supabase
+          .from("referral_signups")
+          .update({ converted_at: null })
+          .eq("referred_id", pr.user_id);
+      }
+    }
+
+    const { error } = await supabase
+      .from("payment_requests")
+      .update({
+        status: "PENDING_SCREENSHOT",
+        verified_at: null,
+        verified_by: null,
+        ...(notes !== undefined ? { notes } : {}),
+      })
+      .eq("id", id);
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ ok: true, balance: revokedTo });
   }
 
   if (action === "reject") {

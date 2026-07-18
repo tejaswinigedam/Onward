@@ -627,3 +627,15 @@ footer.site-foot{background:var(--dark-s);padding:42px 0;border-top:1px solid rg
 .dash-mode:hover .dash-mode-go svg{transform:translateX(3px);}
 .dash-hero-foot{display:flex;flex-wrap:wrap;align-items:center;gap:16px;}
 .dash-free-note{display:inline-flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:13px;}
+
+/* ===== ADMIN: revenue strip + referral columns ===== */
+.rev-strip{display:flex;flex-wrap:wrap;gap:12px;margin:18px 0 6px;}
+.rev-stat{flex:1;min-width:150px;background:var(--white);border:1px solid var(--border);border-radius:14px;padding:14px 18px;box-shadow:var(--sh);}
+.rev-label{display:block;font-family:var(--font-manrope);font-size:10.5px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--ink-mute);margin-bottom:4px;}
+.rev-value{display:block;font-family:var(--font-manrope);font-size:23px;font-weight:900;color:var(--indigo);line-height:1.1;}
+.rev-stat:first-child .rev-value{color:#047857;}
+.ref-yn{display:inline-block;font-size:11.5px;font-weight:800;padding:3px 9px;border-radius:var(--r-pill);}
+.ref-yn.yes{color:#047857;background:#D1FAE5;}
+.ref-yn.no{color:var(--ink-mute);background:var(--ivory2);}
+.admin-actions button.undo{color:#2563EB;background:#DBEAFE;}
+.admin-actions button.undo:hover:not(:disabled){background:#BFDBFE;}
