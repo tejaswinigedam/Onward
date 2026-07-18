@@ -67,7 +67,7 @@ export const EDU_DISCLAIMER =
   "Onward is an educational tool. Our analysis is for learning purposes only and is not financial, tax, or legal advice.";
 
 // ── UPI / WhatsApp (env-overridable) ───────────────────────────────────────
-export const UPI_VPA = process.env.UPI_VPA ?? "subhranta227742@okicici";
+export const UPI_VPA = process.env.UPI_VPA ?? "tejugedam93@oksbi";
 export const UPI_PAYEE = process.env.UPI_PAYEE ?? "Onward";
 /** Digits only, country code included, for wa.me / web.whatsapp links. */
 export const WHATSAPP_NUMBER = process.env.WHATSAPP_NUMBER ?? "917008939228";
