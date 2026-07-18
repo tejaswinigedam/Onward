@@ -74,9 +74,15 @@ export function PayFlow({
 
   if (step === "done") {
     return (
-      <div className="upload-card">
+      <div className="upload-card wait-card">
+        <button type="button" className="modal-close-x" onClick={onActivated} aria-label="Close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+
         <div className="paywall-head">
-          <span className="paywall-credits ok">✓ Request received</span>
+          <span className="paywall-credits ok">✓ Request sent</span>
           <p className="um-t">Almost done</p>
           <p className="um-s">Make sure to share the transaction screenshot. Then you are done.</p>
         </div>
@@ -95,7 +101,6 @@ export function PayFlow({
             Failed to send the WhatsApp message? Try Again
           </button>
         )}
-        <button className="wait-close" onClick={onActivated}>Close</button>
         <p className="paywall-disclaimer">{EDU_DISCLAIMER}</p>
       </div>
     );

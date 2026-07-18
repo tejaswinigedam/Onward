@@ -1,6 +1,21 @@
+import type { ReactNode } from "react";
 import type { OfferAnalysis } from "@/lib/offer-analysis";
 import type { OfferLine, Provenance } from "@onward/engine";
 import { Term } from "@/components/Glossary";
+
+/**
+ * A collapsible report section. Uses native <details>/<summary> so it's
+ * accordion-like on mobile (less scroll) with zero JS state — `open` only
+ * sets the initial state, the browser handles toggling from then on.
+ */
+function Section({ title, defaultOpen = true, children }: { title: ReactNode; defaultOpen?: boolean; children: ReactNode }) {
+  return (
+    <details className="rep-card rep-acc" open={defaultOpen}>
+      <summary className="rep-h">{title}</summary>
+      <div className="rep-acc-body">{children}</div>
+    </details>
+  );
+}
 
 const inr = (n: number) => "₹ " + Math.round(n).toLocaleString("en-IN");
 
@@ -69,8 +84,7 @@ export function OfferReport({ a, lock }: { a: OfferAnalysis; lock?: LockProps })
 
       {/* equity (ESOP/RSU) — surfaced separately, never blended into the cash % */}
       {a.equity.length > 0 && (
-        <div className="rep-card">
-          <div className="rep-h">Equity / ESOP — on top of CTC</div>
+        <Section title="Equity / ESOP — on top of CTC">
           {a.equity.map((e, i) => (
             <div className="rep-row" key={i}>
               <span>
@@ -86,7 +100,7 @@ export function OfferReport({ a, lock }: { a: OfferAnalysis; lock?: LockProps })
               {a.equity.some((e) => e.discretionary) && " · discretionary — not guaranteed"}
             </p>
           )}
-        </div>
+        </Section>
       )}
 
       {/* missing-breakup banner */}
@@ -97,9 +111,8 @@ export function OfferReport({ a, lock }: { a: OfferAnalysis; lock?: LockProps })
         </div>
       )}
 
-      {/* salary breakdown */}
-      <div className="rep-card">
-        <div className="rep-h">Monthly salary breakdown</div>
+      {/* salary breakdown — monthly always open, yearly starts collapsed */}
+      <Section title="Monthly salary breakdown" defaultOpen>
         {a.components.map((c, i) => (
           <div className="rep-row" key={i}>
             <span><Term>{c.name}</Term><Badge source={c.source} /></span>
@@ -114,8 +127,24 @@ export function OfferReport({ a, lock }: { a: OfferAnalysis; lock?: LockProps })
           </div>
         ))}
         <div className="rep-row total"><span><Term k="takehome">Take-home / month</Term></span><b>{inr(a.netMonthly)}</b></div>
-        <div className="rep-row"><span><Term k="takehome">In hand / year (fixed)</Term></span><b>{inr(a.netAnnual)}</b></div>
-      </div>
+      </Section>
+
+      <Section title="Yearly salary breakdown" defaultOpen={false}>
+        {a.components.map((c, i) => (
+          <div className="rep-row" key={i}>
+            <span><Term>{c.name}</Term><Badge source={c.source} /></span>
+            <b>{inr(c.monthly * 12)}</b>
+          </div>
+        ))}
+        <div className="rep-row" style={{ fontWeight: 700 }}><span><Term k="gross">Gross (yearly)</Term></span><b>{inr(a.grossMonthly * 12)}</b></div>
+        {a.deductions.map((d, i) => (
+          <div className="rep-row deduct" key={i}>
+            <span><Term k={termKey(d)}>{d.name}</Term><Badge source={d.source} /></span>
+            <b>− {inr(d.monthly * 12)}</b>
+          </div>
+        ))}
+        <div className="rep-row total"><span><Term k="takehome">Take-home / year</Term></span><b>{inr(a.netAnnual)}</b></div>
+      </Section>
 
       {/* ── Locked analysis: tax regime, savings, clauses, actions, assumptions ── */}
       {locked ? (
@@ -123,8 +152,7 @@ export function OfferReport({ a, lock }: { a: OfferAnalysis; lock?: LockProps })
       ) : (
         <>
           {/* regime */}
-          <div className="rep-card">
-            <div className="rep-h"><Term k="regime">Tax regime</Term> — pick the cheaper</div>
+          <Section title={<><Term k="regime">Tax regime</Term> — pick the cheaper</>}>
             <div className="regime">
               <div className={`regime-card${a.regime.newWins ? " win" : ""}`}>
                 <div className="regime-lbl">New regime</div><div className="regime-val">{inr(a.regime.taxNew)}</div>
@@ -135,7 +163,7 @@ export function OfferReport({ a, lock }: { a: OfferAnalysis; lock?: LockProps })
                 {!a.regime.newWins && <span className="regime-tag">✓ Lower</span>}
               </div>
             </div>
-          </div>
+          </Section>
 
           {/* opportunities */}
           {a.opportunities.length > 0 && (
@@ -152,8 +180,7 @@ export function OfferReport({ a, lock }: { a: OfferAnalysis; lock?: LockProps })
 
           {/* clauses */}
           {a.clauses.length > 0 && (
-            <div className="rep-card">
-              <div className="rep-h">Clauses, in plain English</div>
+            <Section title="Clauses, in plain English">
               {a.clauses.map((c, i) => (
                 <div className={`clause ${c.flag}`} key={i}>
                   <div className="clause-head">
@@ -164,27 +191,25 @@ export function OfferReport({ a, lock }: { a: OfferAnalysis; lock?: LockProps })
                   {c.action && <div className="clause-action"><b>Do this:</b> {c.action}</div>}
                 </div>
               ))}
-            </div>
+            </Section>
           )}
 
           {/* actions */}
           {a.actions.length > 0 && (
-            <div className="rep-card">
-              <div className="rep-h">What to do after reading this offer</div>
+            <Section title="What to do after reading this offer">
               <ul className="rep-actions">
                 {a.actions.map((t, i) => <li key={i}>{t}</li>)}
               </ul>
-            </div>
+            </Section>
           )}
 
           {/* assumptions & what we couldn't find */}
           {a.assumptions.length > 0 && (
-            <div className="rep-card">
-              <div className="rep-h">Assumptions — confirm these with HR</div>
+            <Section title="Assumptions — confirm these with HR">
               <ul className="rep-actions">
                 {a.assumptions.map((t, i) => <li key={i}>{t}</li>)}
               </ul>
-            </div>
+            </Section>
           )}
         </>
       )}

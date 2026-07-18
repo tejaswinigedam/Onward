@@ -185,6 +185,7 @@ nav.site-nav.lifted{border-color:var(--border);box-shadow:0 2px 18px rgba(31,41,
 .pay-now-btn:hover:not(:disabled){background:var(--indigo-d);transform:translateY(-1px);}
 .pay-now-btn:disabled{opacity:.6;cursor:default;}
 .pay-now-btn.ghost{background:var(--indigo-0);color:var(--indigo);box-shadow:none;}
+.pay-now-btn.ghost:hover:not(:disabled){background:var(--indigo-1);color:var(--indigo-d);transform:translateY(-1px);}
 .paywall-disclaimer{max-width:520px;margin:16px auto 0;text-align:center;font-size:11.5px;line-height:1.5;color:var(--ink-mute);}
 .paywall-foot{text-align:center;font-size:12.5px;color:var(--ink-soft);margin:12px 0 0;}
 .credit-badge-row{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:14px;}
@@ -233,8 +234,10 @@ nav.site-nav.lifted{border-color:var(--border);box-shadow:0 2px 18px rgba(31,41,
 /* Waiting state after Payment Done */
 .wait-panel{max-width:460px;margin:0 auto 16px;background:var(--indigo-0);border:1px solid var(--indigo-1);border-radius:14px;padding:16px 18px;}
 .wait-relax{font-size:13.5px;line-height:1.5;color:var(--ink);text-align:center;}
-.wait-close{display:block;margin:10px auto 0;font-size:13px;font-weight:700;color:var(--ink-mute);}
-.wait-close:hover{color:var(--ink);}
+.wait-card{position:relative;}
+.modal-close-x{position:absolute;top:-6px;right:-4px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;color:var(--ink-mute);border-radius:50%;transition:background .15s,color .15s;}
+.modal-close-x:hover{background:var(--ivory2);color:var(--ink);}
+.modal-close-x svg{width:16px;height:16px;}
 
 /* QR */
 .qr-wrap{display:flex;flex-direction:column;align-items:center;gap:10px;margin:0 0 20px;}
@@ -288,6 +291,14 @@ nav.site-nav.lifted{border-color:var(--border);box-shadow:0 2px 18px rgba(31,41,
 .rep{max-width:920px;margin:22px auto 0;display:flex;flex-direction:column;gap:18px;}
 .rep-h{font-family:var(--font-manrope);font-size:12.5px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--ink-mute);margin-bottom:2px;}
 .rep-card{background:var(--white);border:1px solid var(--border);border-radius:var(--r-lg);padding:20px 22px;box-shadow:var(--sh);}
+
+/* Report sections as an accordion (native <details>/<summary>) — cuts scroll on mobile */
+.rep-acc > summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.rep-acc > summary::-webkit-details-marker{display:none;}
+.rep-acc > summary::after{content:"";flex:none;width:8px;height:8px;margin-left:auto;border-right:2px solid var(--ink-mute);border-bottom:2px solid var(--ink-mute);transform:rotate(45deg);transition:transform .15s;}
+.rep-acc[open] > summary::after{transform:rotate(-135deg);}
+.rep-acc[open] > summary{margin-bottom:2px;}
+.rep-acc-body{margin-top:12px;}
 .rep-top{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
 .rep-stat{background:var(--indigo-0);border:1px solid var(--indigo-1);border-radius:14px;padding:14px 16px;}
 .rep-stat .l{font-size:11.5px;font-weight:700;color:var(--ink-soft);}
