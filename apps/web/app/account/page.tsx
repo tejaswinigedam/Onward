@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -6,7 +7,6 @@ import { ReferralClaimer } from "@/components/ReferralClaimer";
 import { UserDashboard } from "@/components/UserDashboard";
 import { getServiceClient } from "@/lib/supabase";
 import { getBalance } from "@/lib/credits";
-import { PaymentHistory } from "./PaymentHistory";
 
 export const dynamic = "force-dynamic";
 const clerkEnabled = Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);
@@ -51,12 +51,11 @@ export default async function AccountPage() {
       <main className="wrap acct-wrap">
         <UserDashboard name={name} balance={balance} hasSaved={savedCount > 0} />
 
-        {/* Payment history lives in the account section only. */}
+        {/* Payment history moved to its own page — linked as an option, not shown inline. */}
         {paymentsCount > 0 && (
-          <section className="acct-sec">
-            <h2 className="acct-h2">Your payments</h2>
-            <PaymentHistory />
-          </section>
+          <p className="acct-more-link">
+            <Link href="/account/payments">View your payment history →</Link>
+          </p>
         )}
       </main>
       <SiteFooter />

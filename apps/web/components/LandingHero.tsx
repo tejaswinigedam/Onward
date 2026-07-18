@@ -163,12 +163,11 @@ export function LandingHero() {
         <div className="blob" />
         <div className="hero-copy" data-reveal>
           <span className="eyebrow">Salary, decoded</span>
-          <h1>Understand your pay<br />Own your money</h1>
+          <h1>Every rupee explained.<br />Every decision made smarter.</h1>
           <p className="hero-sub">
             Whether you&apos;re opening your first offer letter or checking your latest payslip, Onward
             helps you understand what it means, spot what matters, and make smarter money decisions
           </p>
-          <p className="hero-tag">Get analysis in one go</p>
           <div className="hero-actions">
             <Link href="/offer" className="btn btn-accent btn-lg" data-ev="cta_click" data-ev-label="hero_decoder">
               Explore Pay Decoder <ArrowRight />
