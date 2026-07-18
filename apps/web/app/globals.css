@@ -639,3 +639,10 @@ footer.site-foot{background:var(--dark-s);padding:42px 0;border-top:1px solid rg
 .ref-yn.no{color:var(--ink-mute);background:var(--ivory2);}
 .admin-actions button.undo{color:#2563EB;background:#DBEAFE;}
 .admin-actions button.undo:hover:not(:disabled){background:#BFDBFE;}
+
+/* Test payments: keep credits, excluded from revenue */
+.test-badge{margin-left:6px;font-size:9.5px;font-weight:900;letter-spacing:.5px;color:#7C3AED;background:#EDE9FE;padding:2px 7px;border-radius:var(--r-pill);vertical-align:middle;}
+.rev-note{display:block;margin-top:4px;font-size:10.5px;font-weight:600;color:var(--ink-mute);}
+.admin-actions button.test{color:#7C3AED;background:#EDE9FE;}
+.admin-actions button.test:hover:not(:disabled){background:#DDD6FE;}
+.admin-actions button.untest{color:var(--ink-soft);background:var(--ivory2);}

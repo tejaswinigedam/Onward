@@ -7,7 +7,7 @@ import { isAdmin } from "@/lib/credits";
 const clerkEnabled = Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);
 
 const bodySchema = z.object({
-  action: z.enum(["mark_received", "verify", "reject", "edit_notes", "reopen"]),
+  action: z.enum(["mark_received", "verify", "reject", "edit_notes", "reopen", "mark_test", "unmark_test"]),
   notes: z.string().max(2000).optional(),
 });
 
@@ -51,6 +51,17 @@ export async function POST(req: Request, ctx: { params: Promise<{ id: string }> 
 
   if (action === "edit_notes") {
     const { error } = await supabase.from("payment_requests").update({ notes: notes ?? "" }).eq("id", id);
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ ok: true });
+  }
+
+  // Flag a payment as a test account: it keeps its credits, but its amount is
+  // left out of reported revenue. Allowed in any status, including VERIFIED.
+  if (action === "mark_test" || action === "unmark_test") {
+    const { error } = await supabase
+      .from("payment_requests")
+      .update({ is_test: action === "mark_test" })
+      .eq("id", id);
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
     return NextResponse.json({ ok: true });
   }

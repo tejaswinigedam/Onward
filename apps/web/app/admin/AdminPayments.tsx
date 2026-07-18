@@ -17,9 +17,16 @@ interface PaymentRow {
   referred_by_email: string;
   referred_by_name: string;
   referred_by_id: string;
+  is_test: boolean;
 }
 
-interface Revenue { total: number; payments: number; credits: number }
+interface Revenue {
+  total: number;
+  payments: number;
+  credits: number;
+  excludedTest: number;
+  excludedTestAmount: number;
+}
 
 const inr = (n: number) => "₹" + n.toLocaleString("en-IN");
 
@@ -119,6 +126,11 @@ export function AdminPayments({ embedded = false }: { embedded?: boolean }) {
           <div className="rev-stat">
             <span className="rev-label">Revenue</span>
             <span className="rev-value">{inr(revenue.total)}</span>
+            {revenue.excludedTest > 0 && (
+              <span className="rev-note">
+                excludes {revenue.excludedTest} test ({inr(revenue.excludedTestAmount)})
+              </span>
+            )}
           </div>
           <div className="rev-stat">
             <span className="rev-label">Verified payments</span>
@@ -175,7 +187,10 @@ export function AdminPayments({ embedded = false }: { embedded?: boolean }) {
                   <td>{r.plan}</td>
                   <td>₹{r.amount}</td>
                   <td>{r.credits_requested}</td>
-                  <td><span className={`admin-status s-${r.status}`}>{STATUS_LABEL[r.status]}</span></td>
+                  <td>
+                    <span className={`admin-status s-${r.status}`}>{STATUS_LABEL[r.status]}</span>
+                    {r.is_test && <span className="test-badge" title="Excluded from revenue">TEST</span>}
+                  </td>
                   <td>
                     <span className={`ref-yn ${r.referred ? "yes" : "no"}`}>{r.referred ? "Yes" : "No"}</span>
                   </td>
@@ -208,6 +223,14 @@ export function AdminPayments({ embedded = false }: { embedded?: boolean }) {
                         Move to actionable
                       </button>
                     )}
+                    {/* Test accounts keep their credits but leave revenue alone. */}
+                    <button
+                      className={r.is_test ? "untest" : "test"}
+                      disabled={busyId === r.id}
+                      onClick={() => act(r.id, r.is_test ? "unmark_test" : "mark_test")}
+                    >
+                      {r.is_test ? "Unmark test" : "Mark as test"}
+                    </button>
                     <button onClick={() => editNotes(r)}>Notes</button>
                   </td>
                 </tr>

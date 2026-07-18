@@ -38,15 +38,21 @@ export async function GET(req: Request) {
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   const rows = data ?? [];
 
-  // Revenue: always the full verified total, independent of the current filter.
+  // Revenue: the full verified total, independent of the current filter, with
+  // test payments excluded — those accounts still get credits, but their money
+  // isn't real.
   const { data: verified } = await supabase
     .from("payment_requests")
-    .select("amount, credits_requested")
+    .select("amount, credits_requested, is_test")
     .eq("status", "VERIFIED");
+  const real = (verified ?? []).filter((v) => !v.is_test);
+  const testRows = (verified ?? []).filter((v) => v.is_test);
   const revenue = {
-    total: (verified ?? []).reduce((sum, v) => sum + (v.amount ?? 0), 0),
-    payments: verified?.length ?? 0,
-    credits: (verified ?? []).reduce((sum, v) => sum + (v.credits_requested ?? 0), 0),
+    total: real.reduce((sum, v) => sum + (v.amount ?? 0), 0),
+    payments: real.length,
+    credits: real.reduce((sum, v) => sum + (v.credits_requested ?? 0), 0),
+    excludedTest: testRows.length,
+    excludedTestAmount: testRows.reduce((sum, v) => sum + (v.amount ?? 0), 0),
   };
 
   // Was this payer referred, and by whom?
