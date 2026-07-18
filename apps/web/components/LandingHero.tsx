@@ -162,7 +162,7 @@ export function LandingHero() {
         <div className="blob" />
         <div className="hero-copy" data-reveal>
           <span className="eyebrow">Salary, decoded</span>
-          <h1>Understand your pay<br />Own your <em>money</em></h1>
+          <h1>Understand your pay<br />Own your money</h1>
           <p className="hero-sub">
             Whether you&apos;re opening your first offer letter or checking your latest payslip, Onward
             helps you understand what it means, spot what matters, and make smarter money decisions
@@ -247,7 +247,8 @@ export function LandingHero() {
           <div className="decoder-cta" data-reveal>
             <p className="privacy-strip">
               <ShieldIcon />
-              Privacy comes first — we don&apos;t store your personal information or send it to anyone else
+              Your documents are used exclusively to generate your personalized salary insights. Your
+              personal information is never used for any purpose beyond delivering your analysis.
             </p>
             <Link href="/offer" className="btn btn-accent btn-lg" data-ev="cta_click" data-ev-label="decoder_try">
               Try Pay Decoder <ArrowRight />
@@ -288,6 +289,7 @@ export function LandingHero() {
                   <span className="lp-plan-name">{p.name}</span>
                   <span className="lp-plan-price">₹{p.amount}</span>
                   <span className="lp-plan-sub">{p.credits} credit{p.credits > 1 ? "s" : ""} · {pricePerCredit(p)}/credit</span>
+                  <span className="lp-plan-tagline">{p.tagline}</span>
                 </div>
               ))}
             </div>
@@ -312,7 +314,7 @@ export function LandingHero() {
 
           <div className="topic-list" data-reveal>
             {TOPICS.map((t) => (
-              <div className="topic-row" key={t.title} style={t.last ? { borderBottom: "none" } : undefined}>
+              <div className="topic-row" key={t.title}>
                 <span className="ic">{t.icon}</span>
                 <div className="tx">
                   <p>{t.title}</p>

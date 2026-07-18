@@ -203,6 +203,10 @@ function MultiUploadBody() {
           </svg>
           <p className="um-t">Drop your offer letters — one or several</p>
           <p className="um-s">PDF · decoded on our server · never stored · compare up to {MAX_FILES}</p>
+          <p className="upload-privacy">
+            Your documents are used exclusively to generate your personalized salary insights. Your
+            personal information is never used for any purpose beyond delivering your analysis.
+          </p>
         </div>
       ) : (
         <>

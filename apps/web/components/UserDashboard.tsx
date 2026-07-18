@@ -40,9 +40,6 @@ function DecoderShowcase() {
       </div>
 
       <div className="dash-hero-foot">
-        <Link href="/offer" className="btn btn-accent btn-lg" data-ev="dash_decoder">
-          Explore Decoder <ArrowRight />
-        </Link>
         <span className="dash-free-note">
           <span className="dfn-free">Free — your full salary breakdown</span>
           <span className="dfn-dot">•</span>

@@ -20,8 +20,8 @@ export function LandingAuthActions() {
 function GuestActions() {
   return (
     <>
-      <Link href="/sign-up" className="btn btn-ghost" data-ev="nav_sign_up">Sign Up</Link>
-      <Link href="/sign-up" className="btn btn-dark" data-ev="nav_book_demo">Book a Demo</Link>
+      <Link href="/sign-in" className="btn btn-ghost" data-ev="nav_sign_in">Sign In</Link>
+      <Link href="/sign-up" className="btn btn-dark" data-ev="nav_sign_up">Sign Up</Link>
     </>
   );
 }

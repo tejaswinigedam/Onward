@@ -71,6 +71,10 @@ function OfferUploadBody() {
         </svg>
         <p className="um-t">{status === "reading" ? "Decoding your offer… (up to a minute)" : "Drop your offer letter PDF"}</p>
         <p className="um-s">Decoded on our server · never stored</p>
+        <p className="upload-privacy">
+          Your documents are used exclusively to generate your personalized salary insights. Your
+          personal information is never used for any purpose beyond delivering your analysis.
+        </p>
       </div>
 
       {error && <p className="opp-none" style={{ color: "var(--coral-d)" }}>{error}</p>}

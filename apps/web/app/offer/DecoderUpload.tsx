@@ -292,6 +292,10 @@ export function DecoderUpload({
             PDF · decoded on our server · never stored
             {mode.multi ? ` · up to ${maxFiles}` : ""}
           </p>
+          <p className="upload-privacy">
+            Your documents are used exclusively to generate your personalized salary insights. Your
+            personal information is never used for any purpose beyond delivering your analysis.
+          </p>
         </div>
       ) : (
         <>

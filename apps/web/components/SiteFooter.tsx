@@ -21,6 +21,7 @@ export function SiteFooter() {
           <a href="/#learn">Learning</a>
           <a href="#">Privacy</a>
           <a href="#">Contact</a>
+          <a href="https://www.instagram.com/join.onward/" target="_blank" rel="noopener noreferrer">Instagram</a>
         </div>
         <span className="foot-mono">© 2026 Onward — Clarity, on every payslip</span>
       </div>

@@ -18,13 +18,15 @@ export interface Plan {
   credits: number;
   /** Optional highlight chip, e.g. "Popular" / "Best value". */
   badge?: string;
+  /** Short one-line "who this is for" description shown on plan cards. */
+  tagline: string;
 }
 
 /** Ordered list of purchasable plans (order = display order on the QR screen). */
 export const PLANS: Plan[] = [
-  { id: "STARTER_149", name: "Starter", amount: 149, credits: 1 },
-  { id: "POPULAR_299", name: "Popular", amount: 299, credits: 3, badge: "Popular" },
-  { id: "PRO_499", name: "Pro", amount: 499, credits: 6 },
+  { id: "STARTER_149", name: "Starter", amount: 149, credits: 1, tagline: "Perfect for understanding your first offer or payslip" },
+  { id: "POPULAR_299", name: "Popular", amount: 299, credits: 3, badge: "Popular", tagline: "Ideal during job offers and salary negotiations" },
+  { id: "PRO_499", name: "Pro", amount: 499, credits: 6, tagline: "For frequent salary reviews, comparisons, and long-term tracking" },
 ];
 
 export const PLAN_BY_ID: Record<PlanId, Plan> = Object.fromEntries(

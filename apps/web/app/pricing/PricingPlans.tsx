@@ -26,6 +26,7 @@ export function PricingPlans({ signedIn }: { signedIn: boolean }) {
             <span className="plan-tile-price">₹{p.amount}</span>
             <span className="plan-tile-credits">{p.credits} credit{p.credits > 1 ? "s" : ""}</span>
             <span className="plan-tile-per">{pricePerCredit(p)} / credit</span>
+            <span className="plan-tile-tagline">{p.tagline}</span>
             <button
               className="btn btn-accent plan-tile-cta"
               onClick={() => setPlan(p.id)}

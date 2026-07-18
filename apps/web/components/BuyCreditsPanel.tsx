@@ -3,7 +3,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { PayFlow } from "./PayFlow";
-import { PLANS, pricePerCredit, OFFER_LABEL, type PlanId } from "@/lib/credits-config";
+import { PLANS, pricePerCredit, type PlanId } from "@/lib/credits-config";
 
 /**
  * "Buy credits" with the pricing plans inline. Picking a plan opens the QR
@@ -44,7 +44,6 @@ export function BuyCreditsPanel({ compact = false }: { compact?: boolean }) {
           Uploading and your salary breakdown are always free. A credit unlocks the full
           analysis — tax regime, savings, clauses and what to ask HR.
         </p>
-        <p className="dash-offer">{OFFER_LABEL}</p>
         <div className="dash-plans">
           {PLANS.map((p) => (
             <button
@@ -59,6 +58,7 @@ export function BuyCreditsPanel({ compact = false }: { compact?: boolean }) {
               <span className="dash-plan-price">₹{p.amount}</span>
               <span className="dash-plan-credits">{p.credits} credit{p.credits > 1 ? "s" : ""}</span>
               <span className="dash-plan-per">{pricePerCredit(p)} / credit</span>
+              <span className="dash-plan-tagline">{p.tagline}</span>
               <span className="dash-plan-cta">Buy</span>
             </button>
           ))}
