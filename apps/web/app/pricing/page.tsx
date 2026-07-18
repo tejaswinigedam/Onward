@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { auth } from "@clerk/nextjs/server";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { PricingPlans } from "./PricingPlans";
 import {
-  PLANS,
-  pricePerCredit,
   FREE_FEATURES,
   PAID_FEATURES,
   CREDIT_RULE,
@@ -13,6 +13,8 @@ import {
   EDU_DISCLAIMER,
 } from "@/lib/credits-config";
 import "../landing.css";
+
+const clerkEnabled = Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);
 
 export const metadata: Metadata = {
   title: "Pricing — Onward",
@@ -38,7 +40,18 @@ const ArrowRight = () => (
   </svg>
 );
 
-export default function PricingPage() {
+export default async function PricingPage() {
+  // Needed so "Get started" can log the payment request for a signed-in user
+  // (PayFlow sends anyone else to sign-in first).
+  let signedIn = false;
+  if (clerkEnabled) {
+    try {
+      signedIn = Boolean((await auth()).userId);
+    } catch {
+      signedIn = false;
+    }
+  }
+
   return (
     <div className="onward-landing">
       <SiteHeader />
@@ -57,20 +70,7 @@ export default function PricingPage() {
       {/* Plans / prices first */}
       <section className="wrap plans-section">
         <p className="plans-offer">{OFFER_LABEL}</p>
-        <div className="plans-grid">
-          {PLANS.map((p) => (
-            <div className={`plan-tile${p.badge ? " featured" : ""}`} key={p.id}>
-              {p.badge && <span className="plan-tile-badge">{p.badge}</span>}
-              <span className="plan-tile-name">{p.name}</span>
-              <span className="plan-tile-price">₹{p.amount}</span>
-              <span className="plan-tile-credits">{p.credits} credit{p.credits > 1 ? "s" : ""}</span>
-              <span className="plan-tile-per">{pricePerCredit(p)} / credit</span>
-              <Link href="/offer" className="btn btn-accent plan-tile-cta" data-ev="pricing_plan" data-ev-label={p.id}>
-                Get started <ArrowRight />
-              </Link>
-            </div>
-          ))}
-        </div>
+        <PricingPlans signedIn={signedIn} />
         <p className="plans-foot">{CREDITS_FOOTER}</p>
       </section>
 
