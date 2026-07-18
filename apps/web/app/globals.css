@@ -646,3 +646,11 @@ footer.site-foot{background:var(--dark-s);padding:42px 0;border-top:1px solid rg
 .admin-actions button.test{color:#7C3AED;background:#EDE9FE;}
 .admin-actions button.test:hover:not(:disabled){background:#DDD6FE;}
 .admin-actions button.untest{color:var(--ink-soft);background:var(--ivory2);}
+
+/* Keep the Actions column reachable — the table scrolls sideways at 12 columns,
+   so pin it to the right edge instead of hiding it off-screen. */
+.admin-table th:last-child,
+.admin-table td:last-child{position:sticky;right:0;background:var(--white);box-shadow:-8px 0 14px -10px rgba(31,41,55,.35);}
+.admin-table thead th:last-child{z-index:3;}
+.admin-table tbody td:last-child{z-index:2;}
+.admin-table td.admin-actions{min-width:190px;}
