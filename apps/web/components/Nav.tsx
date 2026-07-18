@@ -6,7 +6,9 @@ import { AuthButtons } from "./AuthButtons";
 
 const clerkEnabled = Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);
 
-export function Nav() {
+/** `showAuth={false}` hides the nav's own sign-in CTA — used on the sign-in
+ *  page itself, where a second "Sign in" button would be redundant. */
+export function Nav({ showAuth = true }: { showAuth?: boolean }) {
   const [lifted, setLifted] = useState(false);
   useEffect(() => {
     const onScroll = () => setLifted(window.scrollY > 10);
@@ -21,18 +23,20 @@ export function Nav() {
           <BrandMark />
           <span className="brand-name">Onward</span>
         </Link>
-        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-          {clerkEnabled ? (
-            <AuthButtons />
-          ) : (
-            <Link href="/#waitlist" className="btn-nav">
-              Join Waitlist
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                <path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </Link>
-          )}
-        </div>
+        {showAuth && (
+          <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+            {clerkEnabled ? (
+              <AuthButtons />
+            ) : (
+              <Link href="/#waitlist" className="btn-nav">
+                Join Waitlist
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                  <path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </Link>
+            )}
+          </div>
+        )}
       </div>
     </nav>
   );

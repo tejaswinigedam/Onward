@@ -7,7 +7,7 @@ const clerkEnabled = Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);
 export default function SignInPage() {
   return (
     <>
-      <Nav />
+      <Nav showAuth={false} />
       <main>
         <section className="page-hero" style={{ minHeight: "80vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
           {clerkEnabled ? (
