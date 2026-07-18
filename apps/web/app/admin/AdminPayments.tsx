@@ -33,7 +33,7 @@ const STATUS_LABEL: Record<PaymentRow["status"], string> = {
 
 const fmt = (iso: string) => new Date(iso).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" });
 
-export function AdminPayments() {
+export function AdminPayments({ embedded = false }: { embedded?: boolean }) {
   const [filter, setFilter] = useState("actionable");
   const [q, setQ] = useState("");
   const [rows, setRows] = useState<PaymentRow[]>([]);
@@ -89,8 +89,9 @@ export function AdminPayments() {
     if (next !== null) void act(row.id, "edit_notes", next);
   }
 
+  const Wrapper = embedded ? "div" : "main";
   return (
-    <main className="admin-wrap">
+    <Wrapper className={embedded ? "" : "admin-wrap"}>
       <h1 className="admin-title">Payment requests</h1>
       <p className="um-s">Verify screenshots in WhatsApp, then activate credits here.</p>
 
@@ -159,6 +160,6 @@ export function AdminPayments() {
           </tbody>
         </table>
       </div>
-    </main>
+    </Wrapper>
   );
 }

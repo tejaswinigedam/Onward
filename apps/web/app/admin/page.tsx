@@ -1,6 +1,6 @@
 import { auth } from "@clerk/nextjs/server";
 import { isAdmin } from "@/lib/credits";
-import { AdminPayments } from "./AdminPayments";
+import { AdminTabs } from "./AdminTabs";
 
 export const metadata = { title: "Admin · Payments — Onward" };
 export const dynamic = "force-dynamic";
@@ -27,5 +27,5 @@ export default async function AdminPage() {
     );
   }
 
-  return <AdminPayments />;
+  return <AdminTabs />;
 }

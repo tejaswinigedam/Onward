@@ -45,6 +45,9 @@ export function DecoderUpload({
   // (not per-doc): unlocking releases the analysis for every uploaded document.
   const [unlocking, setUnlocking] = useState(false);
   const [unlockError, setUnlockError] = useState<string | null>(null);
+  // "Save analysis for future" — keeps a report on the user's account page.
+  const [savingId, setSavingId] = useState<string | null>(null);
+  const [savedIds, setSavedIds] = useState<Set<string>>(new Set());
 
   // Non-render state for the extraction pool.
   const filesRef = useRef<Map<string, File>>(new Map());
@@ -130,6 +133,28 @@ export function DecoderUpload({
       setUnlocking(false);
       setUnlockError("Network error. Try again.");
     }
+  }
+
+  /** Persist a decoded report to the user's account ("save for future"). */
+  async function saveAnalysis(d: UploadedDoc, title: string) {
+    if (!d.analysisId) return;
+    if (!signedIn) {
+      const back = typeof window !== "undefined" ? window.location.pathname + window.location.search : "/offer";
+      window.location.href = `/sign-in?redirect_url=${encodeURIComponent(back)}`;
+      return;
+    }
+    setSavingId(d.id);
+    try {
+      const res = await fetch("/api/me/analyses", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ analysisId: d.analysisId, title: title.slice(0, 80) }),
+      });
+      if (res.ok) setSavedIds((s) => new Set(s).add(d.analysisId!));
+    } catch {
+      /* leave un-saved; the button stays available to retry */
+    }
+    setSavingId(null);
   }
 
   const unlockHintMulti = () =>
@@ -354,9 +379,24 @@ export function DecoderUpload({
                 <div id={reportId}>
                   <OfferReport a={d.analysis!} lock={lock} />
                 </div>
-                {!d.locked && (
-                  <DownloadPdfButton targetId={reportId} fileName={`Onward — ${name}`} evLabel={mode.id} />
-                )}
+                <div className="report-actions">
+                  {!d.locked && (
+                    <DownloadPdfButton targetId={reportId} fileName={`Onward — ${name}`} evLabel={mode.id} />
+                  )}
+                  {d.analysisId && (
+                    <button
+                      className="save-analysis-btn"
+                      disabled={savingId === d.id || savedIds.has(d.analysisId)}
+                      onClick={() => saveAnalysis(d, name)}
+                    >
+                      {savedIds.has(d.analysisId)
+                        ? "✓ Saved to your account"
+                        : savingId === d.id
+                          ? "Saving…"
+                          : signedIn ? "Save analysis for future" : "Sign in to save"}
+                    </button>
+                  )}
+                </div>
               </div>
             );
           })

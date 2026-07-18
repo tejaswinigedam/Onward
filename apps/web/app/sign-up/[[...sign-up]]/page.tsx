@@ -1,12 +1,14 @@
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { SignUp } from "@clerk/nextjs";
+import { RefCapture } from "@/components/RefCapture";
 
 const clerkEnabled = Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);
 
 export default function SignUpPage() {
   return (
     <>
+      <RefCapture />
       <Nav />
       <main>
         <section className="page-hero" style={{ minHeight: "80vh", display: "flex", alignItems: "center", justifyContent: "center" }}>

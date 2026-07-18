@@ -92,5 +92,12 @@ export async function POST(req: Request, ctx: { params: Promise<{ id: string }> 
     .eq("id", id);
   if (updErr) return NextResponse.json({ error: updErr.message }, { status: 500 });
 
+  // If this payer was referred, mark that referral as converted (tracking only).
+  await supabase
+    .from("referral_signups")
+    .update({ converted_at: new Date().toISOString() })
+    .eq("referred_id", pr.user_id)
+    .is("converted_at", null);
+
   return NextResponse.json({ ok: true, balance });
 }
