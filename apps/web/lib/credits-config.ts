@@ -24,7 +24,7 @@ export interface Plan {
 export const PLANS: Plan[] = [
   { id: "STARTER_149", name: "Starter", amount: 149, credits: 1 },
   { id: "POPULAR_299", name: "Popular", amount: 299, credits: 3, badge: "Popular" },
-  { id: "PRO_499", name: "Pro", amount: 499, credits: 6, badge: "Best value" },
+  { id: "PRO_499", name: "Pro", amount: 499, credits: 6 },
 ];
 
 export const PLAN_BY_ID: Record<PlanId, Plan> = Object.fromEntries(

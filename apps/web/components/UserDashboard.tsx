@@ -57,8 +57,8 @@ function DecoderShowcase() {
  * The signed-in user's dashboard. Shown on /account and, once signed in, on the
  * landing page too.
  *
- * The Pay Decoder leads; credits and the buy panel sit below it, so signing in
- * opens onto the product rather than a paywall.
+ * Order: name + credits, then (if any) a one-line saved-analyses summary, then
+ * the Pay Decoder, then the learning teaser, then buy-credits last.
  */
 export function UserDashboard({
   name,
@@ -82,14 +82,13 @@ export function UserDashboard({
         <ReferFriend />
       </div>
 
-      <DecoderShowcase />
-
       {hasSaved && (
         <section className="acct-sec">
-          <h2 className="acct-h2">Your saved analyses</h2>
           <SavedAnalyses />
         </section>
       )}
+
+      <DecoderShowcase />
 
       <section className="acct-sec"><LearningTeaser /></section>
 
