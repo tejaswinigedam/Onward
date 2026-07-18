@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect } from "react";
 import { SiteHeader } from "./SiteHeader";
 import { SiteFooter } from "./SiteFooter";
+import { ReferFriendSection } from "./ReferFriendSection";
 import { PLANS, pricePerCredit, FREE_FEATURES, PAID_FEATURES, OFFER_LABEL } from "@/lib/credits-config";
 
 /* ---- inline outline icons (match the design's stroke SVGs) ---- */
@@ -353,6 +354,11 @@ export function LandingHero() {
           </div>
         </div>
       </section>
+
+      {/* REFER A FRIEND */}
+      <div className="wrap">
+        <ReferFriendSection />
+      </div>
 
       {/* FINAL CTA */}
       <section className="final-cta wrap">

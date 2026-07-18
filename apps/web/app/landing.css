@@ -701,21 +701,19 @@
   line-height:1.12;
 }
 .onward-landing .topic-list{
-  display:flex;
-  flex-direction:column;
-  gap:12px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:14px;
 }
 .onward-landing .topic-row{
   display:flex;
   align-items:flex-start;
-  gap:18px;
+  gap:14px;
   padding:20px 22px;
   border:1px solid var(--line);
   border-radius:var(--radius-card);
   background:rgba(18,23,43,0.02);
-  transition:border-color .2s ease,transform .2s ease;
 }
-.onward-landing .topic-row:hover{border-color:var(--accent);transform:translateY(-2px);}
 .onward-landing .topic-row .ic{
   width:36px;height:36px;
   flex:none;
@@ -929,6 +927,16 @@
 .onward-landing .lp-plan-price{display:block;font-family:var(--font-fraunces),serif;font-size:34px;font-weight:600;color:var(--accent);line-height:1.1;margin:2px 0;}
 .onward-landing .lp-plan-sub{display:block;font-size:13px;color:var(--ink-70);}
 .onward-landing .lp-plan-tagline{display:block;margin-top:8px;font-size:11.5px;line-height:1.4;color:var(--ink-50);max-width:160px;}
+
+/* Refer a friend — reskinned to the marketing theme (accent, Fraunces) */
+.onward-landing .refer-promo{background:var(--card);border-color:var(--line);box-shadow:var(--shadow);border-radius:var(--radius-card);}
+.onward-landing .refer-promo-eyebrow{color:var(--accent);background:var(--accent-soft);}
+.onward-landing .refer-promo-h{font-family:var(--font-fraunces),serif;font-weight:600;}
+.onward-landing .refer-promo-sub{color:var(--ink-70);}
+.onward-landing .refer-promo-cta{font-family:var(--font-inter),sans-serif;background:var(--accent);}
+.onward-landing .refer-promo-cta:hover{opacity:.9;}
+.onward-landing .refer-promo .refer-btn{color:var(--accent);background:var(--accent-soft);border-color:transparent;}
+.onward-landing .refer-promo .refer-btn:hover{opacity:.85;}
 
 /* ===== Pricing: dedicated page ===== */
 .onward-landing .pricing-hero{padding:56px 0 8px;text-align:center;}

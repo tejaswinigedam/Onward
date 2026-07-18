@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { SalaryCalculator } from "./SalaryCalculator";
+import { ReferFriendSection } from "@/components/ReferFriendSection";
 
 export const metadata: Metadata = {
   title: "Salary Demystified — Onward",
@@ -34,6 +35,10 @@ export default function SalaryPage() {
           <div className="wrap">
             <SalaryCalculator />
           </div>
+        </section>
+
+        <section className="wrap">
+          <ReferFriendSection />
         </section>
 
         <section className="cta-section">

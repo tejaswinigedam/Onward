@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ReferFriend } from "./ReferFriend";
+import { ReferFriendSection } from "./ReferFriendSection";
 import { LearningTeaser } from "./LearningTeaser";
 import { BuyCreditsPanel } from "./BuyCreditsPanel";
 import { SavedAnalyses } from "@/app/account/SavedAnalyses";
@@ -34,6 +34,7 @@ function DecoderShowcase() {
             <span className="dash-mode-chip">{m.multi ? `${m.minFiles}+ documents` : "Single document"}</span>
             <span className="dash-mode-title">{m.title}</span>
             <span className="dash-mode-tag">{m.tagline}</span>
+            <span className="dash-mode-info">{m.whatYouGet.join(" · ")}</span>
             <span className="dash-mode-go">Start <ArrowRight /></span>
           </Link>
         ))}
@@ -76,7 +77,6 @@ export function UserDashboard({
             {balance} credit{balance === 1 ? "" : "s"}{empty ? "" : " left"}
           </p>
         </div>
-        <ReferFriend />
       </div>
 
       {hasSaved && (
@@ -84,6 +84,8 @@ export function UserDashboard({
           <SavedAnalyses />
         </section>
       )}
+
+      <section className="acct-sec"><ReferFriendSection /></section>
 
       <DecoderShowcase />
 

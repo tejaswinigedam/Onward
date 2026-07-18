@@ -4,6 +4,7 @@ import { auth } from "@clerk/nextjs/server";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { PricingPlans } from "./PricingPlans";
+import { ReferFriendSection } from "@/components/ReferFriendSection";
 import {
   FREE_FEATURES,
   PAID_FEATURES,
@@ -91,6 +92,10 @@ export default async function PricingPage() {
           </ul>
         </div>
       </section>
+
+      <div className="wrap">
+        <ReferFriendSection />
+      </div>
 
       <section className="wrap pricing-cta">
         <h2>See it on your own document first</h2>
