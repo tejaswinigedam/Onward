@@ -223,7 +223,8 @@ nav.site-nav.lifted{border-color:var(--border);box-shadow:0 2px 18px rgba(31,41,
 .lock-hint{font-size:12px;color:var(--ink-mute);margin-top:9px;}
 
 /* Pay flow shown as a modal so the report stays behind it */
-.pay-modal-backdrop{position:fixed;inset:0;z-index:60;background:rgba(17,24,39,.55);display:flex;align-items:flex-start;justify-content:center;padding:5vh 16px;overflow-y:auto;}
+/* Above the sticky site header (z-index:100) so it never overlays the modal. */
+.pay-modal-backdrop{position:fixed;inset:0;z-index:300;background:rgba(17,24,39,.55);display:flex;align-items:flex-start;justify-content:center;padding:5vh 16px;overflow-y:auto;}
 .pay-modal{width:100%;max-width:560px;background:var(--white);border-radius:var(--r-xl);box-shadow:0 24px 60px -20px rgba(0,0,0,.4);padding:24px 22px;}
 .pay-modal .upload-card{max-width:none;}
 .offer-tag{text-align:center;font-family:var(--font-manrope);font-size:11.5px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--coral-d);margin:4px 0 16px;}
@@ -548,3 +549,6 @@ footer.site-foot{background:var(--dark-s);padding:42px 0;border-top:1px solid rg
 .admin-tab{font-family:var(--font-manrope);font-size:13.5px;font-weight:700;color:var(--ink-soft);background:var(--ivory2);padding:9px 18px;border-radius:var(--r-pill);}
 .admin-tab.on{background:var(--indigo);color:#fff;}
 .admin-subh{font-family:var(--font-manrope);font-size:13px;font-weight:800;letter-spacing:.3px;text-transform:uppercase;color:var(--ink-mute);margin:0 0 10px;}
+.ref-person{display:flex;flex-direction:column;gap:1px;}
+.ref-name{font-weight:700;color:var(--ink);font-size:12.5px;}
+.ref-email{color:var(--ink-soft);font-size:12px;word-break:break-all;}

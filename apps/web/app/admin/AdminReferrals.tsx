@@ -7,11 +7,25 @@ interface Signup {
   code: string;
   signed_up_at: string;
   converted_at: string | null;
+  referrer_email: string;
+  referrer_name: string;
+  referred_email: string;
+  referred_name: string;
 }
-interface Rollup { referrer_id: string; signups: number; converted: number }
+interface Rollup { referrer_id: string; email: string; name: string; signups: number; converted: number }
 
 const fmt = (iso: string) => new Date(iso).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" });
-const short = (id: string) => id.slice(0, 14) + "…";
+
+/** Show the person: name + email, falling back to the id if Clerk lookup failed. */
+function Person({ name, email, id }: { name?: string; email?: string; id: string }) {
+  if (!email && !name) return <span className="admin-dim" title={id}>{id.slice(0, 14)}…</span>;
+  return (
+    <span className="ref-person">
+      {name && <span className="ref-name">{name}</span>}
+      <span className="ref-email" title={id}>{email || `${id.slice(0, 14)}…`}</span>
+    </span>
+  );
+}
 
 export function AdminReferrals() {
   const [data, setData] = useState<{ items: Signup[]; rollup: Rollup[]; totals: { signups: number; converted: number } } | null>(null);
@@ -42,7 +56,7 @@ export function AdminReferrals() {
               <tr><td colSpan={3} className="admin-empty">No referrals yet.</td></tr>
             ) : data.rollup.map((r) => (
               <tr key={r.referrer_id}>
-                <td className="admin-email">{short(r.referrer_id)}</td>
+                <td><Person name={r.name} email={r.email} id={r.referrer_id} /></td>
                 <td>{r.signups}</td>
                 <td>{r.converted}</td>
               </tr>
@@ -60,8 +74,8 @@ export function AdminReferrals() {
               <tr><td colSpan={5} className="admin-empty">No referrals yet.</td></tr>
             ) : data.items.map((s) => (
               <tr key={s.referred_id}>
-                <td className="admin-email">{short(s.referred_id)}</td>
-                <td className="admin-email">{short(s.referrer_id)}</td>
+                <td><Person name={s.referred_name} email={s.referred_email} id={s.referred_id} /></td>
+                <td><Person name={s.referrer_name} email={s.referrer_email} id={s.referrer_id} /></td>
                 <td>{s.code}</td>
                 <td className="admin-dim">{fmt(s.signed_up_at)}</td>
                 <td>{s.converted_at
