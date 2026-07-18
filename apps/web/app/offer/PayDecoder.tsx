@@ -5,7 +5,6 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { useAuth } from "@clerk/nextjs";
 import { DECODER_MODES, getDecoderMode, type DecoderModeConfig, type DecoderModeId } from "./decoder-modes";
 import { DecoderModeIcon } from "./decoder-icons";
-import { DecoderUpload } from "./DecoderUpload";
 import { CreditGate } from "./CreditGate";
 import { FREE_FEATURES, PAID_FEATURES } from "@/lib/credits-config";
 
@@ -51,7 +50,22 @@ const Check = () => (
   </svg>
 );
 
+/**
+ * A signed-out visitor can't pick a mode at all — not even the 4 option cards
+ * render — until they sign in. {@link SignInGate} is the only thing shown.
+ */
 export function PayDecoder() {
+  return clerkEnabled ? <AuthGate /> : <ModePickerFlow />;
+}
+
+function AuthGate() {
+  const { isLoaded, isSignedIn } = useAuth();
+  if (!isLoaded) return null;
+  if (!isSignedIn) return <SignInGate />;
+  return <ModePickerFlow />;
+}
+
+function ModePickerFlow() {
   const sp = useSearchParams();
   const initial = getDecoderMode(sp.get("mode")) ? (sp.get("mode") as DecoderModeId) : null;
   const [modeId, setModeId] = useState<DecoderModeId | null>(initial);
@@ -82,12 +96,7 @@ function ModePicker({ onPick }: { onPick: (id: DecoderModeId) => void }) {
   );
 }
 
-/**
- * Once a mode is picked, nothing about that mode — not even the free/paid
- * breakdown — renders for a signed-out visitor. They see only the back
- * button and a sign-in prompt; the mode header, "what you get" list, and
- * upload UI only appear once they're authenticated.
- */
+/** Signed in by the time this renders — {@link AuthGate} handles anonymous visitors. */
 function ModeFlow({ mode, onBack }: { mode: DecoderModeConfig; onBack: () => void }) {
   return (
     <div className="decoder-flow">
@@ -99,26 +108,6 @@ function ModeFlow({ mode, onBack }: { mode: DecoderModeConfig; onBack: () => voi
         Choose a different document
       </button>
 
-      <ModeFlowGate mode={mode} />
-    </div>
-  );
-}
-
-/** Gates the whole mode flow (not just the upload) behind sign-in. */
-function ModeFlowGate({ mode }: { mode: DecoderModeConfig }) {
-  return clerkEnabled ? <AuthedModeFlow mode={mode} /> : <ModeFlowBody mode={mode} />;
-}
-
-function AuthedModeFlow({ mode }: { mode: DecoderModeConfig }) {
-  const { isLoaded, isSignedIn } = useAuth();
-  if (!isLoaded) return null;
-  if (!isSignedIn) return <SignInGate />;
-  return <ModeFlowBody mode={mode} />;
-}
-
-function ModeFlowBody({ mode }: { mode: DecoderModeConfig }) {
-  return (
-    <>
       <div className="decoder-flow-head">
         <span className="dm-icon"><DecoderModeIcon id={mode.id} /></span>
         <div>
@@ -135,11 +124,11 @@ function ModeFlowBody({ mode }: { mode: DecoderModeConfig }) {
       <FreePaidStrip mode={mode} />
 
       <CreditGate mode={mode} />
-    </>
+    </div>
   );
 }
 
-/** Sign-in prompt shown in place of the entire mode flow for anonymous visitors. */
+/** Sign-in prompt shown in place of the mode picker for anonymous visitors. */
 function SignInGate() {
   const pathname = usePathname();
   const sp = useSearchParams();
